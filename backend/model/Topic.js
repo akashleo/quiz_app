@@ -12,7 +12,7 @@ const topicSchema = new Schema({
     required: true,
   },
 
-  timestamps: true, // for createdAt, and updatedAt
+  timestamps: true, // for createdAt, and updatedAt @protyush
   available: {
     // important later @protyush add this to every Schema
     type: Boolean,
