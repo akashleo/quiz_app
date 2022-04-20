@@ -19,7 +19,7 @@ const questionSchema = new Schema({
       },
     },
   ],
-  categoryId: {
+  topicId: {
     type: Number,
     required: true,
   },
