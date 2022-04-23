@@ -23,9 +23,8 @@ const questionSchema = new Schema({
     type: Number,
     required: true,
   },
-  timestamps: true, // for createdAt, and updatedAt
+  timestamps: true,
   available: {
-    // important later @protyush add this to every Schema
     type: Boolean,
   },
   image: {
