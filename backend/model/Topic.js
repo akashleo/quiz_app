@@ -7,18 +7,14 @@ const topicSchema = new Schema({
     type: String,
     required: true,
   },
-  topicId: {
-    type: Number,
-    required: true,
-  },
-
+  
   timestamps: true, // for createdAt, and updatedAt @protyush
   available: {
     // important later @protyush add this to every Schema
     type: Boolean,
   },
   maxAttempts: {
-    type: String,
+    type: Number,
     required: true,
   },
   timeLimit: {
