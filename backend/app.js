@@ -1,20 +1,14 @@
 const express = require("express");
 
 const mongoose = require("mongoose");
-//const router = require("./routes/bookRoutes");
+const router = require("./routes/profileRoutes");
 const cors = require("cors");
 require("dotenv").config();
 const app = express();
 
-// app.get("/", (req, res) => res.send("Hello world!"));
-
-// const port = process.env.PORT || 8082;
-
-// app.listen(port, () => console.log(`Server running on port ${port}`));
-
 app.use(express.json());
 app.use(cors());
-//app.use("/books", router);
+app.use("/profiles", router);
 
 mongoose
   .connect(
