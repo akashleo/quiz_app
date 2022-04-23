@@ -1,0 +1,133 @@
+const Profile = require("../model/Profile");
+
+const getAllProfiles = async (req, res, next) => {
+  let profiles;
+  try {
+    profiles = await Profile.find();
+  } catch (err) {
+    console.log(err);
+  }
+
+  if (!profiles) {
+    return res.status(404).json({ message: "No profiles Found" });
+  }
+  return res.status(200).json({ profiles });
+};
+
+const getProfileById = async (req, res, next) => {
+  const id = req.params.id;
+  let profile;
+  try {
+    profile = await Profile.findById(id);
+  } catch (err) {
+    console.log(err);
+  }
+
+  if (!profile) {
+    return res.status(404).json({ message: "No profile Found" });
+  }
+  return res.status(200).json({ profile });
+};
+const addProfile = async (req, res, next) => {
+  const {
+    username,
+    password,
+    fullName,
+    level,
+    quizPassed,
+    fastestTime,
+    correctAnswers,
+    achievements,
+    featuredCategory,
+    image,
+  } = req.body;
+  let profile;
+  try {
+    profile = new Profile({
+      username,
+      password,
+      fullName,
+      level,
+      quizPassed,
+      fastestTime,
+      correctAnswers,
+      achievements,
+      featuredCategory,
+      image,
+    });
+    await profile.save();
+  } catch (err) {
+    console.log(err);
+  }
+
+  if (!profile) {
+    return res.status(500).json({ message: "Unable to add" });
+  }
+  return res.status(201).json({ profile });
+};
+
+const updateProfile = async (req, res, next) => {
+  const {
+    username,
+    password,
+    fullName,
+    level,
+    quizPassed,
+    fastestTime,
+    correctAnswers,
+    achievements,
+    featuredCategory,
+    image,
+  } = req.body;
+  let profile;
+
+  const id = req.params.id;
+
+  try {
+    profile = await Profile.findByIdAndUpdate(id, {
+      username,
+      password,
+      fullName,
+      level,
+      quizPassed,
+      fastestTime,
+      correctAnswers,
+      achievements,
+      featuredCategory,
+      image,
+    });
+
+    await profile.save();
+  } catch (err) {
+    console.log(err);
+  }
+
+  if (!profile) {
+    return res.status(500).json({ message: "Unable to update by this id" });
+  }
+  return res.status(201).json({ profile });
+};
+
+const deleteProfile = async (req, res, next) => {
+  let profile;
+  const id = req.params.id;
+
+  try {
+    profile = await Profile.findByIdAndRemove(id);
+  } catch (err) {
+    console.log(err);
+  }
+
+  if (!profile) {
+    return res.status(500).json({ message: "Unable to delete by this id" });
+  }
+  return res
+    .status(201)
+    .json({ profile, message: "Product successfully deleted" });
+};
+
+exports.getAllProfiles = getAllProfiles;
+exports.addProfile = addProfile;
+exports.getProfileById = getProfileById;
+exports.updateProfile = updateProfile;
+exports.deleteProfile = deleteProfile;
