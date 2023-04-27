@@ -22,3 +22,15 @@
     box-shadow: none;
     font-family: "Poppins", sans-serif;
 }
+
+.logout{
+    background-color: #fbf9f9;
+    position: absolute;
+    bottom: 20px;
+    width: 100%;
+}
+
+.ant-menu-light.ant-menu-root.ant-menu-vertical{
+    border-inline-end: none !important;
+}
+

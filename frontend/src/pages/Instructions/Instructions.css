@@ -1,0 +1,33 @@
+.logout{
+    position: absolute;
+    bottom: 20px;
+    width: 100%;
+}
+
+.description{
+    border-radius: 30px;
+    box-shadow: 0px 15px 40px 5px #EDEDED;
+    background: #FFFFFF;
+    padding: 20px;
+    margin: 0px 20px 20px 20px;
+}
+
+.details{
+    padding: 10px;
+}
+
+.details h4{
+    margin: 17px auto;
+}
+
+.ant-menu-light.ant-menu-root.ant-menu-vertical{
+    border-inline-end: none !important;
+}
+
+.ant-menu-item-selected .ant-menu-light{
+    border-radius: 30px !important;
+}
+
+.ant-menu-item:hover{
+    border-radius: 30px !important;
+}
