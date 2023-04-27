@@ -6,9 +6,12 @@ import Topics from "./pages/Topics/Topics";
 import Instructions from "./pages/Instructions/Instructions";
 import AnsweringPanel from "./pages/AnweringPanel/AnsweringPanel";
 import ReviewPanel from "./pages/ReviewPanel/ReviewPanel";
+import Navbar from "./components/Navbar";
 
 function App() {
   return (
+    <>
+    <Navbar/>
     <Router>
       <Routes>
         <Route exact path="/" element={<Login />} />
@@ -19,6 +22,7 @@ function App() {
         <Route exact path="/review" element={<ReviewPanel />} />
       </Routes>
     </Router>
+    </>
   );
 }
 
