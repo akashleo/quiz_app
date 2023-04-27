@@ -1,0 +1,24 @@
+.navbar {
+  background-color: #fbf9f9;
+  font-family: "Poppins", sans-serif !important;
+}
+
+.quiz-logo {
+  color: black;
+  font-weight: 800;
+  font-size: 18px;
+  font-family: "Poppins", sans-serif;
+}
+
+
+.searchbar{
+    display: flex;
+    align-items: center;
+}
+
+.start-button{
+    width: 150px;
+    background-color: #8692A6;
+    box-shadow: none;
+    font-family: "Poppins", sans-serif;
+}
