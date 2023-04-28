@@ -7,7 +7,7 @@ import qpic from "../../assests/qpic.png";
 
 const Instructions = () => {
   return (
-    <Row style={{ height: "90vh" }}>
+    <Row style={{ height: "90vh", marginTop: "12vh" }}>
       <Col span={6}>
         <LeftMenu />
       </Col>
