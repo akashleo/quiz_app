@@ -7,7 +7,7 @@ const { Search } = Input;
 
 const Navbar = () => {
   return (
-    <Header className="navbar">
+    <Header className="navbar sticky">
       <Row>
         <Col
           span={4}

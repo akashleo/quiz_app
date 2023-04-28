@@ -24,7 +24,7 @@
     border-inline-end: none !important;
 }
 
-.ant-menu-item-selected .ant-menu-light{
+.ant-menu-item-selected{
     border-radius: 30px !important;
 }
 
