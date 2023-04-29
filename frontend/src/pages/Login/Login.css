@@ -1,0 +1,52 @@
+.cover-image-left {
+  background-image: url("../../assests/loginbg.jpg");
+  /* z-index: 4; */
+  background-repeat: no-repeat;
+  background-size: cover;
+  filter: blur(2px);
+}
+
+.cover-bg-right {
+  background-color: #fff;
+  padding: 20px;
+  height: 100%;
+}
+
+.login-section {
+  width: 100%;
+  text-align: center;
+  margin: 0px auto;
+}
+
+.input-box {
+  background: #ffffff;
+  box-shadow: 0px 15px 40px 5px #ededed;
+  border-radius: 30px;
+  border: none !important;
+  height: 46px;
+  padding: 0px 20px;
+}
+
+::-webkit-input-placeholder { /* WebKit browsers */
+    padding: 0px 20px;
+}
+
+.login-button {
+  box-shadow: 0px 15px 40px 5px #ededed;
+  border: none !important;
+  background: #8692a6 !important;
+  border-radius: 30px;
+  color: white;
+  height: 46px;
+
+}
+
+.google-button {
+    box-shadow: 0px 15px 40px 5px #ededed;
+    border: none !important;
+    background: #fff;
+    border-radius: 30px; 
+    color: black;
+    height: 46px;
+  }
+  
