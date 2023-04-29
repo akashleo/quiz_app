@@ -20,6 +20,10 @@
     margin: 17px auto;
 }
 
+.question-image{
+    border-radius: 30px;
+}
+
 .start-button{
     width: 150px;
     background-color: #8692A6;
@@ -28,8 +32,4 @@
     border: none;
     border-radius: 30px;
     color: #FFFFFF;
-}
-
-.question-image{
-    border-radius: 30px;
 }

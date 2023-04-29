@@ -1,9 +1,9 @@
 import React from "react";
 import LeftMenu from "../../components/LeftMenu";
-//import { LogoutOutlined } from "@ant-design/icons";
-import { Row, Col, Menu, Image } from "antd";
+import { RightOutlined } from "@ant-design/icons";
+import { Row, Col, Button, Image } from "antd";
 import "./Instructions.css";
-import qpic from "../../assests/qpic.png";
+import qstn from "../../assests/qstn.jpg";
 
 const Instructions = () => {
   return (
@@ -17,7 +17,7 @@ const Instructions = () => {
           <h5>Read the following istructions</h5>
           <Row>
             <Col span={12}>
-              <Image src={qpic} />
+              <Image src={qstn}  className="question-image"/>
             </Col>
             <Col span={12} className="details">
               <h4>Date: 11/12/22</h4>
@@ -44,7 +44,13 @@ const Instructions = () => {
               "Submit " button.
             </p>
           </div>
+          <Row>
+            <Col span={24} style={{textAlign: "right"}}>
+              <Button className="start-button">Start&nbsp;<RightOutlined /></Button>
+            </Col>
+          </Row>
         </div>
+       
       </Col>
     </Row>
   );
