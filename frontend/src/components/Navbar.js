@@ -1,22 +1,23 @@
 import { Layout, Input, Button, Avatar, Row, Col } from "antd";
-import { UserOutlined } from "@ant-design/icons";
+import { SearchOutlined, UserOutlined } from "@ant-design/icons";
 import "./components.css";
 
 const { Header } = Layout;
-const { Search } = Input;
+// const { Search } = Input;
 
 const Navbar = () => {
   return (
     <Header className="navbar sticky">
       <Row>
-        <Col
-          span={4}
-          className="quiz-logo"
-        >
+        <Col span={4} className="quiz-logo">
           Quiz Game
         </Col>
-        <Col span={8} className="searchbar" >
-          <Search placeholder="Search" style={{ width: 300 }} />
+        <Col span={8} className="searchbar">
+          <Input
+            placeholder="Search..."
+            prefix={<SearchOutlined />}
+            className="search"
+          />
         </Col>
         <Col span={8} style={{ textAlign: "right" }}>
           <Button type="primary" shape="round" className="start-button">

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import LeftMenu from "../../components/LeftMenu";
-//import { LogoutOutlined } from "@ant-design/icons";
+import { ClockCircleOutlined } from "@ant-design/icons";
 import { Row, Col, Radio, Image, Space, Button } from "antd";
 import "./AnsweringPanel.css";
 import qstn from "../../assests/qstn.jpg";
@@ -20,7 +20,10 @@ const AnsweringPanel = () => {
       </Col>
       <Col span={18}>
         <div className="description">
+          <div className="heading">
           <h1>History Quiz</h1>
+          <h1><ClockCircleOutlined />&nbsp;Timer: 29:09Mins</h1>
+          </div>
           <h5>Answer the question below</h5>
           <Row>
             <Col span={12}>

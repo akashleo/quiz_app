@@ -34,8 +34,6 @@
     color: #FFFFFF;
 }
 
-.heading{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+.answer-status{
+    margin-left: 12rem;
 }

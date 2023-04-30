@@ -30,6 +30,16 @@
     width: 100%;
 }
 
+.search{
+  width: 300px;
+  background: #ffffff;
+  box-shadow: 0px 15px 40px 5px #ededed;
+  border-radius: 30px;
+  border: none !important;
+  height: 40px;
+  padding: 0px 20px;
+}
+
 .sticky {
     position: fixed;
     top: 0;
@@ -39,5 +49,10 @@
 
 .ant-menu-light.ant-menu-root.ant-menu-vertical{
     border-inline-end: none !important;
+}
+
+
+.ant-menu-vertical .ant-menu-item {
+  border-radius: 30px;
 }
 
