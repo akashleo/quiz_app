@@ -3,7 +3,7 @@
   /* z-index: 4; */
   background-repeat: no-repeat;
   background-size: cover;
-  filter: blur(2px);
+  /* filter: blur(2px); */
 }
 
 .cover-bg-right {

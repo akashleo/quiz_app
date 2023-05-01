@@ -13,7 +13,7 @@ import "./Login.css";
 const Login = () => {
   const [form] = Form.useForm();
   return (
-    <Row style={{ height: "100vh", marginTop: "12vh" }}>
+    <Row style={{ height: "90vh" }}>
       <Col span={10}>
         <div
           style={{ width: "100%", height: "100%" }}
