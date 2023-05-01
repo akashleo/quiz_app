@@ -1,11 +1,19 @@
+import React, {useState} from "react";
 import { Layout, Input, Button, Avatar, Row, Col } from "antd";
 import { SearchOutlined, UserOutlined } from "@ant-design/icons";
+import ConfirmModal from "./ConfirmModal";
 import "./components.css";
 
 const { Header } = Layout;
 // const { Search } = Input;
 
 const Navbar = () => {
+
+  const [open, setOpen] = useState(false);
+
+  const showModal = () => {
+    setOpen(true);
+  };
   return (
     <Header className="navbar sticky">
       <Row>
@@ -20,7 +28,7 @@ const Navbar = () => {
           />
         </Col>
         <Col span={8} style={{ textAlign: "right" }}>
-          <Button type="primary" shape="round" className="start-button">
+          <Button type="primary" shape="round" className="start-button" onClick={showModal}>
             Start Quiz
           </Button>
         </Col>
@@ -28,6 +36,7 @@ const Navbar = () => {
           <Avatar icon={<UserOutlined />} />
         </Col>
       </Row>
+      {open && <ConfirmModal open={open} setOpen={setOpen} />}
     </Header>
   );
 };

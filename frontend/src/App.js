@@ -9,9 +9,11 @@ import ReviewPanel from "./pages/ReviewPanel/ReviewPanel";
 import Navbar from "./components/Navbar";
 
 function App() {
+  //console.log(window.location.pathname)
   return (
     <>
-    {/* <Navbar/> */}
+    
+    {window.location.pathname !== "/" && <Navbar/> }
     <Router>
       <Routes>
         <Route exact path="/" element={<Login />} />
