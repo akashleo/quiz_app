@@ -1,10 +1,10 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
 
 //  username, password, fullName, level, quizPassed, fastestTime, correctAnswers, achievements, featuredCategory, image
 
-const profileSchema = new Schema(
+const ProfileSchema = new Schema(
   {
     username: {
       type: String,
@@ -48,4 +48,5 @@ const profileSchema = new Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model("Profile", profileSchema);
+export default mongoose.model("Profile", ProfileSchema);
+//module.exports = mongoose.model("Profile", profileSchema);

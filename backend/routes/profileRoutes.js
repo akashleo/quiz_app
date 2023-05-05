@@ -1,14 +1,23 @@
-const express = require("express");
-const router = express.Router();
+import express from "express";
+const profileRouter = express.Router();
+import {
+  getAllProfiles,
+  getProfileById,
+  addProfile,
+  updateProfile,
+  deleteProfile,
+} from "../controllers/ProfileController.js";
 
 //const Book = require("../model/Profile");
 
-const ProfileControllers = require("../controllers/ProfileController");
+//const ProfileControllers = require("../controllers/ProfileController");
 
-router.get("/", ProfileControllers.getAllProfiles);
-router.get("/:id", ProfileControllers.getProfileById);
-router.post("/", ProfileControllers.addProfile);
-router.put("/:id", ProfileControllers.updateProfile);
-router.delete("/:id", ProfileControllers.deleteProfile);
+profileRouter.get("/", getAllProfiles);
+profileRouter.get("/:id", getProfileById);
+profileRouter.post("/", addProfile);
+profileRouter.put("/:id", updateProfile);
+profileRouter.delete("/:id", deleteProfile);
 
-module.exports = router;
+//module.exports = profileRouter;
+
+export default profileRouter;

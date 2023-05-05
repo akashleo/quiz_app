@@ -1,6 +1,6 @@
-const Profile = require("../model/Profile");
+import Profile from "../model/Profile.js";
 
-const getAllProfiles = async (req, res, next) => {
+export const getAllProfiles = async (req, res, next) => {
   let profiles;
   try {
     profiles = await Profile.find();
@@ -14,7 +14,7 @@ const getAllProfiles = async (req, res, next) => {
   return res.status(200).json({ profiles });
 };
 
-const getProfileById = async (req, res, next) => {
+export const getProfileById = async (req, res, next) => {
   const id = req.params.id;
   let profile;
   try {
@@ -28,7 +28,7 @@ const getProfileById = async (req, res, next) => {
   }
   return res.status(200).json({ profile });
 };
-const addProfile = async (req, res, next) => {
+export const addProfile = async (req, res, next) => {
   const {
     username,
     password,
@@ -66,7 +66,7 @@ const addProfile = async (req, res, next) => {
   return res.status(201).json({ profile });
 };
 
-const updateProfile = async (req, res, next) => {
+export const updateProfile = async (req, res, next) => {
   const {
     username,
     password,
@@ -108,7 +108,7 @@ const updateProfile = async (req, res, next) => {
   return res.status(201).json({ profile });
 };
 
-const deleteProfile = async (req, res, next) => {
+export const deleteProfile = async (req, res, next) => {
   let profile;
   const id = req.params.id;
 
@@ -126,8 +126,8 @@ const deleteProfile = async (req, res, next) => {
     .json({ profile, message: "Product successfully deleted" });
 };
 
-exports.getAllProfiles = getAllProfiles;
-exports.addProfile = addProfile;
-exports.getProfileById = getProfileById;
-exports.updateProfile = updateProfile;
-exports.deleteProfile = deleteProfile;
+// exports.getAllProfiles = getAllProfiles;
+// exports.addProfile = addProfile;
+// exports.getProfileById = getProfileById;
+// exports.updateProfile = updateProfile;
+// exports.deleteProfile = deleteProfile;
