@@ -2,8 +2,6 @@ import mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
 
-//  username, password, fullName, level, quizPassed, fastestTime, correctAnswers, achievements, featuredCategory, image
-
 const ProfileSchema = new Schema(
   {
     username: {
