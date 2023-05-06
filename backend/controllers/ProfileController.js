@@ -76,6 +76,7 @@ export const updateProfile = async (req, res, next) => {
     fastestTime,
     correctAnswers,
     achievements,
+    available,
     featuredCategory,
     image,
   } = req.body;
@@ -85,15 +86,16 @@ export const updateProfile = async (req, res, next) => {
 
   try {
     profile = await Profile.findByIdAndUpdate(id, {
-      username,
-      password,
-      fullName,
+      username: username,
+      password: password,
+      fullName : fullName,
       level,
       quizPassed,
       fastestTime,
       correctAnswers,
       achievements,
       featuredCategory,
+      available: available,
       image,
     });
 

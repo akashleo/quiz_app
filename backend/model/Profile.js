@@ -30,12 +30,13 @@ const ProfileSchema = new Schema(
     correctAnswers: {
       type: Number,
     },
-    featuredCategory: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "Topic",
-      },
-    ],
+    featuredCategory: "",
+    // featuredCategory: [
+    //   {
+    //     type: Schema.Types.ObjectId,
+    //     ref: "Topic",
+    //   },
+    // ],
     available: {
       type: Boolean,
     },
