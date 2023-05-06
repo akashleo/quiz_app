@@ -1,6 +1,6 @@
 import Profile from "../model/Profile.js";
 import bcrypt from "bcryptjs";
-
+import jwt from "jsonwebtoken";
 export const getAllUser = async (req, res, next) => {
   let users;
   try {
@@ -73,10 +73,21 @@ export const login = async (req, res, next) => {
   }
 
   const isPasswordCorrect = bcrypt.compareSync(password, existingUser.password);
+  console.log(existingUser.password, password)
 
-  if (!isPasswordCorrect) {
+  // if (!isPasswordCorrect   ) {
+  //   return res.status(400).json({ message: "Incorrect Password" });
+  // }
+  const token = jwt.sign({ sub: username }, 'secretkey');
+  if(password===existingUser.password)
+  {
+    return res.status(200).json({ message: "Login Successful", token });
+  }
+  else{
     return res.status(400).json({ message: "Incorrect Password" });
   }
+  //const token = jwt.sign({ sub: user.id }, 'secretkey');
+  //return res.status(200).json({ message: "Login Successful", token });
 
-  return res.status(200).json({ message: "Profile login successful" });
+  //return res.status(200).json({ message: "Profile login successful" });
 };
