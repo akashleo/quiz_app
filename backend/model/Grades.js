@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
-const gradesSchema = new Schema(
+const GradesSchema = new Schema(
   {
     userId: {
       type: Schema.Types.ObjectId,
@@ -20,5 +20,5 @@ const gradesSchema = new Schema(
   },
   { timestamps: true }
 );
-
-module.exports = mongoose.model("Grades", gradesSchema);
+export default mongoose.model("Grades", GradesSchema);
+//module.exports = mongoose.model("Grades", gradesSchema);
