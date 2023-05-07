@@ -1,0 +1,129 @@
+*{
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+
+/* .dashboard-content{
+    height: 50%;    
+} */
+
+.dashboard{
+    border-radius: 30px;
+    box-shadow: 0px 15px 40px 5px #EDEDED;
+    background: #FFFFFF;
+    padding: 20px;
+    margin: 0px 20px 20px 20px;
+}
+
+.user-details{
+    
+    height: 30%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-top: 2%;
+    
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 1rem;
+    color: #696F79;
+
+}
+
+.user-level{
+    font-size: 0.7rem;
+}
+
+.user-progress{
+    width: 80%;
+}
+
+.quiz-achivement-block{
+    margin-top: 2%;
+}
+
+.quiz-achivement{
+    display: flex;
+    
+}
+.quiz-achivement-icon{
+    height: fit-content;    
+    padding: 6%;
+    background: #FFFFFF;
+    box-shadow: 0px 15px 40px 5px #EDEDED;
+    border-radius: 15px;
+}
+
+.quiz-achivement-icon{
+    font-size: 1.5rem;
+    color: #696F79;
+}
+.quiz-achivement-details{
+    padding: 4%;
+}
+.quiz-achivement-number{
+    font-weight: 700;
+    font-size: 1rem;
+    color: #696F79;
+}
+.quiz-achivement-lable{
+    font-weight: 400;
+    color: #696F79;
+}
+.achivement-featured{
+    margin-top: 5%;
+    width: 100%;
+}
+.achivement{
+    width: 100%;
+    display: flex;
+    justify-content: space-between
+}
+.achivement-name{
+    flex-grow: 20;
+    color: #696F79;
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 1rem;
+}
+.achivement-progress{
+    flex-grow: 1;
+    flex-basis: 40%;
+}
+
+.achivement-badge{
+    height: 37vh;
+    padding: 5%;
+    background: #FFFFFF;
+    box-shadow: 0px 15px 40px 5px #EDEDED;
+    border-radius: 30px;
+}
+.divide-bar{
+    width: 80%;
+    border: 1px solid #DADADA;
+}
+
+.view-all{
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 0.7rem;
+    color: #696F79;
+}
+.featured-category{
+    padding: 0% 5%;
+}
+.featured-category-name{
+    color: #696F79;
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 1rem;   
+}
+.featured{
+   height: 37vh;
+}
