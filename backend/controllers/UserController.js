@@ -38,14 +38,14 @@ export const signup = async (req, res, next) => {
     fullName,
     username,
     password: hashedPassword,
-    // image,
-    // available,
-    // featuredCategory,
-    // correctAnswers,
-    // achievements,
-    // fastestTime,
-    // quizPassed,
-    // level,
+    level: 4,
+    quizPassed: "",
+    fastestTime: "",
+    correctAnswers: 6,
+    achievements: ["tyty"],
+    featuredCategory:"",
+    available: true,
+    image: ""
   });
 
   try {

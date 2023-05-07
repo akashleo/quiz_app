@@ -1,8 +1,8 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
 
-const topicSchema = new Schema(
+const TopicSchema = new Schema(
   {
     instructions: {
       type: String,
@@ -27,4 +27,6 @@ const topicSchema = new Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model("Topic", topicSchema);
+export default mongoose.model("Topic", TopicSchema);
+
+//module.exports = mongoose.model("Topic", topicSchema);
