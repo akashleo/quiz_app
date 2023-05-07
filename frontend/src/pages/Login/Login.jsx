@@ -1,10 +1,6 @@
 import React from "react";
 //import { LogoutOutlined } from "@ant-design/icons";
-import { Row, Col, Menu, Image } from "antd";
-import "./Login.css";
-import loginpic from "../../assests/loginpic2.png";
 
-import { Row, Col, Form, Input, Button } from "antd";
 import {
   LeftOutlined,
   EyeTwoTone,
@@ -12,15 +8,8 @@ import {
   GoogleOutlined,
 } from "@ant-design/icons";
 
-import "./Login.css";
 
 import { Row, Col, Form, Input, Button } from "antd";
-import {
-  LeftOutlined,
-  EyeTwoTone,
-  EyeInvisibleOutlined,
-  GoogleOutlined,
-} from "@ant-design/icons";
 
 import "./Login.css";
 
