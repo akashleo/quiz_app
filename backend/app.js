@@ -1,21 +1,25 @@
-const express = require("express");
+import express from "express";
+import mongoose from "mongoose";
+import profileRouter from "./routes/profileRoutes.js";
+import userRouter from "./routes/userRoutes.js";
 
-const mongoose = require("mongoose");
-const router = require("./routes/profileRoutes");
-const cors = require("cors");
-require("dotenv").config();
+import cors from "cors";
+import dotenv from "dotenv";
+dotenv.config();
 const app = express();
 
 app.use(express.json());
 app.use(cors());
-app.use("/profiles", router);
+app.use("/profiles", profileRouter);
+app.use("/user", userRouter);
 
 mongoose
   .connect(
-    `mongodb+srv://${process.env.DATABASE_USERNAME}:${process.env.DATABASE_PASSWORD}@cluster0.azzwm.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`
+    `mongodb+srv://${process.env.DATABASE_USERNAME}:${process.env.DATABASE_PASSWORD}@cluster0.vu326ye.mongodb.net/test`
   )
-  .then(() => console.log("Connected to Database"))
   .then(() => {
-    app.listen(8082);
-  })
-  .catch((error) => console.log(error));
+    console.log("MongoDB connected");
+    app.listen(5000, () => {
+      console.log("server is running at port 5000");
+    });
+  });
