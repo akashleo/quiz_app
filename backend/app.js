@@ -4,6 +4,7 @@ import profileRouter from "./routes/profileRoutes.js";
 import userRouter from "./routes/userRoutes.js";
 import gradesRouter from "./routes/gradesRoutes.js"; 
 import topicRouter from "./routes/topicRoutes.js"
+import questionRouter from "./routes/questionRoutes.js";
 
 import cors from "cors";
 import dotenv from "dotenv";
@@ -16,6 +17,7 @@ app.use("/profiles", profileRouter);
 app.use("/user", userRouter);
 app.use("/grades", gradesRouter);
 app.use("/topics", topicRouter);
+app.use("/questions", questionRouter);
 
 mongoose
   .connect(

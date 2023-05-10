@@ -7,13 +7,19 @@ import Instructions from "./pages/Instructions/Instructions";
 import AnsweringPanel from "./pages/AnweringPanel/AnsweringPanel";
 import ReviewPanel from "./pages/ReviewPanel/ReviewPanel";
 import Navbar from "./components/Navbar";
+//import AddQuestion from "./pages/QuestionBank/AddQuestion";
+import QuestionBank from "./pages/QuestionBank/QuestionBank";
+import { useSelector } from "react-redux";
 
 function App() {
   //console.log(window.location.pathname)
+
+  const { tokenValidity
+  } = useSelector((state) => state.auth)
   return (
     <>
     
-    {window.location.pathname !== "/" && <Navbar/> }
+    {!tokenValidity && <Navbar/> }
     <Router>
       <Routes>
         <Route exact path="/" element={<Login />} />
@@ -22,6 +28,7 @@ function App() {
         <Route exact path="/instructions" element={<Instructions />} />
         <Route exact path="/answer" element={<AnsweringPanel />} />
         <Route exact path="/review" element={<ReviewPanel />} />
+        <Route exact path="/question" element={<QuestionBank />} />
       </Routes>
     </Router>
     </>

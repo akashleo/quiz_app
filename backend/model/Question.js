@@ -1,8 +1,8 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
 
-const questionSchema = new Schema(
+const QuestionSchema = new Schema(
   {
     questionText: {
       type: String,
@@ -35,4 +35,4 @@ const questionSchema = new Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model("Question", questionSchema);
+export default mongoose.model("Question", QuestionSchema);

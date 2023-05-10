@@ -9,7 +9,7 @@ import {
 } from "@ant-design/icons";
 
 import { Row, Col, Form, Input, Button } from "antd";
-import { login } from "../../store/slices/AuthActions";
+import { login } from "../../store/slices/auth/AuthActions";
 import { useDispatch, useSelector } from 'react-redux';
 import {useNavigate} from "react-router-dom";
 
