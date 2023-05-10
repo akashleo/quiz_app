@@ -1,14 +1,13 @@
-const express = require("express");
-const router = express.Router();
+import express from "express";
+const questionRouter = express.Router();
 
-//const Book = require("../model/Profile");
+import {getAllQuestions, addQuestion, updateQuestion, deleteQuestion} from "../controllers/QuestionController.js"
 
-const ProfileControllers = require("../controllers/ProfileController");
+questionRouter.get("/", getAllQuestions);
+//questionRouter.get("/:id", get);
+questionRouter.post("/", addQuestion);
+questionRouter.put("/:id", updateQuestion);
+questionRouter.delete("/:id", deleteQuestion);
 
-router.get("/", ProfileControllers.getAllProfiles);
-router.get("/:id", ProfileControllers.getProfileById);
-router.post("/", ProfileControllers.addProfile);
-router.put("/:id", ProfileControllers.updateProfile);
-router.delete("/:id", ProfileControllers.deleteProfile);
+export default questionRouter;
 
-module.exports = router;

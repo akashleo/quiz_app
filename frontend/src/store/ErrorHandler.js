@@ -1,5 +1,5 @@
 //import { useDispatch } from "react-redux";
-import { isTokenValid } from "./slices/AuthSlice";
+import { isTokenValid } from "./slices/auth/AuthSlice";
 
 //const dispatch = useDispatch();
 

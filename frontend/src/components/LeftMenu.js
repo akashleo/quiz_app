@@ -1,8 +1,9 @@
 import React from "react";
 import { LayoutOutlined, BellOutlined, PhoneOutlined, LogoutOutlined } from "@ant-design/icons";
 import { Menu } from "antd";
-import { logOut } from "../store/slices/AuthSlice";
+import { logOut } from "../store/slices/auth/AuthSlice";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const LeftMenu = () => {
   function getItem(label, key, icon, children) {
@@ -21,6 +22,12 @@ const LeftMenu = () => {
   ];
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const LogoutFn = () =>{
+    dispatch(logOut());
+    navigate("/")
+  }
 
   return (
     <>
@@ -30,7 +37,7 @@ const LeftMenu = () => {
         items={items}
       />
       <Menu className="logout">
-        <Menu.Item onClick={()=>dispatch(logOut())}>
+        <Menu.Item onClick={LogoutFn}>
           <LogoutOutlined />
           &nbsp; &nbsp;Logout
         </Menu.Item>
