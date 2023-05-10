@@ -73,7 +73,7 @@ export const login = async (req, res, next) => {
   }
 
   const isPasswordCorrect = bcrypt.compareSync(password, existingUser.password);
-  console.log(existingUser.password, password)
+  //console.log(existingUser.password, password)
 
   // if (!isPasswordCorrect   ) {
   //   return res.status(400).json({ message: "Incorrect Password" });
@@ -81,7 +81,7 @@ export const login = async (req, res, next) => {
   const token = jwt.sign({ sub: username }, 'secretkey');
   if(password===existingUser.password)
   {
-    return res.status(200).json({ message: "Login Successful", token });
+    return res.status(200).json({ message: "Login Successful", token,  user:existingUser});
   }
   else{
     return res.status(400).json({ message: "Incorrect Password" });

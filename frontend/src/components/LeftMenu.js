@@ -1,6 +1,8 @@
 import React from "react";
 import { LayoutOutlined, BellOutlined, PhoneOutlined, LogoutOutlined } from "@ant-design/icons";
 import { Menu } from "antd";
+import { logOut } from "../store/slices/AuthSlice";
+import { useDispatch } from "react-redux";
 
 const LeftMenu = () => {
   function getItem(label, key, icon, children) {
@@ -18,6 +20,8 @@ const LeftMenu = () => {
     getItem("Notification", "3", <BellOutlined />),
   ];
 
+  const dispatch = useDispatch();
+
   return (
     <>
       <Menu
@@ -26,7 +30,7 @@ const LeftMenu = () => {
         items={items}
       />
       <Menu className="logout">
-        <Menu.Item>
+        <Menu.Item onClick={()=>dispatch(logOut())}>
           <LogoutOutlined />
           &nbsp; &nbsp;Logout
         </Menu.Item>
