@@ -1,9 +1,22 @@
 .add-form{
-    margin: 20px auto !important;
-    padding: 20px !important;
-    width: 500px !important;
+    margin: 10px auto !important;
+    padding: 10px !important;
+    /* width: 250px !important; */
 }
 
 .button-submit{
     text-align: center;
+}
+
+.question-bank{
+    margin: 20px;
+    padding: 10px;
+}
+
+.title-line{
+    margin-bottom: 20px;
+}
+
+.text-right{
+    text-align: right;
 }
