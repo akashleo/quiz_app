@@ -19,7 +19,8 @@ function App() {
   return (
     <>
     
-    {!tokenValidity && <Navbar/> }
+    {/* {!tokenValidity && <Navbar/> } */}
+    <Navbar/>
     <Router>
       <Routes>
         <Route exact path="/" element={<Login />} />
