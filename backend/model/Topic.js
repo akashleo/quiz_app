@@ -23,6 +23,7 @@ const TopicSchema = new Schema(
       type: Number,
       required: true,
     },
+    questions: [{type: mongoose.Types.ObjectId, ref: "Question", required: true}]
   },
   { timestamps: true }
 );
