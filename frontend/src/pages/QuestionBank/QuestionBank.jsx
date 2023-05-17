@@ -39,7 +39,12 @@ const QuestionBank = () => {
           Filters
         </Col>
         <Col span={6} className="text-right">
-          <Button disabled={addQuestion ? true : false} onClick={openModal}>Add Question</Button>
+          <Button disabled={addQuestion ? true : false} onClick={openModal}>
+            Add Topic
+          </Button>
+          <Button disabled={addQuestion ? true : false} onClick={openModal}>
+            Add Question
+          </Button>
         </Col>
       </Row>
 
@@ -50,10 +55,13 @@ const QuestionBank = () => {
           </Col>
         ))}
       </Row>
-      {addQuestion &&
-        
-          <AddQuestion  addQuestion={addQuestion} setAddQuestion={setAddQuestion} handleOk={handleOk}/>
-      }
+      {addQuestion && (
+        <AddQuestion
+          addQuestion={addQuestion}
+          setAddQuestion={setAddQuestion}
+          handleOk={handleOk}
+        />
+      )}
     </div>
   );
 };
