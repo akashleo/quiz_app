@@ -4,7 +4,7 @@ import Login from "./pages/Login/Login";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import Topics from "./pages/Topics/Topics";
 import Instructions from "./pages/Instructions/Instructions";
-import AnsweringPanel from "./pages/AnweringPanel/AnsweringPanel";
+import AnsweringPanel from "./pages/AnsweringPanel/AnsweringPanel";
 import ReviewPanel from "./pages/ReviewPanel/ReviewPanel";
 import Navbar from "./components/Navbar";
 //import AddQuestion from "./pages/QuestionBank/AddQuestion";
