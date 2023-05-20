@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import { Layout, Input, Button, Avatar, Row, Col } from "antd";
 import { SearchOutlined, UserOutlined } from "@ant-design/icons";
-import ConfirmModal from "./ConfirmModal";
+import SuccessModal from "./SuccessModal";
 import "./components.css";
 
 const { Header } = Layout;
@@ -36,7 +36,7 @@ const Navbar = () => {
           <Avatar icon={<UserOutlined />} />
         </Col>
       </Row>
-      {open && <ConfirmModal open={open} setOpen={setOpen} />}
+      {open && <SuccessModal open={open} setOpen={setOpen} />}
     </Header>
   );
 };
