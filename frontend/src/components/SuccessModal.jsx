@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import {
-  QuestionOutlined,
+  StarTwoTone,
   BellOutlined,
   PhoneOutlined,
   LogoutOutlined,
 } from "@ant-design/icons";
 import { Modal, Button, Image } from "antd";
-import "./components.css";
+import "./sucess-modal.css";
 
-const ConfirmModal = ({ open, setOpen }) => {
+const SuccessModal = ({ open, setOpen }) => {
   const [loading, setLoading] = useState(false);
 
   const handleOk = () => {
@@ -30,28 +30,25 @@ const ConfirmModal = ({ open, setOpen }) => {
         open={open}
         onOk={handleOk}
         footer={[
-          <Button className="modal-button" key="back" onClick={handleCancel}>
-            No
-          </Button>,
-          <Button
-            className="modal-button"
-            key="submit"
-            loading={loading}
-            onClick={handleOk}
-          >
-            Yes
+          <Button className="modal-button"  key="back" onClick={handleCancel}>
+            Review quiz
           </Button>,
         ]}
       >
         <div className="question-mark">
-          <QuestionOutlined />
+          <StarTwoTone />
         </div>
         <div className="confirm-text">
-          <p>Are you sure you want to submit the quiz</p>
+          <p>Congratulations! You have passed </p>
+        </div>
+        <div className="confirm-text">
+          <p>
+            Your score was <span>80</span>{" "}
+          </p>
         </div>
       </Modal>
     </>
   );
 };
 
-export default ConfirmModal;
+export default SuccessModal;
