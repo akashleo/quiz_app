@@ -43,6 +43,9 @@ const authSlice = createSlice({
     isTokenValid: (state, action) => {
       state.tokenValidity = action.payload;
     },
+    setResponsedata: (state, action) => {
+      state.responseData = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(login.pending, (state, payload) => {
@@ -60,6 +63,7 @@ const authSlice = createSlice({
     builder.addCase(login.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload;
+      state.responseData = "Invalid User"
       state.success = false;
     });
     builder.addCase(register.pending, (state, payload) => {
@@ -78,7 +82,7 @@ const authSlice = createSlice({
     });
   },
 });
-export const { logOut, clearState, isTokenValid } = authSlice.actions;
+export const { logOut, clearState, isTokenValid, setResponsedata } = authSlice.actions;
 //export const { login, register } = authSlice.actions;
 
 export default authSlice.reducer;

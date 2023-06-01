@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
 //import { LogoutOutlined } from "@ant-design/icons";
+import { ToastContainer, toast } from 'react-toastify';
+  import 'react-toastify/dist/ReactToastify.css';
+  import { setResponsedata } from "../../store/slices/auth/AuthSlice";
 
 import {
   LeftOutlined,
@@ -17,7 +20,7 @@ import "./Login.css";
 
 const Login = () => {
 
-  const { tokenValidity
+  const { tokenValidity, responseData
   } = useSelector((state) => state.auth)
 
   const [form] = Form.useForm();
@@ -44,6 +47,13 @@ const Login = () => {
       navigate("/dashboard")
     }
   },[tokenValidity])
+
+  useEffect(()=>{
+    if(responseData==="Invalid User"){
+    toast.error('User does not exist');
+    setResponsedata(null)
+    }
+  },[responseData])
 
 
   return (
@@ -131,6 +141,17 @@ const Login = () => {
           </Row>
         </div>
       </Col>
+      <ToastContainer
+      position="bottom-right"
+      autoClose={5000}
+      hideProgressBar={false}
+      newestOnTop={false}
+      closeOnClick
+      rtl={false}
+      pauseOnFocusLoss
+      draggable
+      pauseOnHover
+      theme="dark"/>
     </Row>
   );
 };
