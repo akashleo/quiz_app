@@ -12,15 +12,15 @@ import QuestionBank from "./pages/QuestionBank/QuestionBank";
 import { useSelector } from "react-redux";
 
 function App() {
-  //console.log(window.location.pathname)
+  console.log(window.location.pathname)
 
   const { tokenValidity
   } = useSelector((state) => state.auth)
   return (
     <>
     
-    {/* {!tokenValidity && <Navbar/> } */}
-    <Navbar/>
+    {window.location.pathname !== "/question" && <Navbar/> }
+    {/* <Navbar/> */}
     <Router>
       <Routes>
         <Route exact path="/" element={<Login />} />
