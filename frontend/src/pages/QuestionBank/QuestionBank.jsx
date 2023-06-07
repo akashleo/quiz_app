@@ -35,14 +35,17 @@ const QuestionBank = () => {
         <Col span={8}>
           <h2>Question Bank</h2>
         </Col>
-        <Col span={10} className="text-right">
+        <Col span={8} className="text-right">
           Filters
         </Col>
-        <Col span={6} className="text-right">
-          <Button disabled={addQuestion ? true : false} onClick={openModal}>
+        <Col span={8} className="text-right">
+        <Button disabled={addQuestion ? true : false} onClick={openModal} className="action-button">
+            Dashboard
+          </Button>
+          <Button disabled={addQuestion ? true : false} onClick={openModal} className="action-button">
             Add Topic
           </Button>
-          <Button disabled={addQuestion ? true : false} onClick={openModal}>
+          <Button disabled={addQuestion ? true : false} onClick={openModal} className="action-button">
             Add Question
           </Button>
         </Col>

@@ -126,4 +126,13 @@
 }
 .featured{
    height: 37vh;
+   text-align: center;
+}
+
+.featured-image{
+    width: 150px;
+    height: 80px;
+    align-items: center;
+    border-radius: 20px;
+    object-fit: fill;
 }

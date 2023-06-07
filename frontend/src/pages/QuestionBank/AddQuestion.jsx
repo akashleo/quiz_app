@@ -21,7 +21,7 @@ const AddQuestion = ({addQuestion, setAddQuestion, handleOk}) => {
   };
 
   return (
-    <Modal style={{ zIndex: 10 }} open={addQuestion} onOk={handleOk} footer={false}>
+    <Modal style={{ zIndex: 10 }} open={addQuestion} onOk={handleOk}  onCancel={handleOk} footer={false}>
       <div className="add-form">
         <Form form={form} onFinish={handleFormSubmit} layout="vertical">
           <Form.Item

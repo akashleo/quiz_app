@@ -59,10 +59,6 @@
   border-radius: 30px !important;
 }
 
-.ant-modal-content{
-  border-radius: 30px !important;
-}
-
 .question-mark {
   font-size: 6rem;
   margin: 20px;
@@ -101,4 +97,8 @@
 
 .ant-modal-close-x{
   display: none !important;
+}
+
+.ant-modal-content{
+  border-radius: 30px !important;
 }
