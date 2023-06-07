@@ -12,10 +12,10 @@ import profilepic from "../../assests/profilepic.png";
 import badge1 from "../../assests/Badge_1.png";
 import badge2 from "../../assests/Badge_2.png";
 import badge3 from "../../assests/Badge_3.png";
-import history from "../../assests/history.png";
-import medicine from "../../assests/medicine.png";
-import technology from "../../assests/technology.png";
-import agriculture from "../../assests/agriculture.png";
+import history from "../../assests/history.jpg";
+import medicine from "../../assests/medicine.jpg";
+import technology from "../../assests/tech.jpg";
+import agriculture from "../../assests/agriculture.jpg";
 
 import { useSelector, useDispatch } from "react-redux";
 import { getProfileById } from "../../store/slices/profile/ProfileAction";
@@ -160,16 +160,16 @@ const Dashboard = () => {
                   style={{ padding: "5%" }}
                 >
                   <Col className="gutter-row" span={12}>
-                    <Image src={history} width={150} />
+                    <Image src={history} className="featured-image" width={150} height={80}/>
                   </Col>
                   <Col className="gutter-row" span={12}>
-                    <Image src={medicine} width={150} />
+                    <Image src={medicine} className="featured-image" width={150} height={80}/>
                   </Col>
                   <Col className="gutter-row" span={12}>
-                    <Image src={technology} width={150} />
+                    <Image src={technology} className="featured-image" width={150} height={80}/>
                   </Col>
                   <Col className="gutter-row" span={12}>
-                    <Image src={agriculture} width={150} />
+                    <Image src={agriculture} className="featured-image" width={150} height={80}/>
                   </Col>
                 </Row>
               </Col>
