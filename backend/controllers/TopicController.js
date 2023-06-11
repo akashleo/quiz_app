@@ -22,6 +22,7 @@ export const addTopic = async (req, res, next) => {
     maxAttempts,
     timeLimit,
     points,
+    name
   } = req.body;
   let topic;
   try {
@@ -31,6 +32,7 @@ export const addTopic = async (req, res, next) => {
         maxAttempts,
         timeLimit,
         points,
+        name
     });
     await topic.save();
   } catch (err) {
@@ -50,6 +52,7 @@ export const updateTopic = async (req, res, next) => {
     maxAttempts,
     timeLimit,
     points,
+    name
   } = req.body;
   let topic;
 
@@ -62,6 +65,7 @@ export const updateTopic = async (req, res, next) => {
         maxAttempts,
         timeLimit,
         points,
+        name
     });
 
     await topic.save();

@@ -1,32 +1,90 @@
-import React, { useState } from "react";
-import { Form, Input, Button, Modal } from "antd";
+import React, { useEffect, useState } from "react";
+import { Form, Input, Button, Modal, Select, Row, Col } from "antd";
+//import { ObjectId } from 'bson';
 import "./questions.css";
+import {
+  addQuestion,
+} from "../../store/slices/question/QuestionAction";
+import { useDispatch, useSelector } from "react-redux";
 
-const AddQuestion = ({addQuestion, setAddQuestion, handleOk}) => {
+const AddQuestion = ({ addQuestionModal, setAddQuestionModal, handleOk, topics }) => {
   const [form] = Form.useForm();
-  const [state, setState] = useState({
-    op1: "",
-    op2: "",
-    op3: "",
-    op4: "",
-    correct: "",
+  const dispatch = useDispatch();
+  const [question, setQuestion] = useState({
+    options: [],
+    isCorrect: "",
     topicId: "",
-    topicName: "",
-    question: "",
+    available: "true",
+    questionText: "",
   });
 
-  const handleFormSubmit = (values) => {
+  const options = [];
+
+  for (let i = 1; i <= 4; i++) {
+    options.push({
+      label: "Option "+i,
+      value: i,
+    });
+  }
+
+  const [topicOptions, setTopicOptions] = useState([]);
+
+  useEffect(()=>{
+    const topicOption = topics.map((item)=>{
+      return ( {
+        label: item.name,
+        value: item._id
+      })
+    })
+    setTopicOptions(topicOption);
+  },[])
+
+  const handleFormSubmit = (obj) => {
+    console.log(obj);
+    const {
+      op1,
+      op2,
+      op3,
+      op4,
+      correct,
+      topicId,
+      questionText
+    }
+    = obj
+    // Do something with the form values, e.g. submit to a server
+const x = {
+      options: [{id: 1, text:op1},{id: 2, text:op2},{id: 3, text:op3},{id: 4, text:op4}],
+      isCorrect: correct,
+      topicId: topicId,
+      available: "true",
+      image: "./lmao.jpeg",
+      questionText: questionText,
+    };
+    setQuestion(x);
+    console.log(question)
+    dispatch(addQuestion(x));
+    setAddQuestionModal(false);
+  };
+
+  const handleChange = (values) => {
     console.log(values);
     // Do something with the form values, e.g. submit to a server
   };
 
   return (
-    <Modal style={{ zIndex: 10 }} open={addQuestion} onOk={handleOk}  onCancel={handleOk} footer={false}>
+    <Modal
+      title={"Add Question"}
+      style={{ zIndex: 10 }}
+      open={addQuestion}
+      onOk={handleOk}
+      onCancel={handleOk}
+      footer={false}
+    >
       <div className="add-form">
         <Form form={form} onFinish={handleFormSubmit} layout="vertical">
           <Form.Item
-            label="Question"
-            name="question"
+             label={<b>Question</b>}
+            name="questionText"
             rules={[
               {
                 required: true,
@@ -37,60 +95,71 @@ const AddQuestion = ({addQuestion, setAddQuestion, handleOk}) => {
             <Input />
           </Form.Item>
 
-          <Form.Item
-            label="Option 1"
-            name="op1"
-            rules={[
-              {
-                required: true,
-                message: "Please enter option 1",
-              },
-            ]}
-          >
-            <Input />
-          </Form.Item>
+          <Row>
+            <Col span={12}>
+              <Form.Item
+                 label={<b>Option 1</b>}
+                name="op1"
+                className="option-field"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please enter option 1",
+                  },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                 label={<b>Option 2</b>}
+                name="op2"
+                className="option-field"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please enter option 2",
+                  },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                 label={<b>Option 3</b>}
+                name="op3"
+                className="option-field"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please enter option 3",
+                  },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                label={<b>Option 4</b>}
+                name="op4"
+                className="option-field"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please enter option 4",
+                  },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+            </Col>
+          </Row>
 
           <Form.Item
-            label="Option 2"
-            name="op2"
-            rules={[
-              {
-                required: true,
-                message: "Please enter option 2",
-              },
-            ]}
-          >
-            <Input />
-          </Form.Item>
-
-          <Form.Item
-            label="Option 3"
-            name="op3"
-            rules={[
-              {
-                required: true,
-                message: "Please enter option 3",
-              },
-            ]}
-          >
-            <Input />
-          </Form.Item>
-
-          <Form.Item
-            label="Option 4"
-            name="op4"
-            rules={[
-              {
-                required: true,
-                message: "Please enter option 4",
-              },
-            ]}
-          >
-            <Input />
-          </Form.Item>
-
-          <Form.Item
-            label="Correct Answer"
+            label={<b>Correct Answer</b>}
             name="correct"
             rules={[
               {
@@ -99,37 +168,37 @@ const AddQuestion = ({addQuestion, setAddQuestion, handleOk}) => {
               },
             ]}
           >
-            <Input />
+            <Select
+              disabled={false}
+              style={{ width: "100%" }}
+              placeholder="Please select"
+              onChange={handleChange}
+              options={options}
+            />
           </Form.Item>
 
           <Form.Item
-            label="Topic ID"
+             label={<b>Topic</b>}
             name="topicId"
             rules={[
               {
                 required: true,
-                message: "Please enter the topic ID",
+                message: "Please select the Topic",
               },
             ]}
           >
-            <Input />
+            <Select
+              //mode="multiple"
+              disabled={false}
+              style={{ width: "100%" }}
+              placeholder="Please select"
+              //defaultValue={["a10", "c12"]}
+              onChange={handleChange}
+              options={topicOptions}
+            />
           </Form.Item>
-
-          <Form.Item
-            label="Topic Name"
-            name="topicName"
-            rules={[
-              {
-                required: true,
-                message: "Please enter the topic name",
-              },
-            ]}
-          >
-            <Input />
-          </Form.Item>
-
           <Form.Item className="button-submit">
-            <Button type="primary" htmlType="submit">
+            <Button type="primary" htmlType="submit" className="submit-button">
               Submit
             </Button>
           </Form.Item>

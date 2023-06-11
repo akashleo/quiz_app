@@ -1,5 +1,6 @@
 import Question from "../model/Question.js";
 import Topic from "../model/Topic.js";
+import mongoose from "mongoose";
 
 export const getAllQuestions = async (req, res, next) => {
   let questions;
@@ -22,7 +23,7 @@ export const addQuestion = async (req, res, next) => {
   let topic;
 
   try {
-    topic = await Topic.findById(topicId);
+    topic = await Topic.findById(mongoose.Types.ObjectId(topicId));
   } catch (err) {
     console.log(err);
   }
@@ -39,19 +40,8 @@ export const addQuestion = async (req, res, next) => {
     options,
     isCorrect,
     image,
+    topicId
   });
-  // try {
-  //   question = new Question({
-  //       questionText,
-  //       available,
-  //       options,
-  //       isCorrect,
-  //       image,
-  //   });
-  //   await question.save();
-  // } catch (err) {
-  //   console.log(err);
-  // }
 
   try {
     const session = await mongoose.startSession();

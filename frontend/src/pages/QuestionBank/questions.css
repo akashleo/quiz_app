@@ -92,3 +92,21 @@
   .toggle{
     background-color: #8692a6 !important;
   }
+
+  .option-field{
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+
+  .ant-switch-inner-checked{
+
+  }
+
+  .submit-button {
+    box-shadow: 0px 15px 40px 5px #ededed;
+    border: none !important;
+    background: #fff;
+    border-radius: 30px;
+    color: black;
+    height: 46px;
+  }
