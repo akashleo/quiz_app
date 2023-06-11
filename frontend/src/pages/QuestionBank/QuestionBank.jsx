@@ -5,28 +5,30 @@ import AddQuestion from "./AddQuestion";
 import "./questions.css";
 
 import {
-  getAllQuestions,
-  addQuestion,
+  getAllQuestions
 } from "../../store/slices/question/QuestionAction";
+import { getAllTopics, addTopic } from "../../store/slices/topic/TopicAction";
 import { useDispatch, useSelector } from "react-redux";
 
 const QuestionBank = () => {
   const dispatch = useDispatch();
 
   const { questions } = useSelector((state) => state.question);
+  const { topics } = useSelector((state) => state.topic);
 
   useEffect(() => {
-    if (questions.length <= 0) dispatch(getAllQuestions());
+    if (questions?.length <= 0) dispatch(getAllQuestions());
+    if (topics?.length <= 0) dispatch(getAllTopics());
   }, []);
 
-  const [addQuestion, setAddQuestion] = useState(false);
+  const [addQuestionModal, setAddQuestionModal] = useState(false);
 
   const handleOk = () => {
-    setAddQuestion(false);
+    setAddQuestionModal(false);
   };
 
   const openModal = () => {
-    setAddQuestion(true);
+    setAddQuestionModal(true);
   };
 
   return (
@@ -39,13 +41,25 @@ const QuestionBank = () => {
           Filters
         </Col>
         <Col span={8} className="text-right">
-        <Button disabled={addQuestion ? true : false} onClick={openModal} className="action-button">
+          <Button
+            disabled={addQuestionModal ? true : false}
+            onClick={openModal}
+            className="action-button"
+          >
             Dashboard
           </Button>
-          <Button disabled={addQuestion ? true : false} onClick={openModal} className="action-button">
+          <Button
+            disabled={addQuestionModal ? true : false}
+            onClick={openModal}
+            className="action-button"
+          >
             Add Topic
           </Button>
-          <Button disabled={addQuestion ? true : false} onClick={openModal} className="action-button">
+          <Button
+            disabled={addQuestionModal ? true : false}
+            onClick={openModal}
+            className="action-button"
+          >
             Add Question
           </Button>
         </Col>
@@ -58,10 +72,11 @@ const QuestionBank = () => {
           </Col>
         ))}
       </Row>
-      {addQuestion && (
+      {addQuestionModal && (
         <AddQuestion
-          addQuestion={addQuestion}
-          setAddQuestion={setAddQuestion}
+          topics={topics}
+          addQuestionModal={addQuestionModal}
+          setAddQuestionModal={setAddQuestionModal}
           handleOk={handleOk}
         />
       )}

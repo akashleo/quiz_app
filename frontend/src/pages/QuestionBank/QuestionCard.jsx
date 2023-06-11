@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Card, Radio, Image } from "antd";
 import { Switch } from "antd";
 import questionmark from "../../assests/questionmark.png";
@@ -8,8 +8,17 @@ const { Meta } = Card;
 const QuestionCard = ({ question }) => {
   const { questionText, options, image } = question;
 
+  const [activeState, setActiveState] = useState("ACTIVE");
+
   const onChange = (event) => {
     console.log(event);
+    if(event)
+    {
+      setActiveState("ACTIVE");
+    }
+    else{
+      setActiveState("ARCHIVED");
+    }
   };
 
   return (
@@ -34,7 +43,7 @@ const QuestionCard = ({ question }) => {
         ))}
       </Radio.Group>
       <div className="archive">
-        <label>ARCHIVE</label>{" "}
+        <label>{activeState}</label>{" "}
         <Switch
           className="toggle"
           defaultChecked
