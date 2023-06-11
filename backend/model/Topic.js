@@ -4,6 +4,11 @@ const Schema = mongoose.Schema;
 
 const TopicSchema = new Schema(
   {
+    name:{
+      type: String,
+      required: true,
+    },
+
     instructions: {
       type: String,
       required: true,
@@ -23,6 +28,10 @@ const TopicSchema = new Schema(
       type: Number,
       required: true,
     },
+    image: {
+      type: String,
+      required: false,
+    }, 
     questions: [{type: mongoose.Types.ObjectId, ref: "Question", required: true}]
   },
   { timestamps: true }
