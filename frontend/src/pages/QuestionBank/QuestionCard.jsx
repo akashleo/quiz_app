@@ -12,11 +12,9 @@ const QuestionCard = ({ question }) => {
 
   const onChange = (event) => {
     console.log(event);
-    if(event)
-    {
+    if (event) {
       setActiveState("ACTIVE");
-    }
-    else{
+    } else {
       setActiveState("ARCHIVED");
     }
   };
@@ -27,6 +25,7 @@ const QuestionCard = ({ question }) => {
       style={{ width: 400 }}
       cover={
         <Image
+          preview={false}
           alt={questionText}
           src={questionmark}
           height={100}
