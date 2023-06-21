@@ -3,19 +3,19 @@ import { Form, Input, Button, Modal, Select, Row, Col } from "antd";
 //import { ObjectId } from 'bson';
 import "./questions.css";
 import {
-  addQuestion,
-} from "../../store/slices/question/QuestionAction";
+  addTopic,
+} from "../../store/slices/topic/TopicAction";
 import { useDispatch, useSelector } from "react-redux";
 
-const AddQuestion = ({ addQuestionModal, setAddQuestionModal, handleOk, topics }) => {
+const AddTopic = ({ addTopicModal, setAddTopicModal, handleOk, topics }) => {
   const [form] = Form.useForm();
   const dispatch = useDispatch();
-  const [question, setQuestion] = useState({
+  const [topic, setTopic] = useState({
     options: [],
     isCorrect: "",
     topicId: "",
     available: "true",
-    questionText: "",
+    topicText: "",
   });
 
   const options = [];
@@ -48,7 +48,7 @@ const AddQuestion = ({ addQuestionModal, setAddQuestionModal, handleOk, topics }
       op4,
       correct,
       topicId,
-      questionText
+      topicText
     }
     = obj
     // Do something with the form values, e.g. submit to a server
@@ -58,12 +58,12 @@ const x = {
       topicId: topicId,
       available: "true",
       image: "./lmao.jpeg",
-      questionText: questionText,
+      topicText: topicText,
     };
-    setQuestion(x);
-    console.log(question)
-    dispatch(addQuestion(x));
-    setAddQuestionModal(false);
+    setTopic(x);
+    console.log(topic)
+    dispatch(addTopic(x));
+    setAddTopicModal(false);
   };
 
   const handleChange = (values) => {
@@ -73,9 +73,9 @@ const x = {
 
   return (
     <Modal
-      title={"Add Question"}
+      title={"Add Topic"}
       style={{ zIndex: 10 }}
-      open={addQuestion}
+      open={addTopic}
       onOk={handleOk}
       onCancel={handleOk}
       footer={false}
@@ -83,12 +83,12 @@ const x = {
       <div className="add-form">
         <Form form={form} onFinish={handleFormSubmit} layout="vertical">
           <Form.Item
-             label={<b>Question</b>}
-            name="questionText"
+             label={<b>Topic</b>}
+            name="topicText"
             rules={[
               {
                 required: true,
-                message: "Please enter a question",
+                message: "Please enter a topic",
               },
             ]}
           >
@@ -208,4 +208,4 @@ const x = {
   );
 };
 
-export default AddQuestion;
+export default AddTopic;
