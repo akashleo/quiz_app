@@ -1,4 +1,5 @@
 import React, {useState} from "react";
+import { useNavigate } from "react-router-dom";
 import { Layout, Input, Button, Avatar, Row, Col } from "antd";
 import { SearchOutlined, UserOutlined } from "@ant-design/icons";
 import SuccessModal from "./SuccessModal";
@@ -10,10 +11,14 @@ const { Header } = Layout;
 const Navbar = () => {
 
   const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
 
   const showModal = () => {
     setOpen(true);
   };
+  const startQuiz = () => {
+    navigate("/answer")
+  }
   return (
     <Header className="navbar sticky">
       <Row>
@@ -28,7 +33,7 @@ const Navbar = () => {
           />
         </Col>
         <Col span={8} style={{ textAlign: "right" }}>
-          <Button type="primary" shape="round" className="start-button" onClick={showModal}>
+          <Button type="primary" shape="round" className="start-button" onClick={startQuiz}>
             Start Quiz
           </Button>
         </Col>

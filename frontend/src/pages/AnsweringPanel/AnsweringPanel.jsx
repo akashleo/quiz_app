@@ -5,6 +5,7 @@ import { Row, Col, Radio, Image, Space, Button } from "antd";
 import "./AnsweringPanel.css";
 import qstn from "../../assests/qstn.jpg";
 import ConfirmModal from "../../components/ConfirmModal";
+import Timer from "../../components/Timer";
 
 const AnsweringPanel = () => {
   const [value, setValue] = useState(1);
@@ -30,10 +31,11 @@ const AnsweringPanel = () => {
           <div className="description">
             <div className="heading">
               <h1>History Quiz</h1>
-              <h1>
+              <div className="timer-clock">
                 <ClockCircleOutlined />
-                &nbsp;Timer: 29:09Mins
-              </h1>
+                &nbsp;
+                <Timer />
+              </div>
             </div>
             <h5>Answer the question below</h5>
             <Row>

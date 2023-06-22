@@ -19,7 +19,7 @@ function App() {
   return (
     <>
     
-    {window.location.pathname !== "/question" && <Navbar/> }
+    
     {/* <Navbar/> */}
     <Router>
       <Routes>
