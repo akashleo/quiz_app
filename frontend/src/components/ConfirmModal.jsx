@@ -7,15 +7,18 @@ import {
 } from "@ant-design/icons";
 import { Modal, Button, Image } from "antd";
 import "./components.css";
+import { useNavigate } from "react-router-dom";
 
 const ConfirmModal = ({ open, setOpen }) => {
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate()
 
   const handleOk = () => {
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
       setOpen(false);
+      navigate("/dashboard")
     }, 3000);
   };
 

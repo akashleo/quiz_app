@@ -18,6 +18,7 @@ app.use("/user", userRouter);
 app.use("/grades", gradesRouter);
 app.use("/topics", topicRouter);
 app.use("/questions", questionRouter);
+app.use("/answer", questionRouter);
 
 mongoose
   .connect(

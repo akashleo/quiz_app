@@ -1,48 +1,65 @@
-.logout{
-    position: absolute;
-    bottom: 20px;
-    width: 100%;
+.logout {
+  position: absolute;
+  bottom: 20px;
+  width: 100%;
 }
 
-.description{
-    border-radius: 30px;
-    box-shadow: 0px 15px 40px 5px #EDEDED;
-    background: #FFFFFF;
-    padding: 20px;
-    margin: 0px 20px 20px 20px;
+.description {
+  border-radius: 30px;
+  box-shadow: 0px 15px 40px 5px #ededed;
+  background: #ffffff;
+  padding: 20px;
+  margin: 0px 20px 20px 20px;
 }
 
-.details{
-    padding: 10px;
+.details {
+  padding: 10px;
+  font-family: "Poppins", sans-serif;
 }
 
-.details h4{
-    margin: 17px auto;
+.details h4 {
+  margin: 17px auto;
 }
 
-.question-image{
-    border-radius: 30px;
+.question-image {
+  border-radius: 30px;
+  height: 15rem !important;
+  width: 100% !important;
+  object-fit: contain;
+  /* border: 1px solid grey; */
+  padding: 20px;
 }
 
-.start-button{
-    width: 150px;
-    background-color: #8692A6;
-    box-shadow: none;
-    font-family: "Poppins", sans-serif;
-    border: none;
-    border-radius: 30px;
-    color: #FFFFFF;
+.start-button {
+  width: 150px;
+  background-color: #8692a6;
+  box-shadow: none;
+  font-family: "Poppins", sans-serif;
+  border: none;
+  border-radius: 30px;
+  color: #ffffff;
 }
 
-.heading{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+.heading {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  font-family: "Poppins", sans-serif !important;
 }
 
-.timer-clock{
-    border: #FFFFFF solid;
-    font-size: 24px;
-    font-weight: 600;
-    font-family: "Poppins", sans-serif !important;
+.timer-clock {
+  border: #ffffff solid;
+  font-size: 24px;
+  font-weight: 600;
+  font-family: "Poppins", sans-serif !important;
+}
+
+.answering-header {
+  margin-bottom: 10px;
+}
+
+.radio-options{
+  font-size: 16px;
+  font-weight: 600;
+  font-family: "Poppins", sans-serif !important;
 }

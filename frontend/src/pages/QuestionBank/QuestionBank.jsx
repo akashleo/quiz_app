@@ -3,15 +3,16 @@ import { Row, Col, Button, Modal } from "antd";
 import QuestionCard from "./QuestionCard";
 import AddQuestion from "./AddQuestion";
 import "./questions.css";
-
 import {
   getAllQuestions
 } from "../../store/slices/question/QuestionAction";
 import { getAllTopics, addTopic } from "../../store/slices/topic/TopicAction";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const QuestionBank = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const { questions } = useSelector((state) => state.question);
   const { topics } = useSelector((state) => state.topic);
@@ -43,7 +44,7 @@ const QuestionBank = () => {
         <Col span={8} className="text-right">
           <Button
             disabled={addQuestionModal ? true : false}
-            onClick={openModal}
+            onClick={()=>navigate("/dashboard")}
             className="action-button"
           >
             Dashboard
