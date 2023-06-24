@@ -9,6 +9,11 @@ const answerSchema = new Schema(
       ref: "Profile",
       required: true,
     },
+    topicId: {
+      type: Schema.Types.ObjectId,
+      ref: "Topic",
+      required: true,
+    },
     answers: { type: Map, of: String },
     startTime: {
       type: Date,
