@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Form, Input, Button, Modal, Select, Row, Col } from "antd";
+import { Form, Input, Button, Upload, Modal, Select, Row, Col } from "antd";
+import { UploadOutlined } from '@ant-design/icons';
 //import { ObjectId } from 'bson';
 import "./questions.css";
 import {

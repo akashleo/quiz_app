@@ -5,6 +5,8 @@ import userRouter from "./routes/userRoutes.js";
 import gradesRouter from "./routes/gradesRoutes.js"; 
 import topicRouter from "./routes/topicRoutes.js"
 import questionRouter from "./routes/questionRoutes.js";
+import answerRouter from "./routes/answerRoutes.js";
+import fileRouter from "./routes/fileRoutes.js";
 
 import cors from "cors";
 import dotenv from "dotenv";
@@ -18,7 +20,9 @@ app.use("/user", userRouter);
 app.use("/grades", gradesRouter);
 app.use("/topics", topicRouter);
 app.use("/questions", questionRouter);
-app.use("/answer", questionRouter);
+app.use("/answer", answerRouter);
+app.use("/file-upload", fileRouter);
+
 
 mongoose
   .connect(
