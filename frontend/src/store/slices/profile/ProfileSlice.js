@@ -10,7 +10,7 @@ const initialState = {
 };
 
 const profileSlice = createSlice({
-  name: "adminAuth",
+  name: "profile",
   initialState,
   reducers: {
     clearState: (state) => {

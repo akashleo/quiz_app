@@ -7,9 +7,6 @@ import {
   deleteTopic,
 } from "../controllers/TopicController.js";
 
-//const Book = require("../model/Profile");
-
-//const ProfileControllers = require("../controllers/ProfileController");
 
 topicRouter.get("/", getAllTopics);
 //topicRouter.get("/:id", getProfileById);
