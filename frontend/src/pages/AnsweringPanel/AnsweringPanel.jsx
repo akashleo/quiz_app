@@ -88,7 +88,7 @@ const AnsweringPanel = () => {
             </Row>
             <div style={{ padding: "20px" }} className="radio-options">
               <h3>Choose Answer</h3>
-              <Radio.Group onChange={storeAnswer} value={answer[displayQuestion._id]? answer[displayQuestion._id]: null}>
+              <Radio.Group onChange={storeAnswer} value={answer[displayQuestion?._id]? answer[displayQuestion?._id]: null}>
                 <Space direction="vertical">
                   {displayQuestion?.options?.map((option) => {
                     return <Radio value={option.id}>{option.text}</Radio>;

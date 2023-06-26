@@ -15,13 +15,14 @@ let processFile = Multer({
 
 let processFileMiddleware = util.promisify(processFile);
 
+
 export const fileUpload = async (req, res, next) => {
   //console.log(req)
   try {
     await processFileMiddleware(req, res);
 
     if (!req.file) {
-      return res.status(400).send({ message: "Please upload a file!" });
+      return res.status(400).send({ message: "Please upload a file!" , file: req});
     }
     
     // Create a new blob in the bucket and upload the file data.

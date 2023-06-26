@@ -21,7 +21,7 @@ app.use("/grades", gradesRouter);
 app.use("/topics", topicRouter);
 app.use("/questions", questionRouter);
 app.use("/answer", answerRouter);
-app.use("/file-upload", fileRouter);
+app.use("/upload", fileRouter);
 
 
 mongoose

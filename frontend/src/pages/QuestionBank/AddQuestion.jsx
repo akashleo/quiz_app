@@ -1,75 +1,104 @@
-import React, { useEffect, useState } from "react";
-import { Form, Input, Button, Upload, Modal, Select, Row, Col } from "antd";
-import { UploadOutlined } from '@ant-design/icons';
+import React, { useEffect, useState, useMemo } from "react";
+import { Form, Input, Button, Space, Modal, Select, Row, Col } from "antd";
+import { UploadOutlined } from "@ant-design/icons";
+
+import {Packer} from "file-saver"
 //import { ObjectId } from 'bson';
 import "./questions.css";
-import {
-  addQuestion,
-} from "../../store/slices/question/QuestionAction";
+import { addQuestion } from "../../store/slices/question/QuestionAction";
 import { useDispatch, useSelector } from "react-redux";
+import { fileUpload } from "../../store/slices/file/FileAction";
+//import { current } from "@reduxjs/toolkit";
 
-const AddQuestion = ({ addQuestionModal, setAddQuestionModal, handleOk, topics }) => {
+const AddQuestion = ({
+  addQuestionModal,
+  setAddQuestionModal,
+  handleOk,
+  topics,
+}) => {
   const [form] = Form.useForm();
   const dispatch = useDispatch();
+
+  const { currentFileUrl } = useSelector((state) => state.file);
+
   const [question, setQuestion] = useState({
     options: [],
     isCorrect: "",
     topicId: "",
     available: "true",
+    image: "",
     questionText: "",
   });
+
+  const [topicOptions, setTopicOptions] = useState([]);
+  const [fileName, setFileName] = useState("");
+  const [selectedFile, setSelectedFile] = useState(null)
+  //const [uploading, setUploading] = useState(false);
 
   const options = [];
 
   for (let i = 1; i <= 4; i++) {
     options.push({
-      label: "Option "+i,
+      label: "Option " + i,
       value: i,
     });
   }
 
-  const [topicOptions, setTopicOptions] = useState([]);
-
-  useEffect(()=>{
-    const topicOption = topics.map((item)=>{
-      return ( {
+  useEffect(() => {
+    const topicOption = topics.map((item) => {
+      return {
         label: item.name,
-        value: item._id
-      })
-    })
+        value: item._id,
+      };
+    });
     setTopicOptions(topicOption);
-  },[])
+  }, []);
+
+  useEffect(() => {
+    setQuestion({ ...question, image: currentFileUrl });
+  }, [currentFileUrl]);
 
   const handleFormSubmit = (obj) => {
     console.log(obj);
-    const {
-      op1,
-      op2,
-      op3,
-      op4,
-      correct,
-      topicId,
-      questionText
-    }
-    = obj
+    const { op1, op2, op3, op4, correct, topicId, questionText } = obj;
     // Do something with the form values, e.g. submit to a server
-const x = {
-      options: [{id: 1, text:op1},{id: 2, text:op2},{id: 3, text:op3},{id: 4, text:op4}],
+    const x = {
+      options: [
+        { id: 1, text: op1 },
+        { id: 2, text: op2 },
+        { id: 3, text: op3 },
+        { id: 4, text: op4 },
+      ],
       isCorrect: correct,
       topicId: topicId,
       available: "true",
-      image: "./lmao.jpeg",
       questionText: questionText,
+      image: question.image,
     };
     setQuestion(x);
-    console.log(question)
+    console.log(question);
     dispatch(addQuestion(x));
     setAddQuestionModal(false);
   };
 
   const handleChange = (values) => {
     console.log(values);
-    // Do something with the form values, e.g. submit to a server
+  };
+
+  const handleFileChange = (event) => {
+    console.log('event =>',event.target.files[0])
+    //setFileName(event.target.files[0].name)
+    setSelectedFile(event.target.files[0]);
+    // setSelectedFile(event.target.files[0]);
+  };
+
+  const imageUpload = () => {
+    const formData = new FormData();
+    //const fileURL = URL.createObjectURL(selectedFile);
+    formData.append("file", selectedFile);
+    //setUploading(true);
+    console.log("formData =>",formData.entries())
+    dispatch(fileUpload(formData));
   };
 
   return (
@@ -84,7 +113,7 @@ const x = {
       <div className="add-form">
         <Form form={form} onFinish={handleFormSubmit} layout="vertical">
           <Form.Item
-             label={<b>Question</b>}
+            label={<b>Question</b>}
             name="questionText"
             rules={[
               {
@@ -99,7 +128,7 @@ const x = {
           <Row>
             <Col span={12}>
               <Form.Item
-                 label={<b>Option 1</b>}
+                label={<b>Option 1</b>}
                 name="op1"
                 className="option-field"
                 rules={[
@@ -114,7 +143,7 @@ const x = {
             </Col>
             <Col span={12}>
               <Form.Item
-                 label={<b>Option 2</b>}
+                label={<b>Option 2</b>}
                 name="op2"
                 className="option-field"
                 rules={[
@@ -129,7 +158,7 @@ const x = {
             </Col>
             <Col span={12}>
               <Form.Item
-                 label={<b>Option 3</b>}
+                label={<b>Option 3</b>}
                 name="op3"
                 className="option-field"
                 rules={[
@@ -179,7 +208,7 @@ const x = {
           </Form.Item>
 
           <Form.Item
-             label={<b>Topic</b>}
+            label={<b>Topic</b>}
             name="topicId"
             rules={[
               {
@@ -197,6 +226,12 @@ const x = {
               onChange={handleChange}
               options={topicOptions}
             />
+          </Form.Item>
+          <Form.Item>
+            <Space.Compact style={{ width: "100%" }}>
+              <Input type="file" defaultValue={"Upload Image"} onChange={handleFileChange} value={fileName}/>
+              <Button type="primary" onClick={imageUpload}><UploadOutlined/>&nbsp;Upload</Button>
+            </Space.Compact>
           </Form.Item>
           <Form.Item className="button-submit">
             <Button type="primary" htmlType="submit" className="submit-button">

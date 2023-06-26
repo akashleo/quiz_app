@@ -11,7 +11,7 @@ const initialState = {
 };
 
 const questionSlice = createSlice({
-  name: "adminAuth",
+  name: "question",
   initialState,
   reducers: {
     clearState: (state) => {
