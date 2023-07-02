@@ -1,5 +1,5 @@
 import React from "react";
-import { LayoutOutlined, BellOutlined, PhoneOutlined, LogoutOutlined } from "@ant-design/icons";
+import { LayoutOutlined, BellOutlined, PhoneOutlined, LogoutOutlined, QuestionCircleOutlined } from "@ant-design/icons";
 import { Menu } from "antd";
 import { logOut } from "../store/slices/auth/AuthSlice";
 import { useDispatch } from "react-redux";
@@ -18,7 +18,7 @@ const LeftMenu = () => {
   const items = [
     getItem("Dashboard", "1", <LayoutOutlined />),
     getItem("Support", "2", <PhoneOutlined />),
-    getItem("Notification", "3", <BellOutlined />),
+    getItem("Notification", "3", <BellOutlined />)
   ];
 
   const dispatch = useDispatch();
@@ -29,6 +29,11 @@ const LeftMenu = () => {
     navigate("/")
   }
 
+  const questionBank = (event) =>{
+    console.log(event)
+    navigate("/question")
+  }
+
   return (
     <>
       <Menu
@@ -36,6 +41,12 @@ const LeftMenu = () => {
         defaultSelectedKeys={["1"]}
         items={items}
       />
+      <Menu className="questionbank">
+        <Menu.Item onClick={questionBank}>
+          <QuestionCircleOutlined />
+          &nbsp; &nbsp;Question Bank
+        </Menu.Item>
+      </Menu>
       <Menu className="logout">
         <Menu.Item onClick={LogoutFn}>
           <LogoutOutlined />

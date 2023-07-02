@@ -6,6 +6,7 @@ import Topics from "./pages/Topics/Topics";
 import Instructions from "./pages/Instructions/Instructions";
 import AnsweringPanel from "./pages/AnsweringPanel/AnsweringPanel";
 import ReviewPanel from "./pages/ReviewPanel/ReviewPanel";
+import Profile from "./pages/Profile/Profile";
 import Navbar from "./components/Navbar";
 //import AddQuestion from "./pages/QuestionBank/AddQuestion";
 import QuestionBank from "./pages/QuestionBank/QuestionBank";
@@ -25,6 +26,7 @@ function App() {
       <Routes>
         <Route exact path="/" element={<Login />} />
         <Route exact path="/dashboard" element={<Dashboard />} />
+        <Route exact path="/profile" element={<Profile />} />
         <Route exact path="/topics" element={<Topics />} />
         <Route exact path="/instructions" element={<Instructions />} />
         <Route exact path="/answer" element={<AnsweringPanel />} />

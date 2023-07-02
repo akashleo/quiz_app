@@ -12,48 +12,14 @@ const Navbar = () => {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
 
-  const items = [
-    {
-      key: "1",
-      label: (
-        <a
-          onClick={()=>navigate("/question")}
-        >
-          Question Bank
-        </a>
-      ),
-    },
-    {
-      key: "2",
-      label: (
-        <a
-          target="_blank"
-          rel="noopener noreferrer"
-          href="https://www.aliyun.com"
-        >
-          Account
-        </a>
-      ),
-    },
-    {
-      key: "3",
-      label: (
-        <a
-          target="_blank"
-          rel="noopener noreferrer"
-          href="https://www.luohanacademy.com"
-        >
-          Add Admin User
-        </a>
-      ),
-    },
-  ];
-
   const showModal = () => {
     setOpen(true);
   };
   const startQuiz = () => {
     navigate("/answer");
+  };
+  const openProfile = () => {
+    navigate("/profile");
   };
   return (
     <Header className="navbar sticky">
@@ -79,15 +45,7 @@ const Navbar = () => {
           </Button>
         </Col>
         <Col span={4} style={{ textAlign: "right" }}>
-          <Dropdown
-            menu={{
-              items,
-            }}
-            placement="bottomRight"
-            arrow
-          >
-            <Avatar icon={<UserOutlined />} />
-          </Dropdown>
+          <Avatar onClick={openProfile} icon={<UserOutlined />} />
         </Col>
       </Row>
       {open && <SuccessModal open={open} setOpen={setOpen} />}
