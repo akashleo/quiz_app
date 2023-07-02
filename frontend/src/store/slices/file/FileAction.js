@@ -11,14 +11,14 @@ export const fileUpload = createAsyncThunk(
       const { data } = response;
       const resMsgType = data.message;
       const resMsg = data.message;
-      if (resMsgType == "error") {
+      if (resMsgType === "error") {
         return rejectWithValue(resMsg);
       } else {
         return response.data;
       }
     } catch (error) {
       const statusCode = error.response.data.error.status;
-      if (statusCode == 412) {
+      if (statusCode === 412) {
         return rejectWithValue(
           error.response.data.error["validationErrors"][0].msg
         );
