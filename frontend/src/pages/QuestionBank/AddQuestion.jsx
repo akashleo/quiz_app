@@ -102,7 +102,8 @@ const AddQuestion = ({
   };
 
   return (
-    <Modal
+    <Modal 
+      className="add-question"
       title={"Add Question"}
       style={{ zIndex: 10 }}
       open={addQuestion}
