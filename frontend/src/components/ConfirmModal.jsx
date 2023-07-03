@@ -1,12 +1,10 @@
 import React, { useState } from "react";
 import {
   QuestionOutlined,
-  BellOutlined,
-  PhoneOutlined,
-  LogoutOutlined,
+  
 } from "@ant-design/icons";
-import { Modal, Button, Image } from "antd";
-import "./components.css";
+import { Modal, Button } from "antd";
+import "./confirm-modal.css";
 import { useNavigate } from "react-router-dom";
 
 const ConfirmModal = ({ open, setOpen }) => {
@@ -29,6 +27,7 @@ const ConfirmModal = ({ open, setOpen }) => {
   return (
     <>
       <Modal
+        className="confirm-modal"
         style={{ zIndex: 10 }}
         open={open}
         onOk={handleOk}

@@ -28,7 +28,10 @@ const questionSlice = createSlice({
     });
     builder.addCase(getAllQuestions.fulfilled, (state, action) => {
       state.loading = false;
-      state.questions = action.payload;
+      const modifyQuestions = action.payload.map((question)=>{
+        return {...question, "correct": question.options[question.isCorrect-1].text}
+      })
+      state.questions = modifyQuestions;
       state.success = true;
     });
     builder.addCase(getAllQuestions.rejected, (state, action) => {
