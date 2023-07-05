@@ -83,12 +83,12 @@ const x = {
       <div className="add-form">
         <Form form={form} onFinish={handleFormSubmit} layout="vertical">
           <Form.Item
-             label={<b>Topic</b>}
-            name="topicText"
+             label={<b>Topic Name</b>}
+            name="name"
             rules={[
               {
                 required: true,
-                message: "Please enter a topic",
+                message: "Please enter a topic name",
               },
             ]}
           >
@@ -98,13 +98,13 @@ const x = {
           <Row>
             <Col span={12}>
               <Form.Item
-                 label={<b>Option 1</b>}
-                name="op1"
+                 label={<b>Instructions</b>}
+                name="instructions"
                 className="option-field"
                 rules={[
                   {
                     required: true,
-                    message: "Please enter option 1",
+                    message: "Please enter instructions",
                   },
                 ]}
               >

@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Row, Col, Button, Modal } from "antd";
+import { Row, Col, Button, Switch } from "antd";
+import { TableOutlined, IdcardOutlined } from "@ant-design/icons";
 import QuestionCard from "./QuestionCard";
 import AddQuestion from "./AddQuestion";
+import QuestionList from "./QuestionList";
 import "./questions.css";
-import {
-  getAllQuestions
-} from "../../store/slices/question/QuestionAction";
+import { getAllQuestions } from "../../store/slices/question/QuestionAction";
 import { getAllTopics, addTopic } from "../../store/slices/topic/TopicAction";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -23,6 +23,7 @@ const QuestionBank = () => {
   }, []);
 
   const [addQuestionModal, setAddQuestionModal] = useState(false);
+  const [tableView, setTableView] = useState(false);
 
   const handleOk = () => {
     setAddQuestionModal(false);
@@ -32,6 +33,15 @@ const QuestionBank = () => {
     setAddQuestionModal(true);
   };
 
+  const onChange = (event) => {
+    console.log(event);
+    if (event) {
+      setTableView(true);
+    } else {
+      setTableView(false);
+    }
+  };
+
   return (
     <div className="question-bank">
       <Row className="title-line">
@@ -39,12 +49,17 @@ const QuestionBank = () => {
           <h2>Question Bank</h2>
         </Col>
         <Col span={8} className="text-right">
-          Filters
+          <Switch
+            checkedChildren={<TableOutlined />}
+            unCheckedChildren={<IdcardOutlined />}
+            value={tableView}
+            onChange={(event) => onChange(event)}
+          />
         </Col>
         <Col span={8} className="text-right">
           <Button
             disabled={addQuestionModal ? true : false}
-            onClick={()=>navigate("/dashboard")}
+            onClick={() => navigate("/dashboard")}
             className="action-button"
           >
             Dashboard
@@ -65,14 +80,19 @@ const QuestionBank = () => {
           </Button>
         </Col>
       </Row>
-
-      <Row gutter={[16, 16]}>
-        {questions?.map((question, index) => (
-          <Col span={8} key={index}>
-            <QuestionCard question={question} />
-          </Col>
-        ))}
-      </Row>
+      {tableView ? (
+        <Row gutter={[16, 16]}>
+         <QuestionList questions={questions}/>
+        </Row>
+      ) : (
+        <Row gutter={[16, 16]}>
+          {questions?.map((question, index) => (
+            <Col span={8} key={index}>
+              <QuestionCard question={question} />
+            </Col>
+          ))}
+        </Row>
+      )}
       {addQuestionModal && (
         <AddQuestion
           topics={topics}

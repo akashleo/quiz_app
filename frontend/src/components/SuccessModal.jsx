@@ -1,20 +1,11 @@
-import React, { useState } from "react";
-import {
-  StarTwoTone,
-  BellOutlined,
-  PhoneOutlined,
-  LogoutOutlined,
-} from "@ant-design/icons";
-import { Modal, Button, Image } from "antd";
-import "./sucess-modal.css";
+import React from "react";
+import { StarTwoTone } from "@ant-design/icons";
+import { Modal, Button } from "antd";
+import "./success-modal.css";
 
 const SuccessModal = ({ open, setOpen }) => {
-  const [loading, setLoading] = useState(false);
-
   const handleOk = () => {
-    setLoading(true);
     setTimeout(() => {
-      setLoading(false);
       setOpen(false);
     }, 3000);
   };
@@ -25,12 +16,13 @@ const SuccessModal = ({ open, setOpen }) => {
 
   return (
     <>
-      <Modal
+      <Modal 
+        className="success-modal"
         style={{ zIndex: 10 }}
         open={open}
         onOk={handleOk}
         footer={[
-          <Button className="modal-button"  key="back" onClick={handleCancel}>
+          <Button className="modal-button" key="back" onClick={handleCancel}>
             Review quiz
           </Button>,
         ]}

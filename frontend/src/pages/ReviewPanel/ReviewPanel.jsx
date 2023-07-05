@@ -14,7 +14,7 @@ const ReviewPanel = () => {
   };
 
   return (
-    <Row style={{ height: "90vh", marginTop: "12vh" }}>
+    <Row style={{ height: "90vh", marginTop: "2vh" }}>
       <Col span={6}>
         <LeftMenu />
       </Col>
