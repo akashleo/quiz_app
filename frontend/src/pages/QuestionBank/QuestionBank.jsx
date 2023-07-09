@@ -9,6 +9,7 @@ import { getAllQuestions } from "../../store/slices/question/QuestionAction";
 import { getAllTopics, addTopic } from "../../store/slices/topic/TopicAction";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import AddTopic from "./AddTopic";
 
 const QuestionBank = () => {
   const dispatch = useDispatch();
@@ -23,14 +24,23 @@ const QuestionBank = () => {
   }, []);
 
   const [addQuestionModal, setAddQuestionModal] = useState(false);
+  const [addTopicModal, setAddTopicModal] = useState(false);
   const [tableView, setTableView] = useState(false);
 
   const handleOk = () => {
     setAddQuestionModal(false);
   };
 
-  const openModal = () => {
+  const handleTopicModalClose = () => {
+    setAddTopicModal(false);
+  };
+
+  const openQuestionModal = () => {
     setAddQuestionModal(true);
+  };
+
+  const openTopicModal = () => {
+    setAddTopicModal(true);
   };
 
   const onChange = (event) => {
@@ -65,15 +75,15 @@ const QuestionBank = () => {
             Dashboard
           </Button>
           <Button
-            disabled={addQuestionModal ? true : false}
-            onClick={openModal}
+            disabled={addTopicModal ? true : false}
+            onClick={openTopicModal}
             className="action-button"
           >
             Add Topic
           </Button>
           <Button
             disabled={addQuestionModal ? true : false}
-            onClick={openModal}
+            onClick={openQuestionModal}
             className="action-button"
           >
             Add Question
@@ -82,7 +92,7 @@ const QuestionBank = () => {
       </Row>
       {tableView ? (
         <Row gutter={[16, 16]}>
-         <QuestionList questions={questions}/>
+          <QuestionList questions={questions} />
         </Row>
       ) : (
         <Row gutter={[16, 16]}>
@@ -99,6 +109,15 @@ const QuestionBank = () => {
           addQuestionModal={addQuestionModal}
           setAddQuestionModal={setAddQuestionModal}
           handleOk={handleOk}
+        />
+      )}
+
+      {addTopicModal && (
+        <AddTopic
+          topics={topics}
+          addTopicModal={addTopicModal}
+          setAddTopicModal={setAddTopicModal}
+          handleOk={handleTopicModalClose}
         />
       )}
     </div>

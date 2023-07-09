@@ -27,6 +27,33 @@ export const addQuestion = createAsyncThunk('addQuestions',
   }
 )
 
+
+export const updateQuestion = createAsyncThunk('updateQuestion',
+  async (questionId, body, { rejectWithValue }) => {
+    try {
+      const { data } = await apiConfig.put(
+        `questions/${questionId}`,
+        body
+      )
+      const resMsg= "error"
+      if (data) {
+        return data;
+      } else {
+        return rejectWithValue(resMsg);
+      }
+    } catch (error) {
+      //console.clear()
+      const statusCode = error.response.data.error.status;
+      if (statusCode == 412) {
+        return rejectWithValue(error.response.data.error['validationErrors'][0].msg)
+      } else {
+        return rejectWithValue(error.response.data.error.msg);
+      }
+    }
+  }
+)
+
+
 export const getAllQuestions = createAsyncThunk('getQuestions',
   async (body, { rejectWithValue, dispatch }) => {
     try {

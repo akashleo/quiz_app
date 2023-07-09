@@ -2,11 +2,12 @@ import React, { useState } from "react";
 import { Card, Radio, Image } from "antd";
 import { Switch } from "antd";
 import questionmark from "../../assests/questionmark.png";
+import {updateQuestion} from "../../store/slices/question/QuestionAction";
 
 const { Meta } = Card;
 
 const QuestionCard = ({ question }) => {
-  const { questionText, options, image } = question;
+  const {_id, questionText, options, image } = question;
 
   const [activeState, setActiveState] = useState("ACTIVE");
 
