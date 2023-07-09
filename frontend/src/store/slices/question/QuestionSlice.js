@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getAllQuestions, addQuestion } from "./QuestionAction";
+import { getAllQuestions, addQuestion, updateQuestion } from "./QuestionAction";
 
 
 const initialState = {
@@ -39,7 +39,7 @@ const questionSlice = createSlice({
       state.error = action.payload;
       state.success = false;
     });
-    builder.addCase(addQuestion.pending, (state, payload) => {
+    builder.addCase(addQuestion.pending, (state, action) => {
       state.loading = true;
       state.error = null;
       state.success = false;
@@ -50,6 +50,21 @@ const questionSlice = createSlice({
       state.success = true;
     });
     builder.addCase(addQuestion.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+      state.success = false;
+    });
+    builder.addCase(updateQuestion.pending, (state, action) => {
+      state.loading = true;
+      state.error = null;
+      state.success = false;
+    });
+    builder.addCase(updateQuestion.fulfilled, (state, action) => {
+      state.loading = false;
+      state.singleQuestion = action.payload
+      state.success = true;
+    });
+    builder.addCase(updateQuestion.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload;
       state.success = false;
