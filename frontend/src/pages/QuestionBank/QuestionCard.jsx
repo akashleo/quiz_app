@@ -1,23 +1,21 @@
 import React, { useState } from "react";
 import { Card, Radio, Image } from "antd";
 import { Switch } from "antd";
+import { EditOutlined } from "@ant-design/icons";
 import questionmark from "../../assests/questionmark.png";
-import {updateQuestion} from "../../store/slices/question/QuestionAction";
+import { useSelector } from "react-redux";
 
 const { Meta } = Card;
 
-const QuestionCard = ({ question }) => {
-  const {_id, questionText, options, image } = question;
-
-  const [activeState, setActiveState] = useState("ACTIVE");
+const QuestionCard = ({ question, updateQuestionState }) => {
+  const { _id, questionText, options, image, available } = question;
+  const { loading } = useSelector((state) => state.question);
 
   const onChange = (event) => {
     console.log(event);
-    if (event) {
-      setActiveState("ACTIVE");
-    } else {
-      setActiveState("ARCHIVED");
-    }
+    const modifiedQuestion = { ...question, available: !question.available };
+    console.log(_id, question, modifiedQuestion);
+    updateQuestionState(_id, modifiedQuestion);
   };
 
   return (
@@ -33,6 +31,17 @@ const QuestionCard = ({ question }) => {
           style={{ objectFit: "contain", paddingTop: "20px" }}
         />
       }
+      actions={[
+        <label key="label"><b>{available ? "ACTIVE" : "ARCHIVED"}</b></label>,
+        <EditOutlined key="edit" />,
+        <Switch
+          className="toggle"
+          key="toggle"
+          checked={available}
+          loading={loading}
+          onChange={(event) => onChange(event)}
+        />,
+      ]}
     >
       <Meta className="q-text" title={questionText} />
       <Radio.Group className="radio-group">
@@ -42,14 +51,6 @@ const QuestionCard = ({ question }) => {
           </Radio>
         ))}
       </Radio.Group>
-      <div className="archive">
-        <label>{activeState}</label>{" "}
-        <Switch
-          className="toggle"
-          defaultChecked
-          onChange={(event) => onChange(event)}
-        />
-      </div>
     </Card>
   );
 };

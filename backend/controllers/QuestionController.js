@@ -16,6 +16,20 @@ export const getAllQuestions = async (req, res, next) => {
   return res.status(200).json({ questions });
 };
 
+export const getArchivedQuestions = async (req, res, next) => {
+  let questions;
+  try {
+    questions = await Question.find({ available: false });
+  } catch (err) {
+    console.log(err);
+  }
+
+  if (!questions) {
+    return res.status(404).json({ message: "No Archived questions Found" });
+  }
+  return res.status(200).json({ questions });
+};
+
 export const addQuestion = async (req, res, next) => {
   const { questionText, options, isCorrect, available, image, topicId } =
     req.body;
@@ -80,11 +94,17 @@ export const updateQuestion = async (req, res, next) => {
   } catch (err) {
     console.log(err);
   }
+  let questions;
+  try {
+    questions = await Question.find();
+  } catch (err) {
+    console.log(err);
+  }
 
-  if (!question) {
+  if (!question && !questions) {
     return res.status(500).json({ message: "Unable to update by this id" });
   }
-  return res.status(201).json({ question });
+  return res.status(201).json({ questions });
 };
 
 export const deleteQuestion = async (req, res, next) => {

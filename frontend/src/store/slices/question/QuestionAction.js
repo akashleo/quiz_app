@@ -18,7 +18,7 @@ export const addQuestion = createAsyncThunk('addQuestions',
     } catch (error) {
       //console.clear()
       const statusCode = error.response.data.error.status;
-      if (statusCode == 412) {
+      if (statusCode === 412) {
         return rejectWithValue(error.response.data.error['validationErrors'][0].msg)
       } else {
         return rejectWithValue(error.response.data.error.msg);
@@ -29,26 +29,23 @@ export const addQuestion = createAsyncThunk('addQuestions',
 
 
 export const updateQuestion = createAsyncThunk('updateQuestion',
-  async (questionId, body, { rejectWithValue }) => {
+  async (req , {dispatch}) => { 
+    console.log("bodyyyy", req.body)
     try {
       const { data } = await apiConfig.put(
-        `questions/${questionId}`,
-        body
+        `questions/${req.id}`,
+        req.body
       )
-      const resMsg= "error"
       if (data) {
+        window.location.reload(false);
         return data;
       } else {
-        return rejectWithValue(resMsg);
+        return "Error on response";
       }
     } catch (error) {
-      //console.clear()
-      const statusCode = error.response.data.error.status;
-      if (statusCode == 412) {
-        return rejectWithValue(error.response.data.error['validationErrors'][0].msg)
-      } else {
-        return rejectWithValue(error.response.data.error.msg);
-      }
+
+        return "Error on catch";
+     
     }
   }
 )
@@ -65,6 +62,7 @@ export const getAllQuestions = createAsyncThunk('getQuestions',
       if (data) {
         return data.questions;
       } else {
+
         return rejectWithValue(resMsg);
       }
     } catch (error) {
@@ -73,3 +71,25 @@ export const getAllQuestions = createAsyncThunk('getQuestions',
     }
   }
 )
+
+export const getAllArchivedQuestions = createAsyncThunk('getArchivedQuestions',
+  async (body, { rejectWithValue, dispatch }) => {
+    try {
+      const { data } = await apiConfig.get(
+        'questions/archived',
+        body
+      )
+      const resMsg= "error"
+      if (data) {
+        return data.questions;
+      } else {
+
+        return rejectWithValue(resMsg);
+      }
+    } catch (error) {
+      //console.clear()
+      return rejectWithValue(errorHandler(error,dispatch));
+    }
+  }
+)
+

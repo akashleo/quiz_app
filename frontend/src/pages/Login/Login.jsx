@@ -133,7 +133,7 @@ const Login = () => {
               </Col>
               <br />
               <Col span={24} style={{ padding: "0px 150px" }}>
-                <Button block className="google-button">
+                <Button block className="google-button" onClick={()=>navigate('/dashboard')}>
                   <GoogleOutlined /> &nbsp; &nbsp;<b>Login with google</b>
                 </Button>
               </Col>

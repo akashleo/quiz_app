@@ -1,5 +1,6 @@
 import React from "react";
 import { Table, Tag, Switch } from "antd";
+import { EditOutlined } from "@ant-design/icons";
 
 const QuestionList = ({ questions }) => {
   const columns = [
@@ -35,7 +36,7 @@ const QuestionList = ({ questions }) => {
       title: "Action",
       dataIndex: "available",
       key: "action",
-      render: (value) => <Switch className="toggle" defaultChecked />,
+      render: (value) => <><EditOutlined/>&nbsp;&nbsp;<Switch className="toggle" checked={value} size="small" /></>,
     },
   ];
   return <Table style={{width: "100%"}} dataSource={questions} columns={columns} />;
