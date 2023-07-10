@@ -5,7 +5,7 @@ import QuestionCard from "./QuestionCard";
 import AddQuestion from "./AddQuestion";
 import QuestionList from "./QuestionList";
 import "./questions.css";
-import { getAllQuestions } from "../../store/slices/question/QuestionAction";
+import { getAllQuestions, updateQuestion } from "../../store/slices/question/QuestionAction";
 import { getAllTopics, addTopic } from "../../store/slices/topic/TopicAction";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -15,13 +15,14 @@ const QuestionBank = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { questions } = useSelector((state) => state.question);
+  const { questions, singleQuestion } = useSelector((state) => state.question);
   const { topics } = useSelector((state) => state.topic);
 
   useEffect(() => {
     if (questions?.length <= 0) dispatch(getAllQuestions());
     if (topics?.length <= 0) dispatch(getAllTopics());
   }, []);
+
 
   const [addQuestionModal, setAddQuestionModal] = useState(false);
   const [addTopicModal, setAddTopicModal] = useState(false);
@@ -51,6 +52,11 @@ const QuestionBank = () => {
       setTableView(false);
     }
   };
+
+  const updateQuestionState = (id, payload) =>{
+    const temp = {"id": id, "body":payload}
+    dispatch(updateQuestion(temp));
+  }
 
   return (
     <div className="question-bank">
@@ -98,7 +104,7 @@ const QuestionBank = () => {
         <Row gutter={[16, 16]}>
           {questions?.map((question, index) => (
             <Col span={8} key={index}>
-              <QuestionCard question={question} />
+              <QuestionCard question={question} updateQuestionState={updateQuestionState}/>
             </Col>
           ))}
         </Row>

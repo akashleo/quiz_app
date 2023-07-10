@@ -39,14 +39,14 @@ const questionSlice = createSlice({
       state.error = action.payload;
       state.success = false;
     });
-    builder.addCase(addQuestion.pending, (state, action) => {
+    builder.addCase(addQuestion.pending, (state, payload) => {
       state.loading = true;
       state.error = null;
       state.success = false;
     });
     builder.addCase(addQuestion.fulfilled, (state, action) => {
       state.loading = false;
-      state.singleQuestion = action.payload
+      state.questions = action.payload
       state.success = true;
     });
     builder.addCase(addQuestion.rejected, (state, action) => {
@@ -54,7 +54,7 @@ const questionSlice = createSlice({
       state.error = action.payload;
       state.success = false;
     });
-    builder.addCase(updateQuestion.pending, (state, action) => {
+    builder.addCase(updateQuestion.pending, (state, payload) => {
       state.loading = true;
       state.error = null;
       state.success = false;

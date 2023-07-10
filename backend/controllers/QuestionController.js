@@ -80,11 +80,17 @@ export const updateQuestion = async (req, res, next) => {
   } catch (err) {
     console.log(err);
   }
+  let questions;
+  try {
+    questions = await Question.find();
+  } catch (err) {
+    console.log(err);
+  }
 
-  if (!question) {
+  if (!question && !questions) {
     return res.status(500).json({ message: "Unable to update by this id" });
   }
-  return res.status(201).json({ question });
+  return res.status(201).json({ questions });
 };
 
 export const deleteQuestion = async (req, res, next) => {
