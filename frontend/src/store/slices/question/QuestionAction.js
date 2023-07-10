@@ -71,3 +71,25 @@ export const getAllQuestions = createAsyncThunk('getQuestions',
     }
   }
 )
+
+export const getAllArchivedQuestions = createAsyncThunk('getArchivedQuestions',
+  async (body, { rejectWithValue, dispatch }) => {
+    try {
+      const { data } = await apiConfig.get(
+        'questions/archived',
+        body
+      )
+      const resMsg= "error"
+      if (data) {
+        return data.questions;
+      } else {
+
+        return rejectWithValue(resMsg);
+      }
+    } catch (error) {
+      //console.clear()
+      return rejectWithValue(errorHandler(error,dispatch));
+    }
+  }
+)
+

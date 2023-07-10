@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getAllQuestions, addQuestion, updateQuestion } from "./QuestionAction";
+import { getAllQuestions, addQuestion, updateQuestion, getAllArchivedQuestions } from "./QuestionAction";
 
 
 const initialState = {
@@ -7,6 +7,7 @@ const initialState = {
   error: null,
   questions: [],
   singleQuestion: {},
+  archivedQuestions: [],
   success: false,
 };
 
@@ -65,6 +66,24 @@ const questionSlice = createSlice({
       state.success = true;
     });
     builder.addCase(updateQuestion.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+      state.success = false;
+    });
+    builder.addCase(getAllArchivedQuestions.pending, (state, payload) => {
+      state.loading = true;
+      state.error = null;
+      state.success = false;
+    });
+    builder.addCase(getAllArchivedQuestions.fulfilled, (state, action) => {
+      state.loading = false;
+      const modifyQuestions = action.payload.map((question)=>{
+        return {...question, "correct": question.options[question.isCorrect-1].text}
+      })
+      state.archivedQuestions = modifyQuestions;
+      state.success = true;
+    });
+    builder.addCase(getAllArchivedQuestions.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload;
       state.success = false;

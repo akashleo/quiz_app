@@ -61,10 +61,10 @@ const QuestionBank = () => {
   return (
     <div className="question-bank">
       <Row className="title-line">
-        <Col span={8}>
+        <Col span={4}>
           <h2>Question Bank</h2>
         </Col>
-        <Col span={8} className="text-right">
+        <Col span={9} >
           <Switch
             checkedChildren={<TableOutlined />}
             unCheckedChildren={<IdcardOutlined />}
@@ -72,7 +72,14 @@ const QuestionBank = () => {
             onChange={(event) => onChange(event)}
           />
         </Col>
-        <Col span={8} className="text-right">
+        <Col span={11} className="text-right">
+        <Button
+            disabled={addQuestionModal ? true : false}
+            onClick={() => navigate("/question/archive")}
+            className="action-button"
+          >
+            Archive
+          </Button>
           <Button
             disabled={addQuestionModal ? true : false}
             onClick={() => navigate("/dashboard")}

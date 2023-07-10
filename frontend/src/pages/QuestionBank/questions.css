@@ -33,13 +33,6 @@
     flex-wrap: wrap;
 }
 
-.archive{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    width: 100%;
-    margin-top: 20px;
-}
 
 .archive label {
     font-weight: 700;
@@ -96,10 +89,6 @@
   .option-field{
     margin-left: 10px;
     margin-right: 10px;
-  }
-
-  .ant-switch-inner-checked{
-
   }
 
   .submit-button {

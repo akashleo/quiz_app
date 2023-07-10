@@ -16,6 +16,20 @@ export const getAllQuestions = async (req, res, next) => {
   return res.status(200).json({ questions });
 };
 
+export const getArchivedQuestions = async (req, res, next) => {
+  let questions;
+  try {
+    questions = await Question.find({ available: false });
+  } catch (err) {
+    console.log(err);
+  }
+
+  if (!questions) {
+    return res.status(404).json({ message: "No Archived questions Found" });
+  }
+  return res.status(200).json({ questions });
+};
+
 export const addQuestion = async (req, res, next) => {
   const { questionText, options, isCorrect, available, image, topicId } =
     req.body;
