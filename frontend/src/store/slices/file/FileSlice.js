@@ -20,7 +20,7 @@ const fileSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(fileUpload.pending, (state, payload) => {
+    builder.addCase(fileUpload.pending, (state) => {
       state.loading = true;
       state.error = null;
       state.success = false;

@@ -41,16 +41,16 @@ export const fileUpload = async (req, res, next) => {
         `https://storage.googleapis.com/${bucket.name}/${blob.name}`
       );
 
-      try {
-        // Make the file public
-
-        await bucket.file(req.file.originalname).makePublic();
-      } catch {
-        return res.status(500).send({
-          message: `Uploaded the file successfully: ${req.file.originalname}, but public access is denied!`,
-          url: publicUrl,
-        });
-      }
+      // try {
+      //   // Make the file public
+      //   const file = await bucket.file(req.file.originalname).makePublic();
+      //   console.log(file)
+      // } catch {
+      //   return res.status(500).send({
+      //     message: `Uploaded the file successfully: ${req.file.originalname}, but public access is denied!`,
+      //     url: publicUrl,
+      //   });
+      // }
 
       res.status(200).send({
         message: "Uploaded the file successfully: " + req.file.originalname,
