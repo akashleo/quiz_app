@@ -1,8 +1,18 @@
 import React, { useEffect, useState, useMemo } from "react";
-import { Form, Input, Button, Space, Modal, Select, Row, Col } from "antd";
+import {
+  Form,
+  Input,
+  Button,
+  Space,
+  Modal,
+  Select,
+  Row,
+  Col,
+  Upload,
+} from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 
-import {Packer} from "file-saver"
+import { Packer } from "file-saver";
 //import { ObjectId } from 'bson';
 import "./questions.css";
 import { addQuestion } from "../../store/slices/question/QuestionAction";
@@ -31,9 +41,6 @@ const AddQuestion = ({
   });
 
   const [topicOptions, setTopicOptions] = useState([]);
-  const [fileName, setFileName] = useState("");
-  const [selectedFile, setSelectedFile] = useState(null)
-  //const [uploading, setUploading] = useState(false);
 
   const options = [];
 
@@ -85,24 +92,24 @@ const AddQuestion = ({
     console.log(values);
   };
 
-  const handleFileChange = (event) => {
-    console.log('event =>',event.target.files[0])
-    //setFileName(event.target.files[0].name)
-    setSelectedFile(event.target.files[0]);
-    // setSelectedFile(event.target.files[0]);
-  };
+  // const handleFileChange = (event) => {
+  //   console.log("event =>", event.target.files[0]);
+  //   //setFileName(event.target.files[0].name)
+  //   setSelectedFile(event.target.files[0]);
+  //   // setSelectedFile(event.target.files[0]);
+  // };
 
-  const imageUpload = () => {
-    const formData = new FormData();
+  const imageUpload = (file) => {
+    //console.log(selectedFile);
+    let formData = new FormData();
     //const fileURL = URL.createObjectURL(selectedFile);
-    formData.append("file", selectedFile);
-    //setUploading(true);
-    console.log("formData =>",formData.entries())
+    formData.append("file", file);
+    console.log("formData", formData);
     dispatch(fileUpload(formData));
   };
 
   return (
-    <Modal 
+    <Modal
       className="add-question"
       title={"Add Question"}
       style={{ zIndex: 10 }}
@@ -230,8 +237,27 @@ const AddQuestion = ({
           </Form.Item>
           <Form.Item>
             <Space.Compact style={{ width: "100%" }}>
-              <Input type="file" defaultValue={"Upload Image"} onChange={handleFileChange} value={fileName}/>
-              <Button type="primary" onClick={imageUpload}><UploadOutlined/>&nbsp;Upload</Button>
+              {/* <Input
+                type="file"
+                defaultValue={"Upload Image"}
+                onChange={handleFileChange}
+                value={fileName}
+              /> */}
+              {/* <Button type="primary" onClick={() => imageUpload()}>
+                <UploadOutlined />
+                &nbsp;Upload
+              </Button> */}
+              <Upload
+                beforeUpload={(file, fileList) => {
+                  // Access file content here and do something with it
+                  console.log(file);
+                  imageUpload(file);
+                  // Prevent upload
+                  return false;
+                }}
+              >
+                <Button icon={<UploadOutlined />}>Click to Upload</Button>
+              </Upload>
             </Space.Compact>
           </Form.Item>
           <Form.Item className="button-submit">
