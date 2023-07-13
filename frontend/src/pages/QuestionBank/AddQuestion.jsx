@@ -62,14 +62,14 @@ const AddQuestion = ({
   }, []);
 
   useEffect(() => {
-    setQuestion({ ...question, image: currentFileUrl });
+    setQuestion({ ...question, image: currentFileUrl.url });
   }, [currentFileUrl]);
 
   const handleFormSubmit = (obj) => {
     console.log(obj);
     const { op1, op2, op3, op4, correct, topicId, questionText } = obj;
     // Do something with the form values, e.g. submit to a server
-    const x = {
+    const temQuestion = {
       options: [
         { id: 1, text: op1 },
         { id: 2, text: op2 },
@@ -82,9 +82,9 @@ const AddQuestion = ({
       questionText: questionText,
       image: question.image,
     };
-    setQuestion(x);
+    setQuestion(temQuestion);
     console.log(question);
-    dispatch(addQuestion(x));
+    dispatch(addQuestion(temQuestion));
     setAddQuestionModal(false);
   };
 

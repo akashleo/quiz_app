@@ -70,11 +70,11 @@ const AnsweringPanel = () => {
             <Row>
               <Col
                 span={12}
-                style={{ textAlign: "center", border: "1px solid grey" }}
+                style={{ textAlign: "center"}}
               >
                 <Image
                   preview={false}
-                  src={questionmark}
+                  src={displayQuestion?.image?displayQuestion?.image:questionmark}
                   className="question-image"
                 />
               </Col>

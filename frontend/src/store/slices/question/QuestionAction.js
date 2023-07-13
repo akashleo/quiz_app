@@ -30,14 +30,31 @@ export const addQuestion = createAsyncThunk('addQuestions',
 
 export const updateQuestion = createAsyncThunk('updateQuestion',
   async (req , {dispatch}) => { 
-    console.log("bodyyyy", req.body)
     try {
       const { data } = await apiConfig.put(
         `questions/${req.id}`,
         req.body
       )
       if (data) {
-        window.location.reload(false);
+        return data;
+      } else {
+        return "Error on response";
+      }
+    } catch (error) {
+
+        return "Error on catch";
+     
+    }
+  }
+)
+
+export const deleteQuestion = createAsyncThunk('deleteQuestion',
+  async (id) => { 
+    try {
+      const { data } = await apiConfig.delete(
+        `questions/${id}`
+      )
+      if (data) {
         return data;
       } else {
         return "Error on response";
