@@ -5,7 +5,7 @@ import QuestionCard from "./QuestionCard";
 import AddQuestion from "./AddQuestion";
 import QuestionList from "./QuestionList";
 import "./questions.css";
-import { getAllQuestions, updateQuestion } from "../../store/slices/question/QuestionAction";
+import { getAllQuestions, updateQuestion, deleteQuestion } from "../../store/slices/question/QuestionAction";
 import { getAllTopics, addTopic } from "../../store/slices/topic/TopicAction";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -58,6 +58,7 @@ const QuestionBank = () => {
     dispatch(updateQuestion(temp));
   }
 
+
   return (
     <div className="question-bank">
       <Row className="title-line">
@@ -108,6 +109,7 @@ const QuestionBank = () => {
           <QuestionList questions={questions} />
         </Row>
       ) : (
+        questions &&
         <Row gutter={[16, 16]}>
           {questions?.map((question, index) => (
             <Col span={8} key={index}>

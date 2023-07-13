@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { Card, Radio, Image } from "antd";
 import { Switch } from "antd";
-import { EditOutlined } from "@ant-design/icons";
+import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import questionmark from "../../assests/questionmark.png";
-import { useSelector } from "react-redux";
+import { deleteQuestion } from "../../store/slices/question/QuestionAction";
+import { useSelector, useDispatch } from "react-redux";
 
 const { Meta } = Card;
 
@@ -11,12 +12,20 @@ const QuestionCard = ({ question, updateQuestionState }) => {
   const { _id, questionText, options, image, available } = question;
   const { loading } = useSelector((state) => state.question);
 
+  const dispatch = useDispatch();
+
   const onChange = (event) => {
     console.log(event);
     const modifiedQuestion = { ...question, available: !question.available };
     console.log(_id, question, modifiedQuestion);
     updateQuestionState(_id, modifiedQuestion);
   };
+
+  const deleteSelectedQuestion =(id)=>{
+    console.log(id)
+    dispatch(deleteQuestion(id));
+  }
+
 
   return (
     <Card
@@ -26,14 +35,12 @@ const QuestionCard = ({ question, updateQuestionState }) => {
         <Image
           preview={false}
           alt={questionText}
-          src={questionmark}
+          src={question?.image? question.image : questionmark}
           height={100}
           style={{ objectFit: "contain", paddingTop: "20px" }}
         />
       }
       actions={[
-        <label key="label"><b>{available ? "ACTIVE" : "ARCHIVED"}</b></label>,
-        <EditOutlined key="edit" />,
         <Switch
           className="toggle"
           key="toggle"
@@ -41,6 +48,8 @@ const QuestionCard = ({ question, updateQuestionState }) => {
           loading={loading}
           onChange={(event) => onChange(event)}
         />,
+        <EditOutlined key="edit" />,
+        <DeleteOutlined onClick={()=>{deleteSelectedQuestion(_id)}} key="delete"/>
       ]}
     >
       <Meta className="q-text" title={questionText} />

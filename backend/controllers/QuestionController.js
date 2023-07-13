@@ -72,7 +72,18 @@ export const addQuestion = async (req, res, next) => {
   if (!question) {
     return res.status(500).json({ message: "Unable to add" });
   }
-  return res.status(201).json({ question });
+  // return res.status(201).json({ question });
+  let questions;
+  try {
+    questions = await Question.find();
+  } catch (err) {
+    console.log(err);
+  }
+
+  if (!questions) {
+    return res.status(404).json({ message: "No questions Found" });
+  }
+  return res.status(200).json(question);
 };
 
 export const updateQuestion = async (req, res, next) => {
@@ -104,7 +115,7 @@ export const updateQuestion = async (req, res, next) => {
   if (!question && !questions) {
     return res.status(500).json({ message: "Unable to update by this id" });
   }
-  return res.status(201).json({ questions });
+  return res.status(201).json(questions);
 };
 
 export const deleteQuestion = async (req, res, next) => {
@@ -120,7 +131,17 @@ export const deleteQuestion = async (req, res, next) => {
   if (!question) {
     return res.status(500).json({ message: "Unable to delete by this id" });
   }
+  let questions;
+  try {
+    questions = await Question.find();
+  } catch (err) {
+    console.log(err);
+  }
+
+  if (!questions) {
+    return res.status(500).json({ message: "Cannot get questions" });
+  }
   return res
     .status(201)
-    .json({ question, message: "Grade successfully deleted" });
+    .json({ questions, message: "Question successfully deleted" });
 };
