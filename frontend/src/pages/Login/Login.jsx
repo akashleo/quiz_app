@@ -128,13 +128,13 @@ const Login = () => {
                   </Button>
                 </Form.Item>
               </Form>
-              <Col span={24} style={{ textAlign: "center" }}>
+              {/* <Col span={24} style={{ textAlign: "center" }}>
                 <p style={{ margin: "0px auto" }}>OR</p>
-              </Col>
+              </Col> */}
               <br />
               <Col span={24} style={{ padding: "0px 150px" }}>
-                <Button block className="google-button" onClick={()=>navigate('/dashboard')}>
-                  <GoogleOutlined /> &nbsp; &nbsp;<b>Login with google</b>
+                <Button block className="google-button" onClick={()=>navigate('/signup')}>
+                  {/* <GoogleOutlined /> &nbsp; &nbsp;*/}<b>Sign Up</b> 
                 </Button>
               </Col>
             </Col>

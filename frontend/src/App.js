@@ -7,8 +7,7 @@ import Instructions from "./pages/Instructions/Instructions";
 import AnsweringPanel from "./pages/AnsweringPanel/AnsweringPanel";
 import ReviewPanel from "./pages/ReviewPanel/ReviewPanel";
 import Profile from "./pages/Profile/Profile";
-import Navbar from "./components/Navbar";
-//import AddQuestion from "./pages/QuestionBank/AddQuestion";
+import SignupPage from "./pages/Login/SignUp";
 import QuestionBank from "./pages/QuestionBank/QuestionBank";
 import ArchivedQuestions from "./pages/QuestionBank/ArchivedQuestions";
 import { useSelector } from "react-redux";
@@ -26,6 +25,7 @@ function App() {
     <Router>
       <Routes>
         <Route exact path="/" element={<Login />} />
+        <Route exact path="/signup" element={<SignupPage />} />
         <Route exact path="/dashboard" element={<Dashboard />} />
         <Route exact path="/profile" element={<Profile />} />
         <Route exact path="/topics" element={<Topics />} />

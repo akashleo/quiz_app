@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, Radio, Image } from "antd";
 import { Switch } from "antd";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
@@ -26,6 +26,11 @@ const QuestionCard = ({ question, updateQuestionState }) => {
     dispatch(deleteQuestion(id));
   }
 
+  const [checked, setChecked] = useState(true);
+
+  useEffect(()=>{
+    setChecked(available)
+  }, [available])
 
   return (
     <Card
@@ -44,7 +49,7 @@ const QuestionCard = ({ question, updateQuestionState }) => {
         <Switch
           className="toggle"
           key="toggle"
-          checked={available}
+          checked={checked}
           loading={loading}
           onChange={(event) => onChange(event)}
         />,
