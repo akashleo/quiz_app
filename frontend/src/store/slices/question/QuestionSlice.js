@@ -62,7 +62,7 @@ const questionSlice = createSlice({
     });
     builder.addCase(updateQuestion.fulfilled, (state, action) => {
       state.loading = false;
-      state.singleQuestion = action.payload
+      state.questions = action.payload
       state.success = true;
     });
     builder.addCase(updateQuestion.rejected, (state, action) => {

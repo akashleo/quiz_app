@@ -1,3 +1,8 @@
+.question-bank{
+  font-family: "Poppins", sans-serif !important;
+}
+
+
 .add-form{
     margin: 10px auto !important;
     padding: 10px !important;
@@ -82,9 +87,10 @@
     border-radius: 30px !important;
   }
 
-  .toggle{
-    background-color: #8692a6 !important;
+  .pop-font {
+    font-family: "Poppins", sans-serif !important;
   }
+
 
   .option-field{
     margin-left: 10px;
