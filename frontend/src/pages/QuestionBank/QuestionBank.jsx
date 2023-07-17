@@ -59,18 +59,22 @@ const QuestionBank = () => {
   }
 
 
+
   return (
     <div className="question-bank">
       <Row className="title-line">
         <Col span={4}>
-          <h2>Question Bank</h2>
+          <h2 className="pop-font">Question Bank</h2>
         </Col>
         <Col span={9} >
           <Switch
-            checkedChildren={<TableOutlined />}
-            unCheckedChildren={<IdcardOutlined />}
+            className="pop-font"
+            style={tableView? { backgroundColor: '#d3e39a'}:{ backgroundColor: '#e39a9c'}}
+            checkedChildren={<b style={{color: "black"}}><TableOutlined />&nbsp;Table View</b>}
+            unCheckedChildren={<b style={{color: "black"}}><IdcardOutlined />&nbsp;Card View</b>}
             value={tableView}
             onChange={(event) => onChange(event)}
+            size="large"
           />
         </Col>
         <Col span={11} className="text-right">
@@ -106,7 +110,7 @@ const QuestionBank = () => {
       </Row>
       {tableView ? (
         <Row gutter={[16, 16]}>
-          <QuestionList questions={questions} />
+          <QuestionList questions={questions} updateQuestionState={updateQuestionState}/>
         </Row>
       ) : (
         questions &&

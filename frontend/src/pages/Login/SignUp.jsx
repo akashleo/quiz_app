@@ -26,7 +26,7 @@ const SignupPage = () => {
         </Button>
       </div>
       <div className="signup-wrapper">
-        <div className="description">
+        <div className="signup">
           <h1>Sign Up</h1>
           <Form
             layout={"vertical"}
