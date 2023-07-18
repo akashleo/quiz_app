@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 
 const ProfileSchema = new Schema(
   {
-    username: {
+    email: {
       type: String,
       required: true,
     },
@@ -30,13 +30,10 @@ const ProfileSchema = new Schema(
     correctAnswers: {
       type: Number,
     },
-    featuredCategory: "",
-    // featuredCategory: [
-    //   {
-    //     type: Schema.Types.ObjectId,
-    //     ref: "Topic",
-    //   },
-    // ],
+    role: {
+      type: String,
+      required: true
+    },
     available: {
       type: Boolean,
     },

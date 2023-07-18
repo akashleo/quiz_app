@@ -2,20 +2,26 @@ import React, { useState } from "react";
 import { Form, Input, Button } from "antd";
 import { ArrowLeftOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
+import { signup } from "../../store/slices/auth/AuthActions";
+import {useDispatch} from "react-redux";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import "./SignUp.css";
 
 const SignupPage = () => {
   const [form] = Form.useForm();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  const onFinish = (values) => {
-    console.log("Received values of form: ", values);
+  const onFinish = (body) => {
+    console.log("Received values of form: ", body);
     // Handle signup logic here
+    dispatch(signup(body))
   };
 
   return (
     <>
-      <div style={{ margin: "30px" }}>
+      <div style={{ margin: "25px" }}>
         <Button
           type="primary"
           htmlType="submit"
@@ -35,8 +41,8 @@ const SignupPage = () => {
             onFinish={onFinish}
           >
             <Form.Item
-              name="name"
-              label="Name"
+              name="fullName"
+              label="Full Name"
               className="login-label"
               rules={[
                 {

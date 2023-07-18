@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 //import { LogoutOutlined } from "@ant-design/icons";
-import { ToastContainer, toast } from 'react-toastify';
-  import 'react-toastify/dist/ReactToastify.css';
-  import { setResponsedata } from "../../store/slices/auth/AuthSlice";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { setResponsedata } from "../../store/slices/auth/AuthSlice";
 
 import {
   LeftOutlined,
@@ -13,48 +13,45 @@ import {
 
 import { Row, Col, Form, Input, Button } from "antd";
 import { login } from "../../store/slices/auth/AuthActions";
-import { useDispatch, useSelector } from 'react-redux';
-import {useNavigate} from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 import "./Login.css";
 
 const Login = () => {
-
-  const { tokenValidity, responseData
-  } = useSelector((state) => state.auth)
+  const { tokenValidity, responseData } = useSelector((state) => state.auth);
 
   const [form] = Form.useForm();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const loginFn = ()=>{
-    console.log(username, password);
-    dispatch(login({username, password}));
-  }
+  const loginFn = () => {
+    console.log(email, password);
+    dispatch(login({ email, password }));
+  };
 
-  const handleNameChange = (event) =>{
-    setUsername(event.target.value);
-  }
+  const handleNameChange = (event) => {
+    setEmail(event.target.value);
+  };
 
-  const handlePasswordChange = (event) =>{
+  const handlePasswordChange = (event) => {
     setPassword(event.target.value);
-  }
+  };
 
-  useEffect(()=>{
-    if(tokenValidity===true){
-      navigate("/dashboard")
+  useEffect(() => {
+    if (tokenValidity === true) {
+      navigate("/dashboard");
     }
-  },[tokenValidity])
+  }, [tokenValidity]);
 
-  useEffect(()=>{
-    if(responseData==="Invalid User"){
-    toast.error('User does not exist');
-    setResponsedata(null)
+  useEffect(() => {
+    if (responseData === "Invalid User") {
+      toast.error("User does not exist");
+      setResponsedata(null);
     }
-  },[responseData])
-
+  }, [responseData]);
 
   return (
     <Row style={{ height: "100vh" }}>
@@ -94,15 +91,22 @@ const Login = () => {
                 onFinish={loginFn}
               >
                 <Form.Item
-                  label="Username *"
+                  label="Email *"
                   className="login-label"
                   rules={[
-                    { required: true, message: "Please input your username!" },
+                    {
+                      type: "email",
+                      message: "Please enter a valid email",
+                    },
+                    {
+                      required: true,
+                      message: "Please enter your email",
+                    },
                   ]}
                 >
                   <Input
                     className="input-box"
-                    placeholder="Enter your username"
+                    placeholder="Enter your email"
                     onChange={(event) => handleNameChange(event)}
                   />
                 </Form.Item>
@@ -133,8 +137,13 @@ const Login = () => {
               </Col> */}
               <br />
               <Col span={24} style={{ padding: "0px 150px" }}>
-                <Button block className="google-button" onClick={()=>navigate('/signup')}>
-                  {/* <GoogleOutlined /> &nbsp; &nbsp;*/}<b>Sign Up</b> 
+                <Button
+                  block
+                  className="google-button"
+                  onClick={() => navigate("/signup")}
+                >
+                  {/* <GoogleOutlined /> &nbsp; &nbsp;*/}
+                  <b>Sign Up</b>
                 </Button>
               </Col>
             </Col>
@@ -142,16 +151,17 @@ const Login = () => {
         </div>
       </Col>
       <ToastContainer
-      position="bottom-right"
-      autoClose={5000}
-      hideProgressBar={false}
-      newestOnTop={false}
-      closeOnClick
-      rtl={false}
-      pauseOnFocusLoss
-      draggable
-      pauseOnHover
-      theme="dark"/>
+        position="bottom-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+      />
     </Row>
   );
 };

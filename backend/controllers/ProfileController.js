@@ -30,7 +30,7 @@ export const getProfileById = async (req, res, next) => {
 };
 export const addProfile = async (req, res, next) => {
   const {
-    username,
+    email,
     password,
     fullName,
     level,
@@ -44,7 +44,7 @@ export const addProfile = async (req, res, next) => {
   let profile;
   try {
     profile = new Profile({
-      username,
+      email,
       password,
       fullName,
       level,
@@ -68,7 +68,7 @@ export const addProfile = async (req, res, next) => {
 
 export const updateProfile = async (req, res, next) => {
   const {
-    username,
+    email,
     password,
     fullName,
     level,
@@ -86,7 +86,7 @@ export const updateProfile = async (req, res, next) => {
 
   try {
     profile = await Profile.findByIdAndUpdate(id, {
-      username: username,
+      email: email,
       password: password,
       fullName : fullName,
       level,

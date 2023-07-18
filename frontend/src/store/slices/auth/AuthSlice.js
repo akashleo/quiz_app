@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { login, register } from "./AuthActions";
+import { login, signup } from "./AuthActions";
 
 const authToken = localStorage.getItem("authToken")
   ? localStorage.getItem("authToken")
@@ -57,6 +57,7 @@ const authSlice = createSlice({
       state.loading = false;
       state.authToken = action.payload.token;
       state.currentUserId = action.payload.user._id;
+      state.userInfo = action.payload.user
       state.tokenValidity = true;
       state.success = true;
     });
@@ -66,16 +67,18 @@ const authSlice = createSlice({
       state.responseData = "Invalid User"
       state.success = false;
     });
-    builder.addCase(register.pending, (state, payload) => {
+    builder.addCase(signup.pending, (state, payload) => {
       state.loading = true;
       state.error = null;
       state.success = false;
     });
-    builder.addCase(register.fulfilled, (state, action) => {
+    builder.addCase(signup.fulfilled, (state, action) => {
       state.loading = false;
       state.success = true;
+      state.currentUserId = action.payload.user._id;
+      state.userInfo = action.payload.user
     });
-    builder.addCase(register.rejected, (state, action) => {
+    builder.addCase(signup.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload;
       state.success = false;
@@ -83,6 +86,5 @@ const authSlice = createSlice({
   },
 });
 export const { logOut, clearState, isTokenValid, setResponsedata } = authSlice.actions;
-//export const { login, register } = authSlice.actions;
 
 export default authSlice.reducer;
