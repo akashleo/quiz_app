@@ -16,12 +16,12 @@ export const getAllUser = async (req, res, next) => {
 };
 
 export const signup = async (req, res, next) => {
-  const { fullName, username, password } = req.body;
+  const { email } = req.body;
 
   let existingUser;
 
   try {
-    existingUser = await Profile.findOne({ username });
+    existingUser = await Profile.findOne({ email });
   } catch (err) {
     console.log(err);
   }
@@ -32,20 +32,20 @@ export const signup = async (req, res, next) => {
       .json({ message: "Profile already exists, Login instead" });
   }
 
-  const hashedPassword = bcrypt.hashSync(password);
+  const hashedPassword = bcrypt.hashSync(req.body.password);
 
   const newUser = new Profile({
-    fullName,
-    username,
+    fullName: req.body.email,
+    email: req.body.email,
     password: hashedPassword,
     level: 4,
     quizPassed: "",
     fastestTime: "",
     correctAnswers: 6,
     achievements: ["tyty"],
-    featuredCategory:"",
+    role: "user",
     available: true,
-    image: ""
+    image: "",
   });
 
   try {
@@ -54,16 +54,20 @@ export const signup = async (req, res, next) => {
     console.log(err);
   }
 
-  res.status(200).json({ message: "Profile successfully created" });
+  const { password, ...userobj } = newUser;
+
+  res
+    .status(200)
+    .json({ message: "Profile successfully created", profile: userobj });
 };
 
 export const login = async (req, res, next) => {
-  const {username, password } = req.body;
+  const { email, password } = req.body;
 
   let existingUser;
 
   try {
-    existingUser = await Profile.findOne({ username });
+    existingUser = await Profile.findOne({ email });
   } catch (err) {
     console.log(err);
   }
@@ -78,12 +82,12 @@ export const login = async (req, res, next) => {
   // if (!isPasswordCorrect   ) {
   //   return res.status(400).json({ message: "Incorrect Password" });
   // }
-  const token = jwt.sign({ sub: username }, 'secretkey');
-  if(password===existingUser.password)
-  {
-    return res.status(200).json({ message: "Login Successful", token,  user:existingUser});
-  }
-  else{
+  const token = jwt.sign({ sub: email }, "secretkey");
+  if (password === existingUser.password) {
+    return res
+      .status(200)
+      .json({ message: "Login Successful", token, user: existingUser });
+  } else {
     return res.status(400).json({ message: "Incorrect Password" });
   }
   //const token = jwt.sign({ sub: user.id }, 'secretkey');

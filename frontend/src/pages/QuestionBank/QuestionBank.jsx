@@ -45,7 +45,6 @@ const QuestionBank = () => {
   };
 
   const onChange = (event) => {
-    console.log(event);
     if (event) {
       setTableView(true);
     } else {

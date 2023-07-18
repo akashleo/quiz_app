@@ -31,11 +31,11 @@ export const login = createAsyncThunk('user/login',
   }
 )
 
-export const register = createAsyncThunk('admin/register',
+export const signup = createAsyncThunk('user/signup',
   async (body, { rejectWithValue, dispatch }) => {
     try {
       const { data } = await apiConfig.post(
-        'admin/register',
+        'user/signup',
         body
       )
       const resMsgType = data.status.success === true ? 'success'
@@ -43,6 +43,7 @@ export const register = createAsyncThunk('admin/register',
       const resMsg = data.result ? 'The user has been added.'
         : data.error ? data.status.message
           : '';
+        console.log("data", data);
       if (resMsgType == 'success') {
         return data.result;
       } else if (resMsgType == 'error') {

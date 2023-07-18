@@ -4,10 +4,14 @@ import { EditOutlined } from "@ant-design/icons";
 
 const QuestionList = ({ questions, updateQuestionState }) => {
   const onChange = (event, record, index) => {
-    console.log(event, record, index);
-    const modifiedQuestion = { ...questions[index], available: !record.available };
+    ///console.log(event, record, index);
+    const modifiedQuestion = { ...record, available: !record.available };
     updateQuestionState(record._id, modifiedQuestion);
   };
+
+  // const getObject = (id) =>{
+  //   return questions.find((item)=> item._id === id)
+  // }
   const columns = [
     {
       title: "Question",
@@ -39,20 +43,20 @@ const QuestionList = ({ questions, updateQuestionState }) => {
     },
     {
       title: "Action",
-      dataIndex: "available",
+      dataIndex: "_id",
       key: "action",
       render: (value, record, index) => (
         <>
           <EditOutlined />
           &nbsp;&nbsp;
           <Switch
-            onChange={(event, record, index) => onChange(event, record, index)}
+            onChange={(event) => onChange(event, record, index)}
             style={
-              value
+              record.available
                 ? { backgroundColor: "#d3e39a" }
                 : { backgroundColor: "#e39a9c" }
             }
-            checked={value}
+            checked={record.available}
             size="small"
           />
         </>
