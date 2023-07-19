@@ -35,7 +35,7 @@ export const signup = async (req, res, next) => {
   const hashedPassword = bcrypt.hashSync(req.body.password);
 
   const newUser = new Profile({
-    fullName: req.body.email,
+    fullName: req.body.fullName,
     email: req.body.email,
     password: hashedPassword,
     level: 4,
@@ -54,11 +54,15 @@ export const signup = async (req, res, next) => {
     console.log(err);
   }
 
-  const { password, ...userobj } = newUser;
+  const { password, ...userobj } = newUser._doc;
 
   res
     .status(200)
-    .json({ message: "Profile successfully created", profile: userobj });
+    .json({
+      message: "Profile successfully created",
+      status: 200,
+      user: userobj,
+    });
 };
 
 export const login = async (req, res, next) => {
@@ -79,19 +83,26 @@ export const login = async (req, res, next) => {
   const isPasswordCorrect = bcrypt.compareSync(password, existingUser.password);
   //console.log(existingUser.password, password)
 
-  // if (!isPasswordCorrect   ) {
+  if (!isPasswordCorrect) {
+    return res.status(400).json({ message: "Incorrect Password", status: 400 });
+  }
+  const token = jwt.sign({ sub: email }, "secretkey");
+  // if (password === existingUser.password) {
+  //   return res
+  //     .status(200)
+  //     .json({ message: "Login Successful", token, user: existingUser });
+  // } else {
   //   return res.status(400).json({ message: "Incorrect Password" });
   // }
-  const token = jwt.sign({ sub: email }, "secretkey");
-  if (password === existingUser.password) {
-    return res
-      .status(200)
-      .json({ message: "Login Successful", token, user: existingUser });
-  } else {
-    return res.status(400).json({ message: "Incorrect Password" });
-  }
   //const token = jwt.sign({ sub: user.id }, 'secretkey');
-  //return res.status(200).json({ message: "Login Successful", token });
+  return res
+    .status(200)
+    .json({
+      message: "Login Successful",
+      token,
+      user: existingUser,
+      status: 200,
+    });
 
   //return res.status(200).json({ message: "Profile login successful" });
 };

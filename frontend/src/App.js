@@ -13,29 +13,28 @@ import ArchivedQuestions from "./pages/QuestionBank/ArchivedQuestions";
 import { useSelector } from "react-redux";
 
 function App() {
-  console.log(window.location.pathname)
-
-  const { tokenValidity
-  } = useSelector((state) => state.auth)
+  const { tokenValidity } = useSelector((state) => state.auth);
   return (
     <>
-    
-    
-    {/* <Navbar/> */}
-    <Router>
-      <Routes>
-        <Route exact path="/" element={<Login />} />
-        <Route exact path="/signup" element={<SignupPage />} />
-        <Route exact path="/dashboard" element={<Dashboard />} />
-        <Route exact path="/profile" element={<Profile />} />
-        <Route exact path="/topics" element={<Topics />} />
-        <Route exact path="/instructions" element={<Instructions />} />
-        <Route exact path="/answer" element={<AnsweringPanel />} />
-        <Route exact path="/review" element={<ReviewPanel />} />
-        <Route exact path="/question/archive" element={<ArchivedQuestions />} />
-        <Route exact path="/question" element={<QuestionBank />} />
-      </Routes>
-    </Router>
+      {/* <Navbar/> */}
+      <Router>
+        <Routes>
+          <Route exact path="/" element={<Login />} />
+          <Route exact path="/signup" element={<SignupPage />} />
+          <Route exact path="/dashboard" element={<Dashboard />} />
+          <Route exact path="/profile" element={<Profile />} />
+          <Route exact path="/topics" element={<Topics />} />
+          <Route exact path="/instructions" element={<Instructions />} />
+          <Route exact path="/answer" element={<AnsweringPanel />} />
+          <Route exact path="/review" element={<ReviewPanel />} />
+          <Route
+            exact
+            path="/question/archive"
+            element={<ArchivedQuestions />}
+          />
+          <Route exact path="/question" element={<QuestionBank />} />
+        </Routes>
+      </Router>
     </>
   );
 }

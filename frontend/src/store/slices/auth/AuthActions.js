@@ -3,7 +3,7 @@ import apiConfig from "../../../AxiosConfig";
 import { errorHandler } from '../../ErrorHandler';
 
 export const login = createAsyncThunk('user/login',
-  async (body, { rejectWithValue }) => {
+  async (body, { rejectWithValue, dispatch }) => {
     try {
       const { data } = await apiConfig.post(
         'user/login',
@@ -11,22 +11,13 @@ export const login = createAsyncThunk('user/login',
       )
       localStorage.setItem('authToken', data?.token);
       localStorage.setItem('authId', data?.user._id);
-      const resMsgType = data.message
-      const resMsg = data.message ? 'Login succesful'
-        : '';
-      if (resMsgType == 'Login Successful') {
+      if (data?.status === 200) {
         return data;
-      } else if (resMsgType == 'error') {
-        return rejectWithValue(resMsg);
+      } else {
+        return rejectWithValue(data?.message);
       }
     } catch (error) {
-      //console.clear()
-      const statusCode = error.response.data.error.status;
-      if (statusCode == 412) {
-        return rejectWithValue(error.response.data.error['validationErrors'][0].msg)
-      } else {
-        return rejectWithValue(error.response.data.error.msg);
-      }
+      return rejectWithValue(errorHandler(error,dispatch));
     }
   }
 )
@@ -38,19 +29,13 @@ export const signup = createAsyncThunk('user/signup',
         'user/signup',
         body
       )
-      const resMsgType = data.status.success === true ? 'success'
-        : 'error';
-      const resMsg = data.result ? 'The user has been added.'
-        : data.error ? data.status.message
-          : '';
-        console.log("data", data);
-      if (resMsgType == 'success') {
-        return data.result;
-      } else if (resMsgType == 'error') {
-        return rejectWithValue(resMsg);
+      
+      if (data?.status === 200) {
+        return data;
+      } else{
+        return rejectWithValue(data?.message);
       }
     } catch (error) {
-      //console.clear()
       return rejectWithValue(errorHandler(error,dispatch));
     }
   }

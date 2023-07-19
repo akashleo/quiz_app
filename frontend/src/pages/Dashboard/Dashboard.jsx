@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import LeftMenu from "../../components/LeftMenu";
 import Navbar from "../../components/Navbar";
 //import { LogoutOutlined } from "@ant-design/icons";
@@ -28,6 +28,7 @@ const Dashboard = () => {
 
   const { singleProfile } = useSelector((state) => state.profile);
   const { currentUserId } = useSelector((state) => state.auth);
+  const [emojiMap, setEmojiMap] = useState({});
 
   useEffect(() => {
     if (currentUserId) {
@@ -36,7 +37,13 @@ const Dashboard = () => {
   }, []);
   useEffect(() => {
     if (singleProfile) {
-      console.log(singleProfile);
+      const counts = {};
+      const { achievements } = singleProfile;
+      if(achievements)
+      for (const key of achievements) {
+        counts[key] = counts[key] ? counts[key] + 1 : 1;
+      }
+      setEmojiMap(counts);
     }
   }, [singleProfile]);
 
@@ -134,27 +141,26 @@ const Dashboard = () => {
                   </div>
                   <div className="achivement-badge">
                     <Row justify="space-between">
-                      <Col span={8}>
-                        {" "}
-                        <Image src={badge3} width={50} height={50} />
-                        <p>Comeback</p>
-                      </Col>
-                      <Col span={8} offset={8} style={{ textAlign: "right" }}>
-                        <Image src={badge1} width={50} height={50} />
-                        <p>Winner</p>
-                      </Col>
-                    </Row>
-                    <Row justify="center">
-                      <div style={{ textAlign: "center" }}>
-                        <Image src={badge2} width={50} height={50} />
-                        <p>Lucky</p>
-                      </div>
-                    </Row>
-                    <Row justify="center" style={{ marginTop: "2%" }}>
-                      <span className="divide-bar"></span>
-                    </Row>
-                    <Row justify="center" style={{ marginTop: "2%" }}>
-                      <p className="view-all">View All</p>
+                      {Object.entries(emojiMap).map(([emoji, count]) => {
+                        return (
+                          <Col span={12} key={emoji}>
+                            <Row className="emoji-card">
+                              <Col className="emoji-count" span={8}>
+                                {String.fromCodePoint(
+                                  emoji.replace("U+", "0x")
+                                )}
+                              </Col>
+
+                              <Col className="emoji-count" span={8}>
+                                x
+                              </Col>
+                              <Col className="emoji-count" span={8}>
+                                <div className="emoji-count">{count}</div>
+                              </Col>
+                            </Row>
+                          </Col>
+                        );
+                      })}
                     </Row>
                   </div>
                 </Col>

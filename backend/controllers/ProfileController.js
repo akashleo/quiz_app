@@ -93,7 +93,7 @@ export const updateProfile = async (req, res, next) => {
       quizPassed,
       fastestTime,
       correctAnswers,
-      achievements,
+      achievements : achievements,
       featuredCategory,
       available: available,
       image,

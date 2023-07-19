@@ -15,7 +15,7 @@ const initialState = {
   responseData: null,
   success: false,
   userInfo: null,
-  currentUserId,
+  currentUserId: null,
   tokenValidity: authToken ? true : false,
 };
 
