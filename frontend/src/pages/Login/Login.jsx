@@ -28,7 +28,6 @@ const Login = () => {
   const [password, setPassword] = useState("");
 
   const loginFn = () => {
-    console.log(email, password);
     dispatch(login({ email, password }));
   };
 
@@ -49,7 +48,7 @@ const Login = () => {
   useEffect(() => {
     if (responseData === "Invalid User") {
       toast.error("User does not exist");
-      setResponsedata(null);
+      dispatch(setResponsedata(null));
     }
   }, [responseData]);
 

@@ -1,23 +1,31 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Form, Input, Button } from "antd";
 import { ArrowLeftOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { signup } from "../../store/slices/auth/AuthActions";
-import {useDispatch} from "react-redux";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { useDispatch, useSelector } from "react-redux";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "./SignUp.css";
 
 const SignupPage = () => {
   const [form] = Form.useForm();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { currentUserId } = useSelector((state) => state.auth);
 
   const onFinish = (body) => {
     console.log("Received values of form: ", body);
     // Handle signup logic here
-    dispatch(signup(body))
+    dispatch(signup(body));
   };
+
+  useEffect(() => {
+    if (currentUserId) {
+      toast.success("User successfully created");
+      navigate("/");
+    }
+  }, [currentUserId]);
 
   return (
     <>
@@ -33,7 +41,12 @@ const SignupPage = () => {
       </div>
       <div className="signup-wrapper">
         <div className="signup">
-          <h1>Sign Up</h1>
+          <h1>
+            Sign Up 	&#128514;
+            <span role="img" aria-label="{label}">
+              {String.fromCodePoint('U+1F435'.replace('U+', '0x'))}
+            </span>
+          </h1>
           <Form
             layout={"vertical"}
             form={form}
@@ -95,6 +108,18 @@ const SignupPage = () => {
           </Form>
         </div>
       </div>
+      <ToastContainer
+        position="bottom-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+      />
     </>
   );
 };

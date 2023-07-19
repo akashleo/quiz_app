@@ -136,3 +136,17 @@
     border-radius: 20px;
     object-fit: fill;
 }
+
+.emoji-count{
+    font-size: 2.5rem;
+    font-family: "Poppins", sans-serif !important;
+    font-weight: 300;
+    text-align: center;
+}
+
+.emoji-card{
+    background-color: #bebebe;
+    padding: 10px;
+    margin: 5px;
+    border-radius: 30px;
+}
