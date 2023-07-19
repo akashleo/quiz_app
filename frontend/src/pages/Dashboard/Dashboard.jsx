@@ -140,7 +140,7 @@ const Dashboard = () => {
                     </div>
                   </div>
                   <div className="achivement-badge">
-                    <Row justify="space-between">
+                    <Row justify="space-between" className="achievements-list">
                       {Object.entries(emojiMap).map(([emoji, count]) => {
                         return (
                           <Col span={12} key={emoji}>

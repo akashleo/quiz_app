@@ -150,3 +150,8 @@
     margin: 5px;
     border-radius: 30px;
 }
+
+.achievements-list{
+    overflow-y: auto;
+    height: 11rem;
+}

@@ -23,7 +23,7 @@ const SignupPage = () => {
   useEffect(() => {
     if (currentUserId) {
       toast.success("User successfully created");
-      navigate("/");
+      setTimeout(()=>navigate("/"), 5000)
     }
   }, [currentUserId]);
 
