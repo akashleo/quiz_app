@@ -42,7 +42,7 @@ export const signup = async (req, res, next) => {
     quizPassed: "",
     fastestTime: "",
     correctAnswers: 6,
-    achievements: ["tyty"],
+    achievements: ["U+1F44A", "U+1F596", "U+1F4A3", "U+1F4AF", "U+1F4AF", "U+270C", "U+270C", "U+2728", "U+1F6AC", "U+26F3", "U+1F308", "U+1F308", "U+1F308"],
     role: "user",
     available: true,
     image: "",

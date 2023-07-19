@@ -1,12 +1,18 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getAllQuestions, addQuestion, updateQuestion, getAllArchivedQuestions, deleteQuestion } from "./QuestionAction";
-
+import {
+  getAllQuestions,
+  addQuestion,
+  updateQuestion,
+  getAllArchivedQuestions,
+  deleteQuestion,
+} from "./QuestionAction";
 
 const initialState = {
   loading: false,
   error: null,
   questions: [],
   singleQuestion: {},
+  displayQuestion: {},
   archivedQuestions: [],
   success: false,
 };
@@ -19,7 +25,13 @@ const questionSlice = createSlice({
       state.loading = false;
       state.error = null;
       state.success = false;
+      state.singleQuestion = {};
+      state.displayQuestion = {};
+      state.archivedQuestions = [];
     },
+    setDisplayQuestion: (state, action) => {
+      state.displayQuestion = state.questions[action.payload];
+    }
   },
   extraReducers: (builder) => {
     builder.addCase(getAllQuestions.pending, (state, payload) => {
@@ -29,9 +41,12 @@ const questionSlice = createSlice({
     });
     builder.addCase(getAllQuestions.fulfilled, (state, action) => {
       state.loading = false;
-      const modifyQuestions = action.payload.map((question)=>{
-        return {...question, "correct": question.options[question.isCorrect-1].text}
-      })
+      const modifyQuestions = action.payload.map((question) => {
+        return {
+          ...question,
+          correct: question.options[question.isCorrect - 1].text,
+        };
+      });
       state.questions = modifyQuestions;
       state.success = true;
     });
@@ -47,7 +62,14 @@ const questionSlice = createSlice({
     });
     builder.addCase(addQuestion.fulfilled, (state, action) => {
       state.loading = false;
-      state.questions = action.payload.questions
+      //state.questions = action.payload.questions
+      const modifyQuestions = action?.payload?.map((question) => {
+        return {
+          ...question,
+          correct: question.options[question.isCorrect - 1].text,
+        };
+      });
+      state.questions = modifyQuestions;
       state.success = true;
     });
     builder.addCase(addQuestion.rejected, (state, action) => {
@@ -62,7 +84,13 @@ const questionSlice = createSlice({
     });
     builder.addCase(updateQuestion.fulfilled, (state, action) => {
       state.loading = false;
-      state.questions = action.payload
+      const modifyQuestions = action.payload.map((question) => {
+        return {
+          ...question,
+          correct: question.options[question.isCorrect - 1].text,
+        };
+      });
+      state.questions = modifyQuestions;
       state.success = true;
     });
     builder.addCase(updateQuestion.rejected, (state, action) => {
@@ -77,9 +105,12 @@ const questionSlice = createSlice({
     });
     builder.addCase(getAllArchivedQuestions.fulfilled, (state, action) => {
       state.loading = false;
-      const modifyQuestions = action.payload.map((question)=>{
-        return {...question, "correct": question.options[question.isCorrect-1].text}
-      })
+      const modifyQuestions = action.payload.map((question) => {
+        return {
+          ...question,
+          correct: question.options[question.isCorrect - 1].text,
+        };
+      });
       state.archivedQuestions = modifyQuestions;
       state.success = true;
     });
@@ -96,9 +127,12 @@ const questionSlice = createSlice({
     });
     builder.addCase(deleteQuestion.fulfilled, (state, action) => {
       state.loading = false;
-      const modifyQuestions = action.payload.questions.map((question)=>{
-        return {...question, "correct": question.options[question.isCorrect-1].text}
-      })
+      const modifyQuestions = action.payload.questions.map((question) => {
+        return {
+          ...question,
+          correct: question.options[question.isCorrect - 1].text,
+        };
+      });
       state.questions = modifyQuestions;
       state.success = true;
     });
@@ -109,6 +143,6 @@ const questionSlice = createSlice({
     });
   },
 });
-export const { logOut, clearState, isTokenValid } = questionSlice.actions;
+export const { clearState, setDisplayQuestion } = questionSlice.actions;
 
 export default questionSlice.reducer;
