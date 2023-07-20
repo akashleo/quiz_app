@@ -17,13 +17,19 @@ export const getAllTopics = async (req, res, next) => {
 
 export const addTopic = async (req, res, next) => {
   const {
-    instructions,
-    available,
-    maxAttempts,
-    timeLimit,
-    points,
-    name
+    arr
   } = req.body;
+  // const {
+  //   instructions,
+  //   available,
+  //   maxAttempts,
+  //   timeLimit,
+  //   points,
+  //   name,
+  // } = req.body;
+  for(const newTopic of arr){
+    
+  }
   let topic;
   try {
     topic = new Topic({
