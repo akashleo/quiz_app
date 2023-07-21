@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getAllTopics, addTopic } from "./TopicAction";
+import { getAllTopics, addTopic, deleteTopic } from "./TopicAction";
 
 const initialState = {
   loading: false,
@@ -46,6 +46,21 @@ const topicSlice = createSlice({
       state.success = true;
     });
     builder.addCase(addTopic.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+      state.success = false;
+    });
+    builder.addCase(deleteTopic.pending, (state, payload) => {
+      state.loading = true;
+      state.error = null;
+      state.success = false;
+    });
+    builder.addCase(deleteTopic.fulfilled, (state, action) => {
+      state.loading = false;
+      state.topics = action.payload;
+      state.success = true;
+    });
+    builder.addCase(deleteTopic.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload;
       state.success = false;

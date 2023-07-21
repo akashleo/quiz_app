@@ -2,6 +2,7 @@ import express from "express";
 const topicRouter = express.Router();
 import {
   getAllTopics,
+  loadAllTopics,
   addTopic,
   updateTopic,
   deleteTopic,
@@ -9,7 +10,7 @@ import {
 
 
 topicRouter.get("/", getAllTopics);
-//topicRouter.get("/:id", getProfileById);
+topicRouter.get("/load", loadAllTopics);
 topicRouter.post("/", addTopic);
 topicRouter.put("/:id", updateTopic);
 topicRouter.delete("/:id", deleteTopic);

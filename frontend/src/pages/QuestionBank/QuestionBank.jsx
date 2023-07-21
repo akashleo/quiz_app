@@ -5,11 +5,17 @@ import QuestionCard from "./QuestionCard";
 import AddQuestion from "./AddQuestion";
 import QuestionList from "./QuestionList";
 import "./questions.css";
-import { getAllQuestions, updateQuestion, deleteQuestion } from "../../store/slices/question/QuestionAction";
+import {
+  getAllQuestions,
+  updateQuestion,
+  deleteQuestion,
+} from "../../store/slices/question/QuestionAction";
 import { getAllTopics, addTopic } from "../../store/slices/topic/TopicAction";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import AddTopic from "./AddTopic";
+import TopicList from "./TopicsList";
+import LoadQuestionsModal from "./LoadQuestionsModal"
 
 const QuestionBank = () => {
   const dispatch = useDispatch();
@@ -23,9 +29,9 @@ const QuestionBank = () => {
     if (topics?.length <= 0) dispatch(getAllTopics());
   }, []);
 
-
   const [addQuestionModal, setAddQuestionModal] = useState(false);
   const [addTopicModal, setAddTopicModal] = useState(false);
+  const [loadModal, setLoadModal] = useState(false);
   const [tableView, setTableView] = useState(false);
 
   const handleOk = () => {
@@ -34,6 +40,10 @@ const QuestionBank = () => {
 
   const handleTopicModalClose = () => {
     setAddTopicModal(false);
+  };
+
+  const handleLoadModalClose = () => {
+    setLoadModal(false);
   };
 
   const openQuestionModal = () => {
@@ -52,12 +62,10 @@ const QuestionBank = () => {
     }
   };
 
-  const updateQuestionState = (id, payload) =>{
-    const temp = {"id": id, "body":payload}
+  const updateQuestionState = (id, payload) => {
+    const temp = { id: id, body: payload };
     dispatch(updateQuestion(temp));
-  }
-
-
+  };
 
   return (
     <div className="question-bank">
@@ -65,24 +73,45 @@ const QuestionBank = () => {
         <Col span={4}>
           <h2 className="pop-font">Question Bank</h2>
         </Col>
-        <Col span={9} >
+        <Col span={9}>
           <Switch
             className="pop-font"
-            style={tableView? { backgroundColor: '#d3e39a'}:{ backgroundColor: '#e39a9c'}}
-            checkedChildren={<b style={{color: "black"}}><TableOutlined />&nbsp;Table View</b>}
-            unCheckedChildren={<b style={{color: "black"}}><IdcardOutlined />&nbsp;Card View</b>}
+            style={
+              tableView
+                ? { backgroundColor: "#d3e39a" }
+                : { backgroundColor: "#e39a9c" }
+            }
+            checkedChildren={
+              <b style={{ color: "black" }}>
+                <TableOutlined />
+                &nbsp;Table View
+              </b>
+            }
+            unCheckedChildren={
+              <b style={{ color: "black" }}>
+                <IdcardOutlined />
+                &nbsp;Card View
+              </b>
+            }
             value={tableView}
             onChange={(event) => onChange(event)}
             size="large"
           />
         </Col>
         <Col span={11} className="text-right">
-        <Button
+          <Button
             disabled={addQuestionModal ? true : false}
             onClick={() => navigate("/question/archive")}
             className="action-button"
           >
             Archive
+          </Button>
+          <Button
+            disabled={loadModal ? true : false}
+            onClick={() => setLoadModal(true)}
+            className="action-button"
+          >
+            Load Questions
           </Button>
           <Button
             disabled={addQuestionModal ? true : false}
@@ -96,7 +125,7 @@ const QuestionBank = () => {
             onClick={openTopicModal}
             className="action-button"
           >
-            Add Topic
+            Topics
           </Button>
           <Button
             disabled={addQuestionModal ? true : false}
@@ -107,19 +136,30 @@ const QuestionBank = () => {
           </Button>
         </Col>
       </Row>
-      {tableView ? (
-        <Row gutter={[16, 16]}>
-          <QuestionList questions={questions} updateQuestionState={updateQuestionState}/>
-        </Row>
-      ) : (
-        questions &&
-        <Row gutter={[16, 16]}>
-          {questions?.map((question, index) => (
-            <Col span={8} key={index}>
-              <QuestionCard question={question} updateQuestionState={updateQuestionState}/>
-            </Col>
-          ))}
-        </Row>
+      {!addTopicModal && (
+        <>
+          {tableView ? (
+            <Row gutter={[16, 16]}>
+              <QuestionList
+                questions={questions}
+                updateQuestionState={updateQuestionState}
+              />
+            </Row>
+          ) : (
+            questions && (
+              <Row gutter={[16, 16]}>
+                {questions?.map((question, index) => (
+                  <Col span={8} key={index}>
+                    <QuestionCard
+                      question={question}
+                      updateQuestionState={updateQuestionState}
+                    />
+                  </Col>
+                ))}
+              </Row>
+            )
+          )}
+        </>
       )}
       {addQuestionModal && (
         <AddQuestion
@@ -136,6 +176,13 @@ const QuestionBank = () => {
           addTopicModal={addTopicModal}
           setAddTopicModal={setAddTopicModal}
           handleOk={handleTopicModalClose}
+        />
+      )}
+      {loadModal && (
+        <LoadQuestionsModal
+          topics={topics}
+          setLoadModal={setLoadModal}
+          handleOk={handleLoadModalClose}
         />
       )}
     </div>
