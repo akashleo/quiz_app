@@ -39,10 +39,6 @@ const LoadQuestions = ({ setLoadModal, handleOk, topics }) => {
     setTopicOptions(topicOption);
   }, []);
 
-  //   useEffect(() => {
-  //     setQuestion({ ...question, image: currentFileUrl.url });
-  //   }, [currentFileUrl]);
-
   const handleFormSubmit = (obj) => {
     console.log(obj);
     //const {topicId, questionText } = obj;
