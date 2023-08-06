@@ -1,9 +1,21 @@
 import React from "react";
-import { LayoutOutlined, BellOutlined, PhoneOutlined, LogoutOutlined, QuestionCircleOutlined } from "@ant-design/icons";
+import {
+  LayoutOutlined,
+  BellOutlined,
+  PhoneOutlined,
+  LogoutOutlined,
+  QuestionCircleOutlined,
+  UserOutlined,
+  SmileOutlined,
+  LineChartOutlined,
+  LockOutlined,
+  TrophyOutlined,
+  BookOutlined,
+} from "@ant-design/icons";
 import { Menu } from "antd";
 import { logOut } from "../store/slices/auth/AuthSlice";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const LeftMenu = () => {
   function getItem(label, key, icon, children) {
@@ -15,38 +27,53 @@ const LeftMenu = () => {
     };
   }
 
-  const items = [
+  const dashboardItems = [
     getItem("Dashboard", "1", <LayoutOutlined />),
     getItem("Support", "2", <PhoneOutlined />),
-    getItem("Notification", "3", <BellOutlined />)
+    getItem("Notification", "3", <BellOutlined />),
+  ];
+
+  const profileItems = [
+    getItem("Public Image", "1", <SmileOutlined />),
+    getItem("Name", "2", <UserOutlined />),
+    getItem("Password", "3", <LockOutlined />),
+    getItem("Achievements", "4", <TrophyOutlined />),
+    getItem("Grades", "5", <BookOutlined />),
+    getItem("Winner Charts", "6", <LineChartOutlined />),
   ];
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
 
-  const LogoutFn = () =>{
+  const LogoutFn = () => {
     dispatch(logOut());
-    navigate("/")
-  }
+    navigate("/");
+  };
 
-  const questionBank = (event) =>{
-    console.log(event)
-    navigate("/question")
-  }
+  const questionBank = (event) => {
+    console.log(event);
+    navigate("/question");
+  };
+
+  const questionBankButton = (
+    <Menu className="questionbank">
+      <Menu.Item onClick={questionBank}>
+        <QuestionCircleOutlined />
+        &nbsp; &nbsp;Question Bank
+      </Menu.Item>
+    </Menu>
+  );
 
   return (
     <>
       <Menu
         style={{ backgroundColor: "#fbf9f9" }}
         defaultSelectedKeys={["1"]}
-        items={items}
+        items={location.pathname === "/profile" ? profileItems : dashboardItems}
       />
-      <Menu className="questionbank">
-        <Menu.Item onClick={questionBank}>
-          <QuestionCircleOutlined />
-          &nbsp; &nbsp;Question Bank
-        </Menu.Item>
-      </Menu>
+      {location.pathname === "/dashboard" && questionBankButton}
+
       <Menu className="logout">
         <Menu.Item onClick={LogoutFn}>
           <LogoutOutlined />
