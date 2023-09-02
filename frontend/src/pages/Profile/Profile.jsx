@@ -52,9 +52,8 @@ const Profile = () => {
         <Col span={18}>
           <div className="description">
             <div className="heading">
-              <h1 className="answering-header">History Quiz</h1>
+              <h1 className="answering-header">Profile Image</h1>
             </div>
-            <h5 className="answering-header">answer the question below</h5>
           </div>
         </Col>
       </Row>
