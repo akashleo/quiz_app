@@ -8,6 +8,7 @@
   font-weight: 800;
   font-size: 18px;
   font-family: "Poppins", sans-serif;
+  cursor: pointer;
 }
 
 .searchbar {
@@ -56,4 +57,13 @@
 
 .questionbank {
   background-color: #fbf9f9;
+}
+
+.avatar-navbar {
+  border: 2px solid greenyellow;
+  cursor: pointer;
+}
+
+.avatar-navbar:hover{
+  border: 2px solid rgb(0, 234, 234);
 }

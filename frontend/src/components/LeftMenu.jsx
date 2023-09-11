@@ -17,7 +17,7 @@ import { logOut } from "../store/slices/auth/AuthSlice";
 import { useDispatch } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
 
-const LeftMenu = () => {
+const LeftMenu = ({ profileOnclick }) => {
   function getItem(label, key, icon, children) {
     return {
       key,
@@ -34,12 +34,24 @@ const LeftMenu = () => {
   ];
 
   const profileItems = [
-    getItem("Public Image", "1", <SmileOutlined />),
-    getItem("Name", "2", <UserOutlined />),
-    getItem("Password", "3", <LockOutlined />),
-    getItem("Achievements", "4", <TrophyOutlined />),
-    getItem("Grades", "5", <BookOutlined />),
-    getItem("Winner Charts", "6", <LineChartOutlined />),
+    <Menu.Item key="1" onClick={() => profileOnclick("image")}>
+      <SmileOutlined /> &nbsp; Display Picture
+    </Menu.Item>,
+    <Menu.Item key="2" onClick={() => profileOnclick("name")}>
+      <UserOutlined /> &nbsp; Name
+    </Menu.Item>,
+    <Menu.Item key="3" onClick={() => profileOnclick("password")}>
+      <LockOutlined /> &nbsp; Password
+    </Menu.Item>,
+    <Menu.Item key="4" onClick={() => profileOnclick("achievements")}>
+      <TrophyOutlined /> &nbsp; Achievements
+    </Menu.Item>,
+    <Menu.Item key="5" onClick={() => profileOnclick("grades")}>
+      <BookOutlined /> &nbsp; Grades
+    </Menu.Item>,
+    <Menu.Item key="6" onClick={() => profileOnclick("winner")}>
+      <LineChartOutlined /> &nbsp; Winner Charts
+    </Menu.Item>,
   ];
 
   const dispatch = useDispatch();
@@ -67,12 +79,19 @@ const LeftMenu = () => {
 
   return (
     <>
-      <Menu
-        style={{ backgroundColor: "#fbf9f9" }}
-        defaultSelectedKeys={["1"]}
-        items={location.pathname === "/profile" ? profileItems : dashboardItems}
-      />
+      {location.pathname === "/dashboard" && (
+        <Menu
+          style={{ backgroundColor: "#fbf9f9" }}
+          defaultSelectedKeys={["1"]}
+          items={dashboardItems}
+        />
+      )}
       {location.pathname === "/dashboard" && questionBankButton}
+      {location.pathname === "/profile" && (
+        <Menu style={{ backgroundColor: "#fbf9f9" }} mode="vertical">
+          {profileItems}
+        </Menu>
+      )}
 
       <Menu className="logout">
         <Menu.Item onClick={LogoutFn}>

@@ -21,10 +21,13 @@ const Navbar = () => {
   const openProfile = () => {
     navigate("/profile");
   };
+  const navigateDashboard = () => {
+    navigate("/dashboard");
+  }
   return (
     <Header className="navbar sticky">
       <Row>
-        <Col span={4} className="quiz-logo">
+        <Col span={4} className="quiz-logo" onClick={()=>navigateDashboard()}>
           Quiz Game
         </Col>
         <Col span={8} className="searchbar">
@@ -45,7 +48,7 @@ const Navbar = () => {
           </Button>
         </Col>
         <Col span={4} style={{ textAlign: "right" }}>
-          <Avatar onClick={openProfile} icon={<UserOutlined />} />
+          <Avatar className="avatar-navbar" onClick={openProfile} src={<img src={"https://www.w3schools.com/howto/img_avatar.png"} alt="avatar" />} />
         </Col>
       </Row>
       {open && <SuccessModal open={open} setOpen={setOpen} />}
