@@ -155,3 +155,12 @@
     overflow-y: auto;
     height: 11rem;
 }
+
+.avt-dash {
+    border-radius: 50%;
+    position: relative;
+    width: 200px;
+    height: 200px;
+    cursor: pointer;
+  }
+  

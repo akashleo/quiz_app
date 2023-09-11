@@ -58,7 +58,7 @@ const Dashboard = () => {
           <div className="dashboard">
             <Row className="dashboard-content">
               <Col span={6}>
-                <Image src={profilepic} width={200} height={200} />
+                <Image className="avt-dash" src={"https://www.w3schools.com/howto/img_avatar.png"} width={200} height={200} />
               </Col>
               <Col span={18}>
                 <div className="user-details">

@@ -1,0 +1,64 @@
+.profile-image {
+  margin: 10px 20px;
+}
+
+.profile-name {
+  margin: 10px 20px;
+}
+
+.description {
+  border-radius: 30px;
+  box-shadow: 0px 15px 40px 5px #ededed;
+  background: #ffffff;
+  padding: 20px;
+  margin: 0px 20px 20px 20px;
+}
+
+.action-buttons {
+  width: 100%;
+  background-color: #8692a6;
+  box-shadow: none;
+  font-family: "Poppins", sans-serif;
+  border: none;
+  border-radius: 30px;
+  color: #ffffff;
+  margin-bottom: 10px;
+}
+
+.custom-avt {
+  border-radius: 50%;
+  position: relative;
+  width: 200px;
+  height: 200px;
+  cursor: pointer;
+  transition: background-color 2s ease-out 100ms;
+}
+
+.overlay {
+  display: none;
+}
+
+.custom-avt:hover + .overlay {
+  position: absolute;
+  top: 108px;
+  width: 200px;
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  border-bottom-left-radius: 100px;
+  border-bottom-right-radius: 100px;
+}
+
+button {
+  width: 100px;
+  height: 20px;
+  background-color: #8692a6;
+  box-shadow: none;
+  font-family: "Poppins", sans-serif;
+  border: none;
+  border-radius: 30px;
+  color: #ffffff;
+  margin-bottom: 10px;
+}
