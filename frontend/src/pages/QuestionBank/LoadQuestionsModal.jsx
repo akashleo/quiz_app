@@ -9,18 +9,20 @@ import {
   Row,
   Col,
   Upload,
+  Progress
 } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 
 import { Packer } from "file-saver";
 //import { ObjectId } from 'bson';
 import "./questions.css";
-import { addQuestion } from "../../store/slices/question/QuestionAction";
+import { bulkLoadQuestions } from "../../store/slices/question/QuestionAction";
 import { useDispatch, useSelector } from "react-redux";
 import { fileUpload } from "../../store/slices/file/FileAction";
+import Typography from "antd/es/typography/Typography";
 //import { current } from "@reduxjs/toolkit";
 
-const LoadQuestions = ({ setLoadModal, handleOk, topics }) => {
+const LoadQuestions = ({ loadModal,setLoadModal, handleOk, topics }) => {
   const [form] = Form.useForm();
   const dispatch = useDispatch();
 
@@ -44,23 +46,25 @@ const LoadQuestions = ({ setLoadModal, handleOk, topics }) => {
     //const {topicId, questionText } = obj;
     // Do something with the form values, e.g. submit to a server
     const tempLoad = {
-      topicId: obj.topicId,
       params: {
-        amtCount: obj.amount,
-        categoryId: obj.categoryId,
+        count: obj.amtCount,
+        category: obj.categoryId,
       },
       image: currentFileUrl,
     };
     console.log(tempLoad);
-    //dispatch(addQuestion(temQuestion));
+    dispatch(bulkLoadQuestions(tempLoad));
     //setLoadModal(false);
   };
 
-  const handleChange = (value) => {
+  const handleCountChange = (value) => {
     console.log(value);
+    console.log(topicId)
+  };
+
+  const handleTopicChange = (value) => {
     const topic = topics.find((item) => item.code === value);
-    console.log(topic);
-    setTopicId(topic._id);
+    setTopicId(topic.code);
   };
 
   const imageUpload = (file) => {
@@ -75,7 +79,7 @@ const LoadQuestions = ({ setLoadModal, handleOk, topics }) => {
       className="add-question"
       title={"Load Questions"}
       style={{ zIndex: 10 }}
-      open={addQuestion}
+      open={loadModal}
       onOk={handleOk}
       onCancel={handleOk}
       footer={false}
@@ -96,7 +100,7 @@ const LoadQuestions = ({ setLoadModal, handleOk, topics }) => {
               disabled={false}
               style={{ width: "100%" }}
               placeholder="Please select"
-              onChange={handleChange}
+              onChange={handleCountChange}
               options={[
                 { label: 10, value: 10 },
                 { label: 20, value: 20 },
@@ -119,21 +123,15 @@ const LoadQuestions = ({ setLoadModal, handleOk, topics }) => {
               style={{ width: "100%" }}
               placeholder="Please select"
               //defaultValue={["a10", "c12"]}
-              onChange={handleChange}
+              onChange={handleTopicChange}
               options={topicOptions}
             />
           </Form.Item>
           <Form.Item
             label={<b>Topic ID</b>}
             name="topicId"
-            rules={[
-              {
-                required: true,
-                message: "Please select the Topic",
-              },
-            ]}
           >
-            <Input value={topicId} />
+            <Typography.Title level={3} code strong>{topicId}</Typography.Title>
           </Form.Item>
           <Form.Item>
             <Space.Compact style={{ width: "100%" }}>
@@ -149,6 +147,9 @@ const LoadQuestions = ({ setLoadModal, handleOk, topics }) => {
                 <Button icon={<UploadOutlined />}>Click to Upload</Button>
               </Upload>
             </Space.Compact>
+          </Form.Item>
+          <Form.Item>
+          <Progress percent={100} size="small" />
           </Form.Item>
           <Form.Item className="button-submit">
             <Button type="primary" htmlType="submit" className="submit-button">

@@ -130,14 +130,7 @@ const Dashboard = () => {
                 <Col span={12}>
                   <div className="achivement">
                     <p className="achivement-name">Achievements</p>
-                    <div className="achivement-progress">
-                      <Progress
-                        percent={30}
-                        size="small"
-                        showInfo={false}
-                        strokeColor={"#C4C4C4"}
-                      />
-                    </div>
+                   
                   </div>
                   <div className="achivement-badge">
                     <Row justify="space-between" className="achievements-list">
@@ -166,8 +159,7 @@ const Dashboard = () => {
                 </Col>
                 <Col span={12}>
                   <Row justify="space-between" className="featured-category">
-                    <p className="featured-category-name">Featured Category</p>
-                    <p>View-all</p>
+                    <p className="featured-category-name">Worst Performances</p>
                   </Row>
                   <Row
                     gutter={[16, 16]}

@@ -45,6 +45,9 @@ const AnsweringPanel = () => {
     setAnswer({ ...answerTemp, ...currentAns });
   };
 
+  
+const parser = new DOMParser();
+
   return (
     <>
       <Row style={{ height: "90vh", marginTop: "2vh" }}>
@@ -79,7 +82,7 @@ const AnsweringPanel = () => {
                           Question {current}/{questions?.length}
                         </h3>
                         <br />
-                        <p>{item?.questionText}</p>
+                        <div dangerouslySetInnerHTML={{__html: item?.questionText}}></div>
                       </Col>
                     </Row>
                     <div style={{ padding: "20px" }} className="radio-options">

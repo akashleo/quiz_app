@@ -63,11 +63,16 @@ const QuestionList = ({ questions, updateQuestionState }) => {
       ),
     },
   ];
+
+  const questionsWithKeys = questions.map((question, index) => ({
+    ...question,
+    key: index.toString(), // Use a unique identifier as the key
+  }));
   return (
     <Table
       style={{ width: "100%" }}
       className="pop-font"
-      dataSource={questions}
+      dataSource={questionsWithKeys}
       columns={columns}
     />
   );
