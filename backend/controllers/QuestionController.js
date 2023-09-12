@@ -1,6 +1,8 @@
 import Question from "../model/Question.js";
 import Topic from "../model/Topic.js";
+import { bulkInsertQuestions } from "../services/bulkLoadService.js";
 import mongoose from "mongoose";
+import fetch from "node-fetch";
 
 export const getAllQuestions = async (req, res, next) => {
   let questions;
@@ -54,7 +56,7 @@ export const addQuestion = async (req, res, next) => {
     options,
     isCorrect,
     image,
-    topicId
+    topicId,
   });
 
   try {
@@ -144,4 +146,85 @@ export const deleteQuestion = async (req, res, next) => {
   return res
     .status(201)
     .json({ questions, message: "Question successfully deleted" });
+};
+
+export const loadQuestionByTopic = async (req, res, next) => {
+  let questions;
+  let modifiedQJSON;
+  let insertedQuestions;
+  //console.log(`https://opentdb.com/api.php?amount=${req.body.params.count}&category=${req.body.params.category}&difficulty=medium&type=multiple`)
+  try {
+    questions = await fetch(
+      `https://opentdb.com/api.php?amount=${req.body.params.count}&category=${req.body.params.category}&difficulty=medium&type=multiple`
+    );
+  } catch (err) {
+    console.log(err);
+  }
+
+  let topic;
+
+  try {
+    topic = await Topic.find({ code: req.body.params.category });
+  } catch (err) {
+    console.log(err);
+  }
+  if (!topic) {
+    return res
+      .status(400)
+      .json({ message: "Unable to find topic with this id" });
+  }
+
+  try {
+    const questionsJson = await questions.json();
+    modifiedQJSON = questionsJson.results.map((item) => {
+      let correctindex = Math.floor(Math.random() * 4);
+      let modifiedOptions = [...item.incorrect_answers];
+      modifiedOptions.splice(correctindex, 0, item.correct_answer);
+      const optionsArr = modifiedOptions.map((option, index) => {
+        return {
+          id: index+1,
+          text: option
+        }
+      })
+      return {
+        questionText: item.question,
+        available: true,
+        options: optionsArr,
+        isCorrect: correctindex + 1,
+        image: req.body.image.url,
+        topicId: topic[0]._id,
+      };
+    });
+  } catch (err) {
+    console.log(err);
+  }
+
+  try {
+    insertedQuestions = await Question.insertMany(modifiedQJSON);
+  } catch (err) {
+    console.log(err);
+  }
+
+  if (!insertedQuestions) {
+    return res
+      .status(500)
+      .json({ ...req.body, message: "Cannot get questionsJson" });
+  }
+  let questionsList;
+  try {
+    questionsList = await Question.find();
+  } catch (err) {
+    console.log(err);
+  }
+
+  if (questionsList) {
+    return res
+      .status(201)
+      .json({ questions:questionsList, message: "Question successfully loaded" });
+  }
+  else{
+    return res
+    .status(500)
+    .json({ modifiedQJSON, message: "Cannot get questionsJson" });
+  }
 };

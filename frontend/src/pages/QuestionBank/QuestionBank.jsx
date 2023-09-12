@@ -73,7 +73,7 @@ const QuestionBank = () => {
         <Col span={4}>
           <h2 className="pop-font">Question Bank</h2>
         </Col>
-        <Col span={9}>
+        <Col span={6}>
           <Switch
             className="pop-font"
             style={
@@ -98,7 +98,7 @@ const QuestionBank = () => {
             size="large"
           />
         </Col>
-        <Col span={11} className="text-right">
+        <Col span={14} className="text-right">
           <Button
             disabled={addQuestionModal ? true : false}
             onClick={() => navigate("/question/archive")}
@@ -181,6 +181,7 @@ const QuestionBank = () => {
       {loadModal && (
         <LoadQuestionsModal
           topics={topics}
+          loadModal={loadModal}
           setLoadModal={setLoadModal}
           handleOk={handleLoadModalClose}
         />

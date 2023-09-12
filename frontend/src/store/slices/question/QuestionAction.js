@@ -110,3 +110,22 @@ export const getAllArchivedQuestions = createAsyncThunk('getArchivedQuestions',
   }
 )
 
+
+export const bulkLoadQuestions = createAsyncThunk('bulkLoadQuestions',
+  async (body) => {
+    try {
+      const { data } = await apiConfig.post(
+        'questions/bulk',
+        body
+      )
+      if (data) {
+        return data;
+      } else {
+        return 'error';
+      }
+    } catch (error) {
+      return "error";
+    }
+  }
+)
+

@@ -31,7 +31,6 @@
   width: 200px;
   height: 200px;
   cursor: pointer;
-  transition: background-color 2s ease-out 100ms;
 }
 
 .overlay {
@@ -40,7 +39,7 @@
 
 .custom-avt:hover + .overlay {
   position: absolute;
-  top: 108px;
+  top: 110px;
   width: 200px;
   height: 100px;
   display: flex;
@@ -51,7 +50,8 @@
   border-bottom-right-radius: 100px;
 }
 
-button {
+
+.overlay button {
   width: 100px;
   height: 20px;
   background-color: #8692a6;

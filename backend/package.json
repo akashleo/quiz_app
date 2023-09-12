@@ -32,6 +32,7 @@
     "jsonwebtoken": "^9.0.0",
     "mongoose": "^6.3.0",
     "multer": "^1.4.5-lts.1",
+    "node-fetch": "^3.3.2",
     "validation": "^0.0.1"
   },
   "devDependencies": {
