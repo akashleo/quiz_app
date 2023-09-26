@@ -2,7 +2,7 @@ import React from "react";
 import { Table, Tag, Switch } from "antd";
 import { EditOutlined } from "@ant-design/icons";
 
-const QuestionList = ({ questions, updateQuestionState }) => {
+const QuestionList = ({ questions, updateQuestionState,filter }) => {
   const onChange = (event, record, index) => {
     ///console.log(event, record, index);
     const modifiedQuestion = { ...record, available: !record.available };
@@ -12,6 +12,18 @@ const QuestionList = ({ questions, updateQuestionState }) => {
   // const getObject = (id) =>{
   //   return questions.find((item)=> item._id === id)
   // }
+  console.log("filter_in",filter)
+
+  const filterTopics = filter.reduce((res,value,index) => {
+    if(value.includes("-") && value.split("-")[0] == 'topics'){
+      console.log(`filter_in_${index}`,value.split("-")[1])
+      res.push(value.split("-")[1])
+    }
+     return res 
+  },[])
+
+  console.log("topic filter",filterTopics)
+
   const columns = [
     {
       title: "Question",
@@ -64,7 +76,10 @@ const QuestionList = ({ questions, updateQuestionState }) => {
     },
   ];
 
-  const questionsWithKeys = questions.map((question, index) => ({
+  const questionsWithKeys = questions.filter((question) => {
+    if(filterTopics.length == 0)
+      return true
+    return filterTopics.includes(question.topicId)}).map((question, index) => ({
     ...question,
     key: index.toString(), // Use a unique identifier as the key
   }));

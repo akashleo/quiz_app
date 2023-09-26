@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Row, Col, Button, Switch } from "antd";
-import { TableOutlined, IdcardOutlined } from "@ant-design/icons";
+import { Row, Col, Button, Switch, TreeSelect} from "antd";
+import { TableOutlined, IdcardOutlined, FilterOutlined } from "@ant-design/icons";
 import QuestionCard from "./QuestionCard";
 import AddQuestion from "./AddQuestion";
 import QuestionList from "./QuestionList";
@@ -16,6 +16,7 @@ import { useNavigate } from "react-router-dom";
 import AddTopic from "./AddTopic";
 import TopicList from "./TopicsList";
 import LoadQuestionsModal from "./LoadQuestionsModal"
+import "./questions.css";
 
 const QuestionBank = () => {
   const dispatch = useDispatch();
@@ -33,6 +34,25 @@ const QuestionBank = () => {
   const [addTopicModal, setAddTopicModal] = useState(false);
   const [loadModal, setLoadModal] = useState(false);
   const [tableView, setTableView] = useState(false);
+  const [filter, setFilter] = useState([]);
+  // '64856ce8c441a939e4661e15','64ff75a27803deb515bade74'
+  const { SHOW_PARENT } = TreeSelect;
+  const filtertreedata =[]
+  const filterTopicData={
+    title: 'All Topics',
+    value: 'topics',
+    key: 'topics',
+    children: topics.map((topic, index) => {
+      return {title: topic.name,
+              value: `topics-${topic._id}`,
+              key: `topics-${topic._id}`}
+    }),
+    
+  }
+  filtertreedata.push(filterTopicData)
+
+  console.log("hello",filtertreedata)
+  console.log("hello2",topics)
 
   const handleOk = () => {
     setAddQuestionModal(false);
@@ -66,6 +86,32 @@ const QuestionBank = () => {
     const temp = { id: id, body: payload };
     dispatch(updateQuestion(temp));
   };
+
+  const filteronchange = (newValue) => {
+    console.log('onChange ', filter);
+    console.log('newValue ', newValue);
+    setFilter(newValue);
+  };
+
+  const filterProps = {
+    treeData: filtertreedata,
+    value: filter,
+    onChange: filteronchange,
+    treeCheckable: true,
+    showCheckedStrategy: SHOW_PARENT,
+    placeholder: 'Filter',
+    style: {
+      width: '100%',
+    },
+  };
+  
+  const filterTopics = filter.reduce((res,value,index) => {
+    if(value.includes("-") && value.split("-")[0] == 'topics'){
+      console.log(`filter_in_${index}`,value.split("-")[1])
+      res.push(value.split("-")[1])
+    }
+     return res 
+  },[])
 
   return (
     <div className="question-bank">
@@ -138,17 +184,27 @@ const QuestionBank = () => {
       </Row>
       {!addTopicModal && (
         <>
+          <Row>
+            <div className="filter-quest">
+            <FilterOutlined style={{ width: "3%", fontSize: '18px' }}/>
+            <TreeSelect {...filterProps} style={{ width: "30%" }}/>
+            </div>
+          </Row>
           {tableView ? (
             <Row gutter={[16, 16]}>
               <QuestionList
                 questions={questions}
                 updateQuestionState={updateQuestionState}
+                filter={filter}
               />
             </Row>
           ) : (
             questions && (
               <Row gutter={[16, 16]}>
-                {questions?.map((question, index) => (
+                {questions?.filter((question) => {
+                if(filterTopics.length == 0)
+                  return true
+                return filterTopics.includes(question.topicId)}).map((question, index) => (
                   <Col span={8} key={index}>
                     <QuestionCard
                       question={question}
