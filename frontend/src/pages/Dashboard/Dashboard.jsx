@@ -50,7 +50,7 @@ const Dashboard = () => {
   return (
     <>
       <Navbar />
-      <Row style={{ height: "90vh", marginTop: "12vh" }}>
+      <Row style={{ height: "88vh", marginTop: "12vh" }}>
         <Col span={6}>
           <LeftMenu />
         </Col>

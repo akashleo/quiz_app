@@ -86,6 +86,13 @@ const LeftMenu = ({ profileOnclick }) => {
           items={dashboardItems}
         />
       )}
+      {location.pathname === "/topics" && (
+        <Menu
+          style={{ backgroundColor: "#fbf9f9" }}
+          defaultSelectedKeys={["1"]}
+          items={dashboardItems}
+        />
+      )}
       {location.pathname === "/dashboard" && questionBankButton}
       {location.pathname === "/profile" && (
         <Menu style={{ backgroundColor: "#fbf9f9" }} mode="vertical">
