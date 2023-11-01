@@ -16,14 +16,14 @@ const Navbar = () => {
     setOpen(true);
   };
   const startQuiz = () => {
-    navigate("/answer");
+    navigate("/topics");
   };
   const openProfile = () => {
     navigate("/profile");
   };
   const navigateDashboard = () => {
     navigate("/dashboard");
-  }
+  };
   return (
     <Header className="navbar sticky">
       <Row>
