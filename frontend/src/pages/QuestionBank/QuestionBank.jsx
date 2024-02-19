@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Row, Col, Button, Switch, TreeSelect} from "antd";
-import { TableOutlined, IdcardOutlined, FilterOutlined } from "@ant-design/icons";
+import { Row, Col, Button, Switch, TreeSelect } from "antd";
+import {
+  TableOutlined,
+  IdcardOutlined,
+  FilterOutlined,
+} from "@ant-design/icons";
 import QuestionCard from "./QuestionCard";
 import AddQuestion from "./AddQuestion";
 import QuestionList from "./QuestionList";
@@ -15,8 +19,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import AddTopic from "./AddTopic";
 import TopicList from "./TopicsList";
-import LoadQuestionsModal from "./LoadQuestionsModal"
+import { Tabs } from "antd";
+import LoadQuestionsModal from "./LoadQuestionsModal";
 import "./questions.css";
+import TopicCard from "./TopicCard";
 
 const QuestionBank = () => {
   const dispatch = useDispatch();
@@ -31,35 +37,16 @@ const QuestionBank = () => {
   }, []);
 
   const [addQuestionModal, setAddQuestionModal] = useState(false);
-  const [addTopicModal, setAddTopicModal] = useState(false);
+  const [showTopicsList, setShowTopicsList] = useState(false);
   const [loadModal, setLoadModal] = useState(false);
   const [tableView, setTableView] = useState(false);
-  const [filter, setFilter] = useState([]);
-  // '64856ce8c441a939e4661e15','64ff75a27803deb515bade74'
-  const { SHOW_PARENT } = TreeSelect;
-  const filtertreedata =[]
-  const filterTopicData={
-    title: 'All Topics',
-    value: 'topics',
-    key: 'topics',
-    children: topics.map((topic, index) => {
-      return {title: topic.name,
-              value: `topics-${topic._id}`,
-              key: `topics-${topic._id}`}
-    }),
-    
-  }
-  filtertreedata.push(filterTopicData)
-
-  console.log("hello",filtertreedata)
-  console.log("hello2",topics)
 
   const handleOk = () => {
     setAddQuestionModal(false);
   };
 
   const handleTopicModalClose = () => {
-    setAddTopicModal(false);
+    setShowTopicsList(false);
   };
 
   const handleLoadModalClose = () => {
@@ -70,8 +57,8 @@ const QuestionBank = () => {
     setAddQuestionModal(true);
   };
 
-  const openTopicModal = () => {
-    setAddTopicModal(true);
+  const openTopicList = () => {
+    setShowTopicsList(true);
   };
 
   const onChange = (event) => {
@@ -87,31 +74,69 @@ const QuestionBank = () => {
     dispatch(updateQuestion(temp));
   };
 
-  const filteronchange = (newValue) => {
-    console.log('onChange ', filter);
-    console.log('newValue ', newValue);
-    setFilter(newValue);
-  };
+  const questionJSX = (
+    <>
+      {tableView ? (
+        <Row gutter={[16, 16]}>
+          <QuestionList
+            questions={questions}
+            updateQuestionState={updateQuestionState}
+          />
+        </Row>
+      ) : (
+        <Row gutter={[16, 16]}>
+          {questions?.map((question, index) => (
+            <Col span={8} key={index}>
+              <QuestionCard
+                question={question}
+                updateQuestionState={updateQuestionState}
+              />
+            </Col>
+          ))}
+        </Row>
+      )}
+    </>
+  );
 
-  const filterProps = {
-    treeData: filtertreedata,
-    value: filter,
-    onChange: filteronchange,
-    treeCheckable: true,
-    showCheckedStrategy: SHOW_PARENT,
-    placeholder: 'Filter',
-    style: {
-      width: '100%',
-    },
+  const topicJSX = (
+    <>
+      {tableView ? (
+        <TopicList
+          topics={topics}
+          showTopicsList={showTopicsList}
+          setShowTopicsList={setShowTopicsList}
+          handleOk={handleTopicModalClose}
+          updateQuestionState={updateQuestionState}
+        />
+      ) : (
+        <Row gutter={[16, 16]}>
+          {topics?.map((topic, index) => (
+            <Col span={8} key={index}>
+              <TopicCard
+                {...topic}
+              />
+            </Col>
+          ))}
+        </Row>
+      )}
+    </>
+  );
+
+  const onTabChange = (key) => {
+    console.log(key);
   };
-  
-  const filterTopics = filter.reduce((res,value,index) => {
-    if(value.includes("-") && value.split("-")[0] == 'topics'){
-      console.log(`filter_in_${index}`,value.split("-")[1])
-      res.push(value.split("-")[1])
-    }
-     return res 
-  },[])
+  const items = [
+    {
+      key: "1",
+      label: "Question",
+      children: questionJSX,
+    },
+    {
+      key: "2",
+      label: "Topics",
+      children: topicJSX,
+    },
+  ];
 
   return (
     <div className="question-bank">
@@ -166,13 +191,13 @@ const QuestionBank = () => {
           >
             Dashboard
           </Button>
-          <Button
-            disabled={addTopicModal ? true : false}
-            onClick={openTopicModal}
+          {/* <Button
+            disabled={showTopicsList ? true : false}
+            onClick={openTopicList}
             className="action-button"
           >
             Topics
-          </Button>
+          </Button> */}
           <Button
             disabled={addQuestionModal ? true : false}
             onClick={openQuestionModal}
@@ -182,41 +207,8 @@ const QuestionBank = () => {
           </Button>
         </Col>
       </Row>
-      {!addTopicModal && (
-        <>
-          <Row>
-            <div className="filter-quest">
-            <FilterOutlined style={{ width: "3%", fontSize: '18px' }}/>
-            <TreeSelect {...filterProps} style={{ width: "30%" }}/>
-            </div>
-          </Row>
-          {tableView ? (
-            <Row gutter={[16, 16]}>
-              <QuestionList
-                questions={questions}
-                updateQuestionState={updateQuestionState}
-                filter={filter}
-              />
-            </Row>
-          ) : (
-            questions && (
-              <Row gutter={[16, 16]}>
-                {questions?.filter((question) => {
-                if(filterTopics.length == 0)
-                  return true
-                return filterTopics.includes(question.topicId)}).map((question, index) => (
-                  <Col span={8} key={index}>
-                    <QuestionCard
-                      question={question}
-                      updateQuestionState={updateQuestionState}
-                    />
-                  </Col>
-                ))}
-              </Row>
-            )
-          )}
-        </>
-      )}
+      <Tabs defaultActiveKey="1" items={items} onChange={onTabChange} />
+
       {addQuestionModal && (
         <AddQuestion
           topics={topics}
@@ -226,14 +218,6 @@ const QuestionBank = () => {
         />
       )}
 
-      {addTopicModal && (
-        <AddTopic
-          topics={topics}
-          addTopicModal={addTopicModal}
-          setAddTopicModal={setAddTopicModal}
-          handleOk={handleTopicModalClose}
-        />
-      )}
       {loadModal && (
         <LoadQuestionsModal
           topics={topics}

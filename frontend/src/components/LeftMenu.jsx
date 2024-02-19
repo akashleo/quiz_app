@@ -18,19 +18,20 @@ import { useDispatch } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
 
 const LeftMenu = ({ profileOnclick }) => {
-  function getItem(label, key, icon, children) {
-    return {
-      key,
-      icon,
-      children,
-      label,
-    };
-  }
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const dashboardItems = [
-    getItem("Dashboard", "1", <LayoutOutlined />),
-    getItem("Support", "2", <PhoneOutlined />),
-    getItem("Notification", "3", <BellOutlined />),
+    <Menu.Item key="1" onClick={() => navigate("/dashboard")}>
+      <LayoutOutlined /> &nbsp; Dashboard
+    </Menu.Item>,
+    <Menu.Item key="2" disabled={true}>
+      <PhoneOutlined /> &nbsp; Support
+    </Menu.Item>,
+    <Menu.Item key="3" disabled={true}>
+      <BellOutlined /> &nbsp; Notification
+    </Menu.Item>,
   ];
 
   const profileItems = [
@@ -53,10 +54,6 @@ const LeftMenu = ({ profileOnclick }) => {
       <LineChartOutlined /> &nbsp; Winner Charts
     </Menu.Item>,
   ];
-
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const location = useLocation();
 
   const LogoutFn = () => {
     dispatch(logOut());
@@ -83,15 +80,19 @@ const LeftMenu = ({ profileOnclick }) => {
         <Menu
           style={{ backgroundColor: "#fbf9f9" }}
           defaultSelectedKeys={["1"]}
-          items={dashboardItems}
-        />
+          mode="vertical"
+        >
+          {dashboardItems}
+        </Menu>
       )}
       {location.pathname === "/topics" && (
         <Menu
           style={{ backgroundColor: "#fbf9f9" }}
           defaultSelectedKeys={["1"]}
-          items={dashboardItems}
-        />
+          mode="vertical"
+        >
+          {dashboardItems}
+        </Menu>
       )}
       {location.pathname === "/dashboard" && questionBankButton}
       {location.pathname === "/profile" && (
