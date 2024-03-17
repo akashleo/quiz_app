@@ -4,6 +4,9 @@ import { Layout, Input, Button, Avatar, Row, Col, Dropdown } from "antd";
 import { SearchOutlined, UserOutlined } from "@ant-design/icons";
 import SuccessModal from "./SuccessModal";
 import "./components.css";
+import { quizStart } from "../store/slices/answer/AnswerSlice";
+import { useDispatch, useSelector } from "react-redux";
+
 
 const { Header } = Layout;
 // const { Search } = Input;
@@ -11,6 +14,7 @@ const { Header } = Layout;
 const Navbar = () => {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
+  const { progressMeasure } = useSelector((state) => state.answer);
 
   const showModal = () => {
     setOpen(true);
@@ -24,6 +28,8 @@ const Navbar = () => {
   const navigateDashboard = () => {
     navigate("/dashboard");
   };
+
+
   return (
     <Header className="navbar sticky">
       <Row>
