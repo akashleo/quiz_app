@@ -54,19 +54,17 @@ To run this project locally, follow these steps:
    git clone https://github.com/yourusername/quiz-app.git
    cd quiz-app
 2. Install dependencies for both the client and server:
-
+    ```sh
     cd frontend
     npm install
     cd ../backend
     npm install
-
 3. Set up environment variables. Create a .env file in the server directory and add the following:
-
+    ```sh
     MONGO_URI=your_mongodb_uri
     JWT_SECRET=your_jwt_secret
-
 4. Start the development servers:
-
+    ```sh
     npm start
 
 
