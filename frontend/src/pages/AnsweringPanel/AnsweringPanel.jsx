@@ -9,6 +9,7 @@ import { getAllQuestions } from "../../store/slices/question/QuestionAction";
 import { setDisplayQuestion } from "../../store/slices/question/QuestionSlice";
 import { useDispatch, useSelector } from "react-redux";
 import questionmark from "../../assests/questionmark.png";
+import Navbar from "../../components/Navbar";
 
 const AnsweringPanel = () => {
   const [answer, setAnswer] = useState({});
@@ -50,7 +51,8 @@ const parser = new DOMParser();
 
   return (
     <>
-      <Row style={{ height: "90vh", marginTop: "2vh" }}>
+    <Navbar />
+      <Row style={{ height: "88vh", marginTop: "12vh" }}>
         <Col span={6}>
           <LeftMenu />
         </Col>
