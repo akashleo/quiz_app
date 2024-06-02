@@ -10,7 +10,7 @@ const initialState = {
 };
 
 const topicSlice = createSlice({
-  name: "adminAuth",
+  name: "topics",
   initialState,
   reducers: {
     clearState: (state) => {
@@ -68,6 +68,6 @@ const topicSlice = createSlice({
   },
 });
 
-export const { logOut, clearState, isTokenValid } = topicSlice.actions;
+export const { clearState } = topicSlice.actions;
 
 export default topicSlice.reducer;

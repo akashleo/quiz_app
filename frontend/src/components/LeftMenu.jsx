@@ -101,7 +101,7 @@ const LeftMenu = ({ profileOnclick }) => {
         </Menu>
       )}
 
-      <Menu className="logout">
+      <Menu className="logout" mode="vertical">
         <Menu.Item onClick={LogoutFn}>
           <LogoutOutlined />
           &nbsp; &nbsp;Logout
