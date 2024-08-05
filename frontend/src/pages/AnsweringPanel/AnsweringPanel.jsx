@@ -63,7 +63,7 @@ const parser = new DOMParser();
               <div className="timer-clock">
                 <ClockCircleOutlined />
                 &nbsp;
-                <Timer />
+                <Timer duration={2}/>
               </div>
             </div>
             <h5 className="answering-header">answer the question below</h5>
