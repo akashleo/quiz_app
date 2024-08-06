@@ -121,32 +121,73 @@ export const updateQuestion = async (req, res, next) => {
 };
 
 export const deleteQuestion = async (req, res, next) => {
+  const { questionId } = req.params; // Assuming the question ID is passed as a URL parameter
+
   let question;
-  const id = req.params.id;
+
+  // Validate the question ID
+  if (!mongoose.Types.ObjectId.isValid(questionId)) {
+    return res.status(400).json({ message: "Invalid question ID" });
+  }
 
   try {
-    question = await Question.findByIdAndRemove(id);
+    // Start a session for transaction
+    const session = await mongoose.startSession();
+    session.startTransaction();
+
+    // Find the question to delete
+    question = await Question.findById(questionId).session(session);
+    if (!question) {
+      await session.abortTransaction();
+      return res.status(404).json({ message: "Question not found" });
+    }
+
+    // Find the topic associated with the question
+    const topic = await Topic.findById(question.topicId).session(session);
+    if (topic) {
+      // Remove the question from the topic's questions array
+      topic.questions.pull(questionId);
+      await topic.save({ session });
+    }
+
+    // Delete the question
+    await Question.findByIdAndDelete(questionId).session(session);
+    await session.commitTransaction();
   } catch (err) {
     console.log(err);
+    return res.status(500).json({ message: "Error deleting question" });
   }
 
-  if (!question) {
-    return res.status(500).json({ message: "Unable to delete by this id" });
-  }
-  let questions;
-  try {
-    questions = await Question.find();
-  } catch (err) {
-    console.log(err);
-  }
-
-  if (!questions) {
-    return res.status(500).json({ message: "Cannot get questions" });
-  }
-  return res
-    .status(201)
-    .json({ questions, message: "Question successfully deleted" });
+  return res.status(200).json({ message: "Question deleted successfully" });
 };
+
+// export const deleteQuestion = async (req, res, next) => {
+//   let question;
+//   const id = req.params.id;
+
+//   try {
+//     question = await Question.findByIdAndRemove(id);
+//   } catch (err) {
+//     console.log(err);
+//   }
+
+//   if (!question) {
+//     return res.status(500).json({ message: "Unable to delete by this id" });
+//   }
+//   let questions;
+//   try {
+//     questions = await Question.find();
+//   } catch (err) {
+//     console.log(err);
+//   }
+
+//   if (!questions) {
+//     return res.status(500).json({ message: "Cannot get questions" });
+//   }
+//   return res
+//     .status(201)
+//     .json({ questions, message: "Question successfully deleted" });
+// };
 
 export const loadQuestionByTopic = async (req, res, next) => {
   let questions;
@@ -182,10 +223,10 @@ export const loadQuestionByTopic = async (req, res, next) => {
       modifiedOptions.splice(correctindex, 0, item.correct_answer);
       const optionsArr = modifiedOptions.map((option, index) => {
         return {
-          id: index+1,
-          text: option
-        }
-      })
+          id: index + 1,
+          text: option,
+        };
+      });
       return {
         questionText: item.question,
         available: true,
@@ -218,13 +259,13 @@ export const loadQuestionByTopic = async (req, res, next) => {
   }
 
   if (questionsList) {
+    return res.status(201).json({
+      questions: questionsList,
+      message: "Question successfully loaded",
+    });
+  } else {
     return res
-      .status(201)
-      .json({ questions:questionsList, message: "Question successfully loaded" });
-  }
-  else{
-    return res
-    .status(500)
-    .json({ modifiedQJSON, message: "Cannot get questionsJson" });
+      .status(500)
+      .json({ modifiedQJSON, message: "Cannot get questionsJson" });
   }
 };

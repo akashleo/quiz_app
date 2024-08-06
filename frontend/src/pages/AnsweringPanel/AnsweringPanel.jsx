@@ -72,7 +72,7 @@ const parser = new DOMParser();
                 current === index + 1 && (
                   <>
                     <Row>
-                      <Col span={12} style={{ textAlign: "center" }}>
+                      <Col span={12} style={{ textAlign: "left" }}>
                         <Image
                           preview={false}
                           src={item?.image ? item?.image : questionmark}
