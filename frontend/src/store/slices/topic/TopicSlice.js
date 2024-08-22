@@ -7,6 +7,7 @@ const initialState = {
   topics: [],
   singleTopic: {},
   success: false,
+  topicQuestions: [],
 };
 
 const topicSlice = createSlice({
@@ -17,6 +18,10 @@ const topicSlice = createSlice({
       state.loading = false;
       state.error = null;
       state.success = false;
+    },
+    getSingleTopic: (state, action) => {
+      state.singleTopic = action.payload;
+      state.topicQuestions = action.payload.questions;
     },
   },
   extraReducers: (builder) => {
@@ -68,6 +73,6 @@ const topicSlice = createSlice({
   },
 });
 
-export const { clearState } = topicSlice.actions;
+export const { clearState, getSingleTopic } = topicSlice.actions;
 
 export default topicSlice.reducer;

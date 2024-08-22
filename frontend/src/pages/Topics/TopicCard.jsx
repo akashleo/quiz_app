@@ -4,6 +4,8 @@ import { Row, Col, Card, Image } from "antd";
 import "./Topics.css";
 import subject from "../../assests/qbg2.jpg";
 import { CheckCircleOutlined } from "@ant-design/icons";
+import { useDispatch, useSelector } from "react-redux";
+import {getSingleTopic} from '../../store/slices/topic/TopicSlice';
 
 // Define your TopicCard
 const TopicCard = ({
@@ -25,6 +27,8 @@ const TopicCard = ({
     timeLimit,
   } = topicData;
 
+  const dispatch = useDispatch();
+
   return (
     <Col span={8}>
       <Card
@@ -34,6 +38,7 @@ const TopicCard = ({
         onClick={() => {
           setSelectedTopic(code);
           setTopic(topicData);
+          dispatch(getSingleTopic(topicData));
         }}
       >
         <div

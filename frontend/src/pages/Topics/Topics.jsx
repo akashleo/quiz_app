@@ -30,6 +30,7 @@ const Topics = () => {
     if (Object.keys(topic).length){
       dispatch(updateAnswer({ id: topic._id, name: "Akash" }));
       navigate("/answer");
+      console.log(topic);
     }
   }, [topic]);
 
@@ -49,6 +50,7 @@ const Topics = () => {
           </Row>
           <Row gutter={[16, 16]}>
             {topics.map((item) => {
+              if(item.questions?.length>0){
               return (
                 <TopicCard
                   topicData={item}
@@ -56,7 +58,7 @@ const Topics = () => {
                   selectedTopic={selectedTopic}
                   setSelectedTopic={setSelectedTopic}
                 />
-              );
+              )}
             })}
           </Row>
         </Col>

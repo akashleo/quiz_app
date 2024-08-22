@@ -5,7 +5,10 @@ import { Row, Col, Radio, Image, Space, Button } from "antd";
 import "./AnsweringPanel.css";
 import ConfirmModal from "../../components/ConfirmModal";
 import Timer from "../../components/Timer";
-import { getAllQuestions } from "../../store/slices/question/QuestionAction";
+import {
+  getAllQuestions,
+  fetchQuestionById,
+} from "../../store/slices/question/QuestionAction";
 import { setDisplayQuestion } from "../../store/slices/question/QuestionSlice";
 import { useDispatch, useSelector } from "react-redux";
 import questionmark from "../../assests/questionmark.png";
@@ -17,6 +20,7 @@ const AnsweringPanel = () => {
   const dispatch = useDispatch();
   //const navigate = useNavigate();
   const { questions, displayQuestion } = useSelector((state) => state.question);
+  const { singleTopic, topicQuestions } = useSelector((state) => state.topic);
 
   const onChange = (e) => {
     console.log("radio checked", e.target.value);
@@ -30,13 +34,14 @@ const AnsweringPanel = () => {
   };
 
   useEffect(() => {
-    dispatch(getAllQuestions());
+    dispatch(fetchQuestionById(topicQuestions[0]));
+    console.log(singleTopic, topicQuestions);
   }, []);
 
-  const nextQuestion = (id) => {
-    if (current < questions.length) {
+  const nextQuestion = () => {
+    if (current < topicQuestions.length) {
+      dispatch(fetchQuestionById(topicQuestions[current]));
       setCurrent(current + 1);
-      dispatch(setDisplayQuestion(id));
     } else showModal();
   };
 
@@ -46,12 +51,9 @@ const AnsweringPanel = () => {
     setAnswer({ ...answerTemp, ...currentAns });
   };
 
-  
-const parser = new DOMParser();
-
   return (
     <>
-    <Navbar />
+      <Navbar />
       <Row style={{ height: "88vh", marginTop: "12vh" }}>
         <Col span={6}>
           <LeftMenu />
@@ -63,61 +65,72 @@ const parser = new DOMParser();
               <div className="timer-clock">
                 <ClockCircleOutlined />
                 &nbsp;
-                <Timer duration={2}/>
+                <Timer duration={2} />
               </div>
             </div>
             <h5 className="answering-header">answer the question below</h5>
-            {questions?.map((item, index) => {
-              return (
-                current === index + 1 && (
-                  <>
-                    <Row>
-                      <Col span={12} style={{ textAlign: "left" }}>
-                        <Image
-                          preview={false}
-                          src={item?.image ? item?.image : questionmark}
-                          className="question-image"
-                        />
-                      </Col>
-                      <Col span={12} className="details">
-                        <h3>
-                          Question {current}/{questions?.length}
-                        </h3>
-                        <br />
-                        <div dangerouslySetInnerHTML={{__html: item?.questionText}}></div>
-                      </Col>
-                    </Row>
-                    <div style={{ padding: "20px" }} className="radio-options">
-                      <h3>Choose Answer</h3>
-                      <Radio.Group
-                        onChange={storeAnswer}
-                        value={answer[item?._id] ? answer[item?._id] : null}
-                      >
-                        <Space direction="vertical">
-                          {item?.options?.map((option) => {
-                            return (
-                              <Radio value={option.id}>{option.text}</Radio>
-                            );
-                          })}
-                        </Space>
-                      </Radio.Group>
-                    </div>
-                    <Row>
-                      <Col span={24} style={{ textAlign: "right" }}>
-                        <Button
-                          className="start-button"
-                          onClick={() => nextQuestion(current + 1)}
-                        >
-                          {current === questions.length
-                            ? "Submit"
-                            : "Next Question"}
-                        </Button>
-                      </Col>
-                    </Row>
-                  </>
-                )
-              );
-            })}
+            <>
+              <Row>
+                <Col span={12} style={{ textAlign: "left" }}>
+                  <Image
+                    preview={false}
+                    src={
+                      displayQuestion?.image
+                        ? displayQuestion?.image
+                        : questionmark
+                    }
+                    className="question-image"
+                  />
+                </Col>
+                <Col span={12} className="details">
+                  <h3>
+                    Question {current}/{topicQuestions?.length}
+                  </h3>
+                  <br />
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: displayQuestion?.questionText,
+                    }}
+                  ></div>
+                </Col>
+              </Row>
+              <div style={{ padding: "20px" }} className="radio-options">
+                <h3>Choose Answer</h3>
+                <Radio.Group
+                  onChange={storeAnswer}
+                  value={
+                    answer[displayQuestion?._id]
+                      ? answer[displayQuestion?._id]
+                      : null
+                  }
+                >
+                  <Space direction="vertical">
+                    {displayQuestion?.options?.map((option) => {
+                      return (
+                        <Radio value={option.id}>
+                          {" "}
+                          <div
+                            dangerouslySetInnerHTML={{ __html: option.text }}
+                          ></div>
+                        </Radio>
+                      );
+                    })}
+                  </Space>
+                </Radio.Group>
+              </div>
+              <Row>
+                <Col span={24} style={{ textAlign: "right" }}>
+                  <Button
+                    className="start-button"
+                    onClick={() => nextQuestion()}
+                  >
+                    {current === topicQuestions.length
+                      ? "Submit"
+                      : "Next Question"}
+                  </Button>
+                </Col>
+              </Row>
+            </>
           </div>
         </Col>
         {open && <ConfirmModal open={open} setOpen={setOpen} />}
