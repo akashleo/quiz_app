@@ -12,6 +12,5 @@ answerRouter.get("/", getAllAnswers);
 answerRouter.post("/", addAnswer);
 answerRouter.put("/:id", updateAnswer);
 answerRouter.delete("/:id", deleteAnswer);
-//answerRouter.delete("questions/:topicId", getQuestions);
 
 export default answerRouter;
