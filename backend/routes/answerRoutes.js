@@ -2,14 +2,14 @@ import express from "express";
 const answerRouter = express.Router();
 import {
   getAllAnswers,
-  addAnswer,
+  createNewAnswer,
   updateAnswer,
   deleteAnswer,
 } from "../controllers/AnswerController.js";
 
 answerRouter.get("/", getAllAnswers);
 //answerRouter.get("/:id", getProfileById);
-answerRouter.post("/", addAnswer);
+answerRouter.post("/", createNewAnswer);
 answerRouter.put("/:id", updateAnswer);
 answerRouter.delete("/:id", deleteAnswer);
 

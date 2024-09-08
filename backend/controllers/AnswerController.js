@@ -29,14 +29,8 @@ export const getAnswerById = async (req, res, next) => {
   return res.status(200).json({ answer });
 };
 
-export const addAnswer = async (req, res, next) => {
-  const {
-    userId,
-    answers,
-    startTime,
-    endTime,
-    topicId,
-  } = req.body;
+export const createNewAnswer = async (req, res, next) => {
+  const { userId, answers, startTime, endTime, topicId } = req.body;
   let answer;
   try {
     answer = new Answer({
@@ -58,13 +52,7 @@ export const addAnswer = async (req, res, next) => {
 };
 
 export const updateAnswer = async (req, res, next) => {
-  const {
-    userId,
-    answers,
-    startTime,
-    endTime,
-    topicId,
-  } = req.body;
+  const { userId, answers, startTime, endTime, topicId } = req.body;
   let answer;
 
   const id = req.params.id;
@@ -84,7 +72,9 @@ export const updateAnswer = async (req, res, next) => {
   }
 
   if (!answer) {
-    return res.status(500).json({ message: "Unable to update answer with this id" });
+    return res
+      .status(500)
+      .json({ message: "Unable to update answer with this id" });
   }
   return res.status(201).json({ answer });
 };
@@ -100,7 +90,9 @@ export const deleteAnswer = async (req, res, next) => {
   }
 
   if (!answer) {
-    return res.status(500).json({ message: "Unable to delete answer with this id" });
+    return res
+      .status(500)
+      .json({ message: "Unable to delete answer with this id" });
   }
   return res
     .status(201)
