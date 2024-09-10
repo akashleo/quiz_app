@@ -7,6 +7,8 @@ const ProfileSchema = new Schema(
     email: {
       type: String,
       required: true,
+      trim: true,
+      unique: true,
     },
     password: {
       type: String,
@@ -32,7 +34,8 @@ const ProfileSchema = new Schema(
     },
     role: {
       type: String,
-      required: true
+      enum: ["user", "admin"],
+      default: "user",
     },
     available: {
       type: Boolean,

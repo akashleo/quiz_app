@@ -30,14 +30,12 @@ export const getAnswerById = async (req, res, next) => {
 };
 
 export const createNewAnswer = async (req, res, next) => {
-  const { userId, answers, startTime, endTime, topicId } = req.body;
+  const { userId, answers, topicId } = req.body;
   let answer;
   try {
     answer = new Answer({
       userId,
       answers,
-      startTime,
-      endTime,
       topicId,
     });
     await answer.save();
@@ -61,8 +59,6 @@ export const updateAnswer = async (req, res, next) => {
     answer = await Answer.findByIdAndUpdate(id, {
       userId,
       answers,
-      startTime,
-      endTime,
       topicId,
     });
 

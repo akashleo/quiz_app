@@ -28,16 +28,26 @@ const answerSlice = createSlice({
     });
     builder.addCase(createNewAnswer.fulfilled, (state, action) => {
       state.loading = false;
-      const modifyQuestions = action.payload.map((question) => {
-        return {
-          ...question,
-          correct: question.options[question.isCorrect - 1].text,
-        };
-      });
-      state.questions = modifyQuestions;
+      state.currentUserAnswer = action.payload.answer;
       state.success = true;
     });
     builder.addCase(createNewAnswer.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+      state.success = false;
+    });
+
+    builder.addCase(updateAnswer.pending, (state, payload) => {
+      state.loading = true;
+      state.error = null;
+      state.success = false;
+    });
+    builder.addCase(updateAnswer.fulfilled, (state, action) => {
+      state.loading = false;
+      state.currentUserAnswer = action.payload.answer;
+      state.success = true;
+    });
+    builder.addCase(updateAnswer.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload;
       state.success = false;

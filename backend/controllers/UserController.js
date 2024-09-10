@@ -15,8 +15,17 @@ export const getAllUser = async (req, res, next) => {
   return res.status(200).json({ users });
 };
 
+const validateEmail = (email) => {
+  const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  return regex.test(email);
+};
+
 export const signup = async (req, res, next) => {
   const { email } = req.body;
+
+  if (!validateEmail(email)) {
+    return res.status(403).json({ message: "Invalid email format" });
+  }
 
   let existingUser;
 
@@ -42,7 +51,21 @@ export const signup = async (req, res, next) => {
     quizPassed: "",
     fastestTime: "",
     correctAnswers: 6,
-    achievements: ["U+1F44A", "U+1F596", "U+1F4A3", "U+1F4AF", "U+1F4AF", "U+270C", "U+270C", "U+2728", "U+1F6AC", "U+26F3", "U+1F308", "U+1F308", "U+1F308"],
+    achievements: [
+      "U+1F44A",
+      "U+1F596",
+      "U+1F4A3",
+      "U+1F4AF",
+      "U+1F4AF",
+      "U+270C",
+      "U+270C",
+      "U+2728",
+      "U+1F6AC",
+      "U+26F3",
+      "U+1F308",
+      "U+1F308",
+      "U+1F308",
+    ],
     role: "user",
     available: true,
     image: "",
@@ -56,13 +79,11 @@ export const signup = async (req, res, next) => {
 
   const { password, ...userobj } = newUser._doc;
 
-  res
-    .status(200)
-    .json({
-      message: "Profile successfully created",
-      status: 200,
-      user: userobj,
-    });
+  res.status(200).json({
+    message: "Profile successfully created",
+    status: 200,
+    user: userobj,
+  });
 };
 
 export const login = async (req, res, next) => {
@@ -95,14 +116,12 @@ export const login = async (req, res, next) => {
   //   return res.status(400).json({ message: "Incorrect Password" });
   // }
   //const token = jwt.sign({ sub: user.id }, 'secretkey');
-  return res
-    .status(200)
-    .json({
-      message: "Login Successful",
-      token,
-      user: existingUser,
-      status: 200,
-    });
+  return res.status(200).json({
+    message: "Login Successful",
+    token,
+    user: existingUser,
+    status: 200,
+  });
 
   //return res.status(200).json({ message: "Profile login successful" });
 };

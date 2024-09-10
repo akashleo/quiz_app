@@ -1,12 +1,11 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import apiConfig from "../../../AxiosConfig";
-import { errorHandler } from "../../ErrorHandler";
 
 export const createNewAnswer = createAsyncThunk(
   "createNewAnswer",
   async (body, { rejectWithValue }) => {
     try {
-      const { data } = await apiConfig.post("answers", body);
+      const { data } = await apiConfig.post("answer", body);
       const resMsg = "error";
       if (data) {
         return data;

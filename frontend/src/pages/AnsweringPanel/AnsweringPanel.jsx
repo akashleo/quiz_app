@@ -10,6 +10,7 @@ import {
   fetchQuestionById,
 } from "../../store/slices/question/QuestionAction";
 import { setDisplayQuestion } from "../../store/slices/question/QuestionSlice";
+import { updateAnswer } from "../../store/slices/answer/AnswerAction";
 import { useDispatch, useSelector } from "react-redux";
 import questionmark from "../../assests/questionmark.png";
 import Navbar from "../../components/Navbar";
@@ -21,6 +22,7 @@ const AnsweringPanel = () => {
   //const navigate = useNavigate();
   const { questions, displayQuestion } = useSelector((state) => state.question);
   const { singleTopic, topicQuestions } = useSelector((state) => state.topic);
+  const { currentUserAnswer } = useSelector((state) => state.answer);
 
   const onChange = (e) => {
     console.log("radio checked", e.target.value);
@@ -46,9 +48,11 @@ const AnsweringPanel = () => {
   };
 
   const storeAnswer = (event) => {
-    const answerTemp = JSON.parse(JSON.stringify(answer));
+    const answerTemp = JSON.parse(JSON.stringify(currentUserAnswer.answers));
     const currentAns = { [displayQuestion?._id]: event.target.value };
-    setAnswer({ ...answerTemp, ...currentAns });
+    const updatedAns = { ...answerTemp, ...currentAns };
+    dispatch(updateAnswer());
+    setAnswer({ ...answerTemp, ...currentAns })
   };
 
   return (
