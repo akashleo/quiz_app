@@ -29,7 +29,7 @@ export const updateAnswer = createAsyncThunk(
   "updateAnswer",
   async (req, { dispatch }) => {
     try {
-      const { data } = await apiConfig.post(`answers${req.id}`, req.body);
+      const { data } = await apiConfig.post(`answer/${req.id}`, req.body);
       if (data) {
         return data;
       } else {

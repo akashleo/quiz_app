@@ -50,10 +50,11 @@ export const createNewAnswer = async (req, res, next) => {
 };
 
 export const updateAnswer = async (req, res, next) => {
-  const { userId, answers, startTime, endTime, topicId } = req.body;
+  const { userId, answers, topicId } = req.body;
   let answer;
 
   const id = req.params.id;
+  console.log(id);
 
   try {
     answer = await Answer.findByIdAndUpdate(id, {

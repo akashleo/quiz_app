@@ -44,6 +44,7 @@ const AnsweringPanel = () => {
     if (current < topicQuestions.length) {
       dispatch(fetchQuestionById(topicQuestions[current]));
       setCurrent(current + 1);
+      setAnswer({})
     } else showModal();
   };
 
@@ -51,8 +52,9 @@ const AnsweringPanel = () => {
     const answerTemp = JSON.parse(JSON.stringify(currentUserAnswer.answers));
     const currentAns = { [displayQuestion?._id]: event.target.value };
     const updatedAns = { ...answerTemp, ...currentAns };
-    dispatch(updateAnswer());
     setAnswer({ ...answerTemp, ...currentAns })
+    dispatch(updateAnswer({id: currentUserAnswer._id, body: {...currentUserAnswer,answers: updatedAns}}));
+    
   };
 
   return (
