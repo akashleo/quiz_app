@@ -15,6 +15,7 @@ const answerSchema = new Schema(
       required: true,
     },
     answers: { type: Map, of: String },
+    submitted: { type: Boolean, default: false },
   },
   { timestamps: true }
 );

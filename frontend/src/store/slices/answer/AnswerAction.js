@@ -29,7 +29,28 @@ export const updateAnswer = createAsyncThunk(
   "updateAnswer",
   async (req, { dispatch }) => {
     try {
-      const { data } = await apiConfig.post(`answer/${req.id}`, req.body);
+      const { data } = await apiConfig.put(`answer/${req.id}`, req.body);
+      if (data) {
+        return data;
+      } else {
+        return "Error on response";
+      }
+    } catch (error) {
+      const statusCode = error.response.data.error.status;
+      if (statusCode === 412) {
+        return "Error on response";
+      } else {
+        return "Error on response";
+      }
+    }
+  }
+);
+
+export const submitAnswer = createAsyncThunk(
+  "submitAnswer",
+  async (req, { dispatch }) => {
+    try {
+      const { data } = await apiConfig.put(`answer/submit/${req.id}`, req.body);
       if (data) {
         return data;
       } else {

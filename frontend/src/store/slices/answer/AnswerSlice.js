@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { createNewAnswer, updateAnswer } from "./AnswerAction";
+import { createNewAnswer, updateAnswer, submitAnswer } from "./AnswerAction";
 
 const initialState = {
   loading: false,
@@ -7,6 +7,7 @@ const initialState = {
   tabChange: 0,
   currentUserAnswer: {},
   userAllAnswers: [],
+  answerMap: {},
   success: false,
 };
 
@@ -18,6 +19,12 @@ const answerSlice = createSlice({
       state.loading = false;
       state.error = null;
       state.success = false;
+    },
+    updateAnswerMap: (state, action) => {
+      state.loading = false;
+      state.error = null;
+      state.success = false;
+      state.answerMap = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -44,6 +51,7 @@ const answerSlice = createSlice({
     });
     builder.addCase(updateAnswer.fulfilled, (state, action) => {
       state.loading = false;
+      //const answerList = action.payload.answer;
       state.currentUserAnswer = action.payload.answer;
       state.success = true;
     });
@@ -52,9 +60,26 @@ const answerSlice = createSlice({
       state.error = action.payload;
       state.success = false;
     });
+
+    builder.addCase(submitAnswer.pending, (state, payload) => {
+      state.loading = true;
+      state.error = null;
+      state.success = false;
+    });
+    builder.addCase(submitAnswer.fulfilled, (state, action) => {
+      state.loading = false;
+      state.currentUserAnswer = {};
+      state.answerMap = {};
+      state.success = true;
+    });
+    builder.addCase(submitAnswer.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+      state.success = false;
+    });
   },
 });
 
-export const { clearState } = answerSlice.actions;
+export const { clearState, updateAnswerMap } = answerSlice.actions;
 
 export default answerSlice.reducer;

@@ -10,24 +10,21 @@ import {
   fetchQuestionById,
 } from "../../store/slices/question/QuestionAction";
 import { setDisplayQuestion } from "../../store/slices/question/QuestionSlice";
-import { updateAnswer } from "../../store/slices/answer/AnswerAction";
+import { updateAnswer, submitAnswer } from "../../store/slices/answer/AnswerAction";
 import { useDispatch, useSelector } from "react-redux";
 import questionmark from "../../assests/questionmark.png";
 import Navbar from "../../components/Navbar";
+import {updateAnswerMap} from "../../store/slices/answer/AnswerSlice" 
 
 const AnsweringPanel = () => {
   const [answer, setAnswer] = useState({});
   const [current, setCurrent] = useState(1);
   const dispatch = useDispatch();
   //const navigate = useNavigate();
-  const { questions, displayQuestion } = useSelector((state) => state.question);
+  const { displayQuestion } = useSelector((state) => state.question);
   const { singleTopic, topicQuestions } = useSelector((state) => state.topic);
-  const { currentUserAnswer } = useSelector((state) => state.answer);
+  const { currentUserAnswer, answerMap } = useSelector((state) => state.answer);
 
-  const onChange = (e) => {
-    console.log("radio checked", e.target.value);
-    //setValue(e.target.value);
-  };
 
   const [open, setOpen] = useState(false);
 
@@ -36,6 +33,7 @@ const AnsweringPanel = () => {
   };
 
   useEffect(() => {
+    dispatch(updateAnswerMap({}));
     dispatch(fetchQuestionById(topicQuestions[0]));
     console.log(singleTopic, topicQuestions);
   }, []);
@@ -49,13 +47,22 @@ const AnsweringPanel = () => {
   };
 
   const storeAnswer = (event) => {
-    const answerTemp = JSON.parse(JSON.stringify(currentUserAnswer.answers));
+    const {_id } = currentUserAnswer
     const currentAns = { [displayQuestion?._id]: event.target.value };
-    const updatedAns = { ...answerTemp, ...currentAns };
-    setAnswer({ ...answerTemp, ...currentAns })
-    dispatch(updateAnswer({id: currentUserAnswer._id, body: {...currentUserAnswer,answers: updatedAns}}));
+    const updatedAns = { ...answerMap, ...currentAns };
+    console.log(updatedAns);
+    setAnswer(updatedAns);
+    dispatch(updateAnswerMap(updatedAns));
+    dispatch(updateAnswer({id: _id, body: {answers: updatedAns}}));
     
   };
+
+  const submitQuiz =() =>{
+    const {_id } = currentUserAnswer;
+    setAnswer({});
+    dispatch(updateAnswerMap({}));
+    dispatch(submitAnswer({id: _id, body: {submitted: true}}));
+  }
 
   return (
     <>
@@ -139,7 +146,7 @@ const AnsweringPanel = () => {
             </>
           </div>
         </Col>
-        {open && <ConfirmModal open={open} setOpen={setOpen} />}
+        {open && <ConfirmModal open={open} setOpen={setOpen} submitQuiz={submitQuiz}/>}
       </Row>
     </>
   );

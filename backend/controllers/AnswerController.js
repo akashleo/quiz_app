@@ -50,17 +50,41 @@ export const createNewAnswer = async (req, res, next) => {
 };
 
 export const updateAnswer = async (req, res, next) => {
-  const { userId, answers, topicId } = req.body;
+  const { answers } = req.body;
   let answer;
+  let answerObj;
 
   const id = req.params.id;
-  console.log(id);
 
   try {
     answer = await Answer.findByIdAndUpdate(id, {
-      userId,
       answers,
-      topicId,
+    });
+
+    await answer.save();
+    answerObj = await Answer.findById(id);
+  } catch (err) {
+    console.log(err);
+  }
+
+  if (!answer) {
+    return res
+      .status(500)
+      .json({ message: "Unable to update answer with this id" });
+  }
+  return res.status(201).json({ answer: answerObj });
+};
+
+export const submitAnswer = async (req, res, next) => {
+  const { submitted } = req.body;
+  let answer;
+  let answerObj;
+
+  const id = req.params.id;
+
+  try {
+    answer = await Answer.findByIdAndUpdate(id, {
+      submitted,
     });
 
     await answer.save();
@@ -73,7 +97,7 @@ export const updateAnswer = async (req, res, next) => {
       .status(500)
       .json({ message: "Unable to update answer with this id" });
   }
-  return res.status(201).json({ answer });
+  return res.status(201).json({ message: "Successfully submitted the quiz" });
 };
 
 export const deleteAnswer = async (req, res, next) => {
