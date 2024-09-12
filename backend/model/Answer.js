@@ -15,14 +15,7 @@ const answerSchema = new Schema(
       required: true,
     },
     answers: { type: Map, of: String },
-    startTime: {
-      type: Date,
-      required: true
-    },
-    endTime: {
-      type: Date,
-      required: true
-    }
+    submitted: { type: Boolean, default: false },
   },
   { timestamps: true }
 );

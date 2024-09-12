@@ -7,7 +7,7 @@ import Navbar from "../../components/Navbar";
 import { getAllTopics } from "../../store/slices/topic/TopicAction";
 import { useDispatch, useSelector } from "react-redux";
 import TopicCard from "./TopicCard";
-import { updateAnswer } from "../../store/slices/answer/AnswerSlice";
+import { createNewAnswer } from "../../store/slices/answer/AnswerAction";
 import { useNavigate } from "react-router-dom";
 
 const Topics = () => {
@@ -15,6 +15,7 @@ const Topics = () => {
   const navigate = useNavigate();
 
   const { topics } = useSelector((state) => state.topic);
+  const { singleProfile } = useSelector((state) => state.profile);
 
   const [selectedTopic, setSelectedTopic] = useState(0);
 
@@ -27,9 +28,10 @@ const Topics = () => {
   }, []);
 
   useEffect(() => {
-    if (Object.keys(topic).length){
-      dispatch(updateAnswer({ id: topic._id, name: "Akash" }));
+    if (Object.keys(topic).length) {
+      dispatch(createNewAnswer({ userId: singleProfile._id, answers: {}, topicId:  topic._id}));
       navigate("/answer");
+      //console.log(topic);
     }
   }, [topic]);
 
@@ -49,14 +51,16 @@ const Topics = () => {
           </Row>
           <Row gutter={[16, 16]}>
             {topics.map((item) => {
-              return (
-                <TopicCard
-                  topicData={item}
-                  setTopic = {setTopic}
-                  selectedTopic={selectedTopic}
-                  setSelectedTopic={setSelectedTopic}
-                />
-              );
+              if (item.questions?.length > 0) {
+                return (
+                  <TopicCard
+                    topicData={item}
+                    setTopic={setTopic}
+                    selectedTopic={selectedTopic}
+                    setSelectedTopic={setSelectedTopic}
+                  />
+                );
+              }
             })}
           </Row>
         </Col>

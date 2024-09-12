@@ -65,11 +65,11 @@ const QuestionCard = ({ question, updateQuestionState }) => {
         />,
       ]}
     >
-      <Meta className="q-text" title={questionText} />
+      <Meta className="q-text" title={<div dangerouslySetInnerHTML={{__html: questionText}}></div>} />
       <Radio.Group className="radio-group">
         {options.map((option) => (
           <Radio key={option.id} value={option.id}>
-            {option.text}
+            <div dangerouslySetInnerHTML={{__html: option.text}}></div>
           </Radio>
         ))}
       </Radio.Group>

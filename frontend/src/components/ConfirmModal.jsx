@@ -7,7 +7,7 @@ import { Modal, Button } from "antd";
 import "./confirm-modal.css";
 import { useNavigate } from "react-router-dom";
 
-const ConfirmModal = ({ open, setOpen }) => {
+const ConfirmModal = ({ open, setOpen, submitQuiz }) => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate()
 
@@ -16,6 +16,7 @@ const ConfirmModal = ({ open, setOpen }) => {
     setTimeout(() => {
       setLoading(false);
       setOpen(false);
+      submitQuiz();
       navigate("/dashboard")
     }, 3000);
   };

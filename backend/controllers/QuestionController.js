@@ -125,49 +125,101 @@ export const deleteQuestion = async (req, res, next) => {
   const id = req.params.id;
 
   try {
+    // Find and remove the question by ID
     question = await Question.findByIdAndRemove(id);
   } catch (err) {
     console.log(err);
+    return res.status(500).json({ message: "Error deleting question" });
   }
 
   if (!question) {
-    return res.status(500).json({ message: "Unable to delete by this id" });
+    return res.status(404).json({ message: "Question not found" });
   }
+
+  // Update the topic to remove the question ID
+  try {
+    await Topic.updateOne(
+      { _id: question.topicId }, // Assuming the question has a topicId field
+      { $pull: { questions: id } } // Remove the question ID from the topic's questionIds array
+    );
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ message: "Error updating topic" });
+  }
+
   let questions;
   try {
+    // Fetch the updated list of questions
     questions = await Question.find();
   } catch (err) {
     console.log(err);
+    return res.status(500).json({ message: "Cannot get questions" });
   }
 
   if (!questions) {
     return res.status(500).json({ message: "Cannot get questions" });
   }
+
   return res
-    .status(201)
+    .status(200)
     .json({ questions, message: "Question successfully deleted" });
 };
+
+// export const deleteQuestion = async (req, res, next) => {
+//   let question;
+//   const id = req.params.id;
+
+//   try {
+//     question = await Question.findByIdAndRemove(id);
+//   } catch (err) {
+//     console.log(err);
+//   }
+
+//   if (!question) {
+//     return res.status(500).json({ message: "Unable to delete by this id" });
+//   }
+//   let questions;
+//   try {
+//     questions = await Question.find();
+//   } catch (err) {
+//     console.log(err);
+//   }
+
+//   if (!questions) {
+//     return res.status(500).json({ message: "Cannot get questions" });
+//   }
+//   return res
+//     .status(201)
+//     .json({ questions, message: "Question successfully deleted" });
+// };
 
 export const loadQuestionByTopic = async (req, res, next) => {
   let questions;
   let modifiedQJSON;
   let insertedQuestions;
-  //console.log(`https://opentdb.com/api.php?amount=${req.body.params.count}&category=${req.body.params.category}&difficulty=medium&type=multiple`)
+
   try {
     questions = await fetch(
       `https://opentdb.com/api.php?amount=${req.body.params.count}&category=${req.body.params.category}&difficulty=medium&type=multiple`
     );
   } catch (err) {
     console.log(err);
+    return res
+      .status(500)
+      .json({ message: "Error fetching questions from API" });
   }
 
   let topic;
 
   try {
-    topic = await Topic.find({ code: req.body.params.category });
+    topic = await Topic.findOne({ code: req.body.params.category });
   } catch (err) {
     console.log(err);
+    return res
+      .status(500)
+      .json({ message: "Error fetching topic from database" });
   }
+
   if (!topic) {
     return res
       .status(400)
@@ -182,49 +234,91 @@ export const loadQuestionByTopic = async (req, res, next) => {
       modifiedOptions.splice(correctindex, 0, item.correct_answer);
       const optionsArr = modifiedOptions.map((option, index) => {
         return {
-          id: index+1,
-          text: option
-        }
-      })
+          id: index + 1,
+          text: option,
+        };
+      });
       return {
         questionText: item.question,
         available: true,
         options: optionsArr,
         isCorrect: correctindex + 1,
         image: req.body.image.url,
-        topicId: topic[0]._id,
+        topicId: topic._id, // Use topic._id directly since we are using findOne
       };
     });
   } catch (err) {
     console.log(err);
+    return res.status(500).json({ message: "Error processing questions JSON" });
   }
 
   try {
     insertedQuestions = await Question.insertMany(modifiedQJSON);
   } catch (err) {
     console.log(err);
+    return res
+      .status(500)
+      .json({ message: "Error inserting questions into database" });
   }
 
   if (!insertedQuestions) {
+    return res.status(500).json({ message: "Cannot get questionsJson" });
+  }
+
+  // Push the newly created question IDs into the topic object
+  try {
+    const questionIds = insertedQuestions.map((question) => question._id);
+    await Topic.updateOne(
+      { _id: topic._id },
+      { $addToSet: { questions: { $each: questionIds } } } // Assuming questionIds is an array in the Topic schema
+    );
+  } catch (err) {
+    console.log(err);
     return res
       .status(500)
-      .json({ ...req.body, message: "Cannot get questionsJson" });
+      .json({ message: "Error updating topic with question IDs" });
   }
+
   let questionsList;
   try {
     questionsList = await Question.find();
   } catch (err) {
     console.log(err);
+    return res
+      .status(500)
+      .json({ message: "Error fetching questions from database" });
   }
 
   if (questionsList) {
-    return res
-      .status(201)
-      .json({ questions:questionsList, message: "Question successfully loaded" });
+    return res.status(201).json({
+      questions: questionsList,
+      message: "Questions successfully loaded and topic updated",
+    });
+  } else {
+    return res.status(500).json({ message: "Cannot get questionsJson" });
   }
-  else{
-    return res
-    .status(500)
-    .json({ modifiedQJSON, message: "Cannot get questionsJson" });
+};
+
+export const fetchQuestionById = async (req, res, next) => {
+  const id = req.params.id; // Get the question ID from the request parameters
+  let question;
+
+  try {
+    // Fetch the question by ID
+    question = await Question.findById(id);
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ message: "Error fetching question" });
   }
+
+  // Check if the question was found
+  if (!question) {
+    return res.status(404).json({ message: "Question not found" });
+  }
+
+  // Create a new object excluding the isCorrect property
+  const { isCorrect, ...questionWithoutIsCorrect } = question._doc; // Use _doc to access the plain object
+
+  // Return the found question without the isCorrect property
+  return res.status(200).json({ question: questionWithoutIsCorrect });
 };

@@ -1,12 +1,11 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import apiConfig from "../../../AxiosConfig";
-import { errorHandler } from "../../ErrorHandler";
 
-export const addTopic = createAsyncThunk(
-  "addTopics",
+export const createNewAnswer = createAsyncThunk(
+  "createNewAnswer",
   async (body, { rejectWithValue }) => {
     try {
-      const { data } = await apiConfig.post("topics", body);
+      const { data } = await apiConfig.post("answer", body);
       const resMsg = "error";
       if (data) {
         return data;
@@ -26,36 +25,44 @@ export const addTopic = createAsyncThunk(
   }
 );
 
-export const getAllTopics = createAsyncThunk(
-  "getTopics",
-  async (body, { rejectWithValue, dispatch }) => {
+export const updateAnswer = createAsyncThunk(
+  "updateAnswer",
+  async (req, { dispatch }) => {
     try {
-      const { data } = await apiConfig.get("topics", body);
-      const resMsg = "error";
+      const { data } = await apiConfig.put(`answer/${req.id}`, req.body);
       if (data) {
-        return data.topics;
+        return data;
       } else {
-        return rejectWithValue(resMsg);
+        return "Error on response";
       }
     } catch (error) {
-      return rejectWithValue(errorHandler(error, dispatch));
+      const statusCode = error.response.data.error.status;
+      if (statusCode === 412) {
+        return "Error on response";
+      } else {
+        return "Error on response";
+      }
     }
   }
 );
 
-export const deleteTopic = createAsyncThunk(
-  "deleteTopics",
-  async (id, { rejectWithValue }) => {
+export const submitAnswer = createAsyncThunk(
+  "submitAnswer",
+  async (req, { dispatch }) => {
     try {
-      const { data } = await apiConfig.delete(`topics/${id}`);
-      const resMsg = "error";
+      const { data } = await apiConfig.put(`answer/submit/${req.id}`, req.body);
       if (data) {
-        return data.topics;
+        return data;
       } else {
-        return rejectWithValue(resMsg);
+        return "Error on response";
       }
     } catch (error) {
-      return rejectWithValue(error.response.data.error.msg);
+      const statusCode = error.response.data.error.status;
+      if (statusCode === 412) {
+        return "Error on response";
+      } else {
+        return "Error on response";
+      }
     }
   }
 );

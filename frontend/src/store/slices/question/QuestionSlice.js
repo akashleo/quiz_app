@@ -5,6 +5,8 @@ import {
   updateQuestion,
   getAllArchivedQuestions,
   deleteQuestion,
+  bulkLoadQuestions,
+  fetchQuestionById,
 } from "./QuestionAction";
 
 const initialState = {
@@ -31,7 +33,7 @@ const questionSlice = createSlice({
     },
     setDisplayQuestion: (state, action) => {
       state.displayQuestion = state.questions[action.payload];
-    }
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(getAllQuestions.pending, (state, payload) => {
@@ -98,11 +100,33 @@ const questionSlice = createSlice({
       state.error = action.payload;
       state.success = false;
     });
+    builder.addCase(bulkLoadQuestions.pending, (state, payload) => {
+      state.loading = true;
+      state.error = null;
+      state.success = false;
+    });
+    builder.addCase(bulkLoadQuestions.fulfilled, (state, action) => {
+      state.loading = false;
+      const modifyQuestions = action.payload.questions.map((question) => {
+        return {
+          ...question,
+          correct: question.options[question.isCorrect - 1].text,
+        };
+      });
+      state.questions = modifyQuestions;
+      state.success = true;
+    });
+    builder.addCase(bulkLoadQuestions.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+      state.success = false;
+    });
     builder.addCase(getAllArchivedQuestions.pending, (state, payload) => {
       state.loading = true;
       state.error = null;
       state.success = false;
     });
+
     builder.addCase(getAllArchivedQuestions.fulfilled, (state, action) => {
       state.loading = false;
       const modifyQuestions = action.payload.map((question) => {
@@ -137,6 +161,22 @@ const questionSlice = createSlice({
       state.success = true;
     });
     builder.addCase(deleteQuestion.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+      state.success = false;
+    });
+
+    builder.addCase(fetchQuestionById.pending, (state, payload) => {
+      state.loading = true;
+      state.error = null;
+      state.success = false;
+    });
+    builder.addCase(fetchQuestionById.fulfilled, (state, action) => {
+      state.loading = false;
+      state.displayQuestion = action.payload.question;
+      state.success = true;
+    });
+    builder.addCase(fetchQuestionById.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload;
       state.success = false;

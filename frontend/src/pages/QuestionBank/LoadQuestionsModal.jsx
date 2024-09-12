@@ -53,6 +53,7 @@ const LoadQuestions = ({ loadModal,setLoadModal, handleOk, topics }) => {
       image: currentFileUrl,
     };
     console.log(tempLoad);
+    handleOk();
     dispatch(bulkLoadQuestions(tempLoad));
     //setLoadModal(false);
   };

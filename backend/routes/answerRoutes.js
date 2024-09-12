@@ -2,17 +2,17 @@ import express from "express";
 const answerRouter = express.Router();
 import {
   getAllAnswers,
-  addAnswer,
+  createNewAnswer,
   updateAnswer,
   deleteAnswer,
+  submitAnswer,
 } from "../controllers/AnswerController.js";
-
 
 answerRouter.get("/", getAllAnswers);
 //answerRouter.get("/:id", getProfileById);
-answerRouter.post("/", addAnswer);
+answerRouter.post("/", createNewAnswer);
 answerRouter.put("/:id", updateAnswer);
+answerRouter.put("/submit/:id", submitAnswer);
 answerRouter.delete("/:id", deleteAnswer);
-
 
 export default answerRouter;

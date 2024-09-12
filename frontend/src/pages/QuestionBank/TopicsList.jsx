@@ -1,5 +1,5 @@
 import React from "react";
-import { Table, Tag, Switch } from "antd";
+import { Table, Tag, Switch, Button } from "antd";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import { deleteTopic } from "../../store/slices/topic/TopicAction";
 import { useDispatch, useSelector } from "react-redux";
@@ -53,6 +53,12 @@ const TopicList = ({ topics, updateQuestionState }) => {
           />
         </>
       ),
+    },
+    {
+      title: "Clear List",
+      dataIndex: "_id",
+      key: "cl",
+      render: (value) => <Button disabled={value ? true : false}>Clear</Button>,
     },
   ];
   return (
