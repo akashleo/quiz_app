@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const Timer = ({ duration }) => {
+const Timer = ({ duration, submitQuiz }) => {
 
   const durationInSeconds = duration * 60;
   const [timeRemaining, setTimeRemaining] = useState(durationInSeconds);
@@ -13,6 +13,7 @@ const Timer = ({ duration }) => {
 
       return () => clearInterval(interval);
     } else {
+      submitQuiz();
       console.log('Finished!');
     }
   }, [timeRemaining]);

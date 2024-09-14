@@ -15,12 +15,13 @@ import { useDispatch, useSelector } from "react-redux";
 import questionmark from "../../assests/questionmark.png";
 import Navbar from "../../components/Navbar";
 import {updateAnswerMap} from "../../store/slices/answer/AnswerSlice" 
+import { useNavigate } from "react-router-dom";
 
 const AnsweringPanel = () => {
   const [answer, setAnswer] = useState({});
   const [current, setCurrent] = useState(1);
   const dispatch = useDispatch();
-  //const navigate = useNavigate();
+  const navigate = useNavigate();
   const { displayQuestion } = useSelector((state) => state.question);
   const { singleTopic, topicQuestions } = useSelector((state) => state.topic);
   const { currentUserAnswer, answerMap } = useSelector((state) => state.answer);
@@ -62,6 +63,7 @@ const AnsweringPanel = () => {
     setAnswer({});
     dispatch(updateAnswerMap({}));
     dispatch(submitAnswer({id: _id, body: {submitted: true}}));
+    navigate("/dashboard")
   }
 
   return (
@@ -78,7 +80,7 @@ const AnsweringPanel = () => {
               <div className="timer-clock">
                 <ClockCircleOutlined />
                 &nbsp;
-                <Timer duration={2} />
+                <Timer duration={1} submitQuiz={submitQuiz}/>
               </div>
             </div>
             <h5 className="answering-header">answer the question below</h5>
