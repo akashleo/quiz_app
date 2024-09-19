@@ -51,20 +51,20 @@ const profileSlice = createSlice({
       state.success = false;
     });
     builder.addCase(getProfileById.pending, (state, payload) => {
-        state.loading = true;
-        state.error = null;
-        state.success = false;
-      });
-      builder.addCase(getProfileById.fulfilled, (state, action) => {
-        state.loading = false;
-        state.singleProfile = action.payload;
-        state.success = true;
-      });
-      builder.addCase(getProfileById.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
-        state.success = false;
-      });
+      state.loading = true;
+      state.error = null;
+      state.success = false;
+    });
+    builder.addCase(getProfileById.fulfilled, (state, action) => {
+      state.loading = false;
+      state.singleProfile = action.payload;
+      state.success = true;
+    });
+    builder.addCase(getProfileById.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+      state.success = false;
+    });
   },
 });
 

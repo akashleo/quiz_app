@@ -69,9 +69,3 @@ export const deleteGrade = async (req, res, next) => {
   }
   return res.status(201).json({ grade, message: "Grade successfully deleted" });
 };
-
-// exports.getAllProfiles = getAllProfiles;
-// exports.addProfile = addProfile;
-// exports.getProfileById = getProfileById;
-// exports.updateProfile = updateProfile;
-// exports.deleteProfile = deleteProfile;
