@@ -88,12 +88,12 @@ export const updateProfile = async (req, res, next) => {
     profile = await Profile.findByIdAndUpdate(id, {
       email: email,
       password: password,
-      fullName : fullName,
+      fullName: fullName,
       level,
       quizPassed,
       fastestTime,
       correctAnswers,
-      achievements : achievements,
+      achievements: achievements,
       featuredCategory,
       available: available,
       image,
@@ -127,9 +127,3 @@ export const deleteProfile = async (req, res, next) => {
     .status(201)
     .json({ profile, message: "Product successfully deleted" });
 };
-
-// exports.getAllProfiles = getAllProfiles;
-// exports.addProfile = addProfile;
-// exports.getProfileById = getProfileById;
-// exports.updateProfile = updateProfile;
-// exports.deleteProfile = deleteProfile;

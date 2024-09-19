@@ -17,7 +17,7 @@ const ConfirmModal = ({ open, setOpen, submitQuiz }) => {
       setLoading(false);
       setOpen(false);
       submitQuiz();
-      navigate("/dashboard")
+      
     }, 3000);
   };
 

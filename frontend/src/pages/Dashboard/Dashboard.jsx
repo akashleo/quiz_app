@@ -26,15 +26,16 @@ const Dashboard = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { singleProfile } = useSelector((state) => state.profile);
+  const { singleProfile, loading } = useSelector((state) => state.profile);
   const { currentUserId } = useSelector((state) => state.auth);
   const [emojiMap, setEmojiMap] = useState({});
 
   useEffect(() => {
-    if (currentUserId) {
+    if (currentUserId && Object.keys(singleProfile).length<1 && !loading) {
       dispatch(getProfileById(currentUserId));
     }
   }, []);
+
   useEffect(() => {
     if (singleProfile) {
       const counts = {};
