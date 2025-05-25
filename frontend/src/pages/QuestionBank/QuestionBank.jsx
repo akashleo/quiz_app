@@ -1,13 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Button, Switch } from "antd";
-import {
-  TableOutlined,
-  IdcardOutlined,
-  InboxOutlined,
-  PlusOutlined,
-  DashboardOutlined,
-  FileSearchOutlined,
-} from "@ant-design/icons";
+import { Switch } from "antd";
+import { TableOutlined, IdcardOutlined } from "@ant-design/icons";
 import QuestionCard from "./QuestionCard";
 import AddQuestion from "./AddQuestion";
 import QuestionList from "./QuestionList";
@@ -25,33 +18,7 @@ import TopicList from "./TopicsList";
 import { Tabs } from "antd";
 import LoadQuestionsModal from "./LoadQuestionsModal";
 import TopicCard from "./TopicCard";
-
-const ACTIONS = [
-  {
-    icon: <FileSearchOutlined />,
-    label: 'Archive',
-    onClick: (navigate) => navigate("/question/archive"),
-    disabled: (state) => state.addQuestionModal
-  },
-  {
-    icon: <InboxOutlined />,
-    label: 'Load Questions',
-    onClick: (_, setLoadModal) => setLoadModal(true),
-    disabled: (state) => state.loadModal
-  },
-  {
-    icon: <DashboardOutlined />,
-    label: 'Dashboard',
-    onClick: (navigate) => navigate("/dashboard"),
-    disabled: (state) => state.addQuestionModal
-  },
-  {
-    icon: <PlusOutlined />,
-    label: 'Add Question',
-    onClick: (_, __, setAddQuestionModal) => setAddQuestionModal(true),
-    disabled: (state) => state.addQuestionModal
-  }
-];
+import ActionButtons from "./ActionButtons";
 
 const QuestionBank = () => {
   const dispatch = useDispatch();
@@ -181,34 +148,22 @@ const QuestionBank = () => {
       </div>
 
       {/* Desktop/Tablet Action Buttons */}
-      <div className="action-buttons">
-        {ACTIONS.map((action, index) => (
-          <Button
-            key={index}
-            disabled={action.disabled(state)}
-            onClick={() => action.onClick(navigate, setLoadModal, setAddQuestionModal)}
-            className="action-button"
-          >
-            {action.icon}
-            {action.label}
-          </Button>
-        ))}
-      </div>
+      <ActionButtons
+        navigate={navigate}
+        setLoadModal={setLoadModal}
+        setAddQuestionModal={setAddQuestionModal}
+        state={state}
+        isMobile={false}
+      />
 
-      {/* Mobile Action Buttons (with labels) */}
-      <div className="mobile-action-buttons">
-        {ACTIONS.map((action, index) => (
-          <button
-            key={index}
-            className="mobile-action-button"
-            disabled={action.disabled(state)}
-            onClick={() => action.onClick(navigate, setLoadModal, setAddQuestionModal)}
-          >
-            {action.icon}
-            <span className="mobile-action-button-label">{action.label}</span>
-          </button>
-        ))}
-      </div>
+      {/* Mobile Action Buttons */}
+      <ActionButtons
+        navigate={navigate}
+        setLoadModal={setLoadModal}
+        setAddQuestionModal={setAddQuestionModal}
+        state={state}
+        isMobile={true}
+      />
 
       <Tabs defaultActiveKey="1" items={items} onChange={onTabChange} />
 

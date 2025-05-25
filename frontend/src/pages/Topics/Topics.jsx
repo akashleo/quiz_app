@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import LeftMenu from "../../components/LeftMenu";
-import { Row, Col, Menu, Image, Button } from "antd";
+import { Row, Col, Image, Button } from "antd";
 import "./Topics.css";
 import subject from "../../assests/qbg2.jpg";
 import Navbar from "../../components/Navbar";
@@ -18,7 +17,6 @@ const Topics = () => {
   const { singleProfile } = useSelector((state) => state.profile);
 
   const [selectedTopic, setSelectedTopic] = useState(0);
-
   const [topic, setTopic] = useState({});
 
   useEffect(() => {
@@ -29,9 +27,8 @@ const Topics = () => {
 
   useEffect(() => {
     if (Object.keys(topic).length) {
-      dispatch(createNewAnswer({ userId: singleProfile._id, answers: {}, topicId:  topic._id}));
+      dispatch(createNewAnswer({ userId: singleProfile._id, answers: {}, topicId: topic._id }));
       navigate("/answer");
-      //console.log(topic);
     }
   }, [topic]);
 
@@ -39,10 +36,7 @@ const Topics = () => {
     <>
       <Navbar />
       <Row style={{ height: "88vh", marginTop: "12vh" }}>
-        <Col span={6}>
-          <LeftMenu />
-        </Col>
-        <Col span={18} className="cat-content">
+        <Col span={24} className="cat-content">
           <Row>
             <div>
               <h2 className="select-topic-head">Select Topic</h2>
@@ -54,6 +48,7 @@ const Topics = () => {
               if (item.questions?.length > 0) {
                 return (
                   <TopicCard
+                    key={item._id}
                     topicData={item}
                     setTopic={setTopic}
                     selectedTopic={selectedTopic}
@@ -61,6 +56,7 @@ const Topics = () => {
                   />
                 );
               }
+              return null;
             })}
           </Row>
         </Col>
