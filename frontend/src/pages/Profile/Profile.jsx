@@ -1,7 +1,5 @@
 import React, { useState } from "react";
-import { Row, Col, Image, Button } from "antd";
-import { UploadOutlined } from "@ant-design/icons";
-import LeftMenu from "../../components/LeftMenu";
+import { Row, Col, Button } from "antd";
 import Navbar from "../../components/Navbar";
 import "./Profile.css";
 import ProfileImage from "./ProfileImage";
@@ -10,45 +8,10 @@ import ProfilePassword from "./ProfilePassword";
 import Achievements from "./Achievements";
 import Grades from "./Grades";
 import WinnerCharts from "./WinnerCharts";
+
 const Profile = () => {
-  // const [name, setName] = useState("John Doe");
-  // const [password, setPassword] = useState("");
-  // const [photo, setPhoto] = useState(null);
-  // const [grades, setGrades] = useState([]);
-  // const [history, setHistory] = useState([]);
   const [currentModal, setCurrentModal] = useState("image");
   const [currentTitle, setCurrentTitle] = useState("Display Picture");
-
-  // const handleNameChange = (event) => {
-  //   setName(event.target.value);
-  // };
-
-  // const handlePasswordChange = (event) => {
-  //   setPassword(event.target.value);
-  // };
-
-  // const handlePhotoUpload = (event) => {
-  //   const file = event.fileList[0].originFileObj;
-  //   setPhoto(URL.createObjectURL(file));
-  // };
-
-  // const handleGradesChange = (event) => {
-  //   const newGrades = event.target.value.split(",");
-  //   setGrades(newGrades);
-  // };
-
-  // const handleHistoryChange = (event) => {
-  //   const newHistory = event.target.value.split(",");
-  //   setHistory(newHistory);
-  // };
-
-  // const openModal = (modal) => {
-  //   setCurrentModal(modal);
-  // };
-
-  // const closeModal = () => {
-  //   setCurrentModal(null);
-  // };
 
   const handleButtonChange = (value) => {
     setCurrentModal(value);
@@ -63,11 +26,8 @@ const Profile = () => {
   return (
     <>
       <Navbar />
-      <Row style={{ height: "90vh", marginTop: "12vh" }}>
-        <Col span={6}>
-          <LeftMenu profileOnclick={handleButtonChange} />
-        </Col>
-        <Col span={18}>
+      <Row style={{ height: "88vh", marginTop: "12vh" }}>
+        <Col span={24}>
           <div className="description">
             <Row>
               <Col span={24}>
@@ -75,7 +35,7 @@ const Profile = () => {
                   <h1 className="answering-header">{currentTitle}</h1>
                 </div>
               </Col>
-              <Col span={12}>
+              <Col xs={24} md={16}>
                 {currentModal === "image" && <ProfileImage />}
                 {currentModal === "name" && <ProfileName />}
                 {currentModal === "password" && <ProfilePassword />}
@@ -83,10 +43,45 @@ const Profile = () => {
                 {currentModal === "grades" && <Grades />}
                 {currentModal === "winner" && <WinnerCharts />}
               </Col>
-              <Col span={12}>
-                <Button className="action-buttons">Edit</Button>
-                <Button className="action-buttons">Remove</Button>
-                <Button className="action-buttons">Save</Button>
+              <Col xs={24} md={8}>
+                <div className="profile-actions">
+                  <Button 
+                    className="action-buttons"
+                    onClick={() => handleButtonChange("image")}
+                  >
+                    Display Picture
+                  </Button>
+                  <Button 
+                    className="action-buttons"
+                    onClick={() => handleButtonChange("name")}
+                  >
+                    Name
+                  </Button>
+                  <Button 
+                    className="action-buttons"
+                    onClick={() => handleButtonChange("password")}
+                  >
+                    Password
+                  </Button>
+                  <Button 
+                    className="action-buttons"
+                    onClick={() => handleButtonChange("achievements")}
+                  >
+                    Achievements
+                  </Button>
+                  <Button 
+                    className="action-buttons"
+                    onClick={() => handleButtonChange("grades")}
+                  >
+                    Grades
+                  </Button>
+                  <Button 
+                    className="action-buttons"
+                    onClick={() => handleButtonChange("winner")}
+                  >
+                    Winner Charts
+                  </Button>
+                </div>
               </Col>
             </Row>
           </div>
