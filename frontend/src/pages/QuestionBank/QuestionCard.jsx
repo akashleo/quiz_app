@@ -1,78 +1,75 @@
 import React, { useState, useEffect } from "react";
-import { Card, Radio, Image } from "antd";
+import { Card, Radio } from "antd";
 import { Switch } from "antd";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import questionmark from "../../assests/questionmark.png";
 import { deleteQuestion } from "../../store/slices/question/QuestionAction";
 import { useSelector, useDispatch } from "react-redux";
+import "./questions.css";
 
 const { Meta } = Card;
 
 const QuestionCard = ({ question, updateQuestionState }) => {
   const { _id, questionText, options, image, available } = question;
   const { loading } = useSelector((state) => state.question);
-
   const dispatch = useDispatch();
-
-  const onChange = (event) => {
-    console.log(event);
-    const modifiedQuestion = { ...question, available: !question.available };
-    updateQuestionState(_id, modifiedQuestion);
-  };
-
-  const deleteSelectedQuestion = (id) => {
-    console.log(id);
-    dispatch(deleteQuestion(id));
-  };
-
   const [checked, setChecked] = useState(true);
 
   useEffect(() => {
     setChecked(available);
   }, [available]);
 
+  const onChange = (event) => {
+    const modifiedQuestion = { ...question, available: !question.available };
+    updateQuestionState(_id, modifiedQuestion);
+  };
+
+  const deleteSelectedQuestion = (id) => {
+    dispatch(deleteQuestion(id));
+  };
+
+  const backgroundImage = question?.image ? question.image : questionmark;
+
   return (
     <Card
       hoverable
-      style={{ width: 400 }}
-      cover={
-        <Image
-          preview={false}
-          alt={questionText}
-          src={question?.image ? question.image : questionmark}
-          height={100}
-          style={{ objectFit: "contain", paddingTop: "20px" }}
-        />
-      }
+      className="question-card-container"
+      style={{
+        backgroundImage: `url(${backgroundImage})`,
+      }}
       actions={[
         <Switch
-          className="pop-font"
+          className={`question-card-switch ${
+            checked ? 'question-card-switch-active' : 'question-card-switch-archived'
+          }`}
           key="toggle"
           size="small"
-          style={checked? { backgroundColor: '#d3e39a'}:{ backgroundColor: '#e39a9c'}}
           checked={checked}
-          checkedChildren={<b style={{ color: "black"}}>active</b>}
-          unCheckedChildren={<b style={{ color: "black"}}>archived</b>}
+          checkedChildren={<span className="question-card-switch-text">active</span>}
+          unCheckedChildren={<span className="question-card-switch-text">archived</span>}
           loading={loading}
-          onChange={(event) => onChange(event)}
+          onChange={onChange}
         />,
         <EditOutlined key="edit" />,
         <DeleteOutlined
-          onClick={() => {
-            deleteSelectedQuestion(_id);
-          }}
+          onClick={() => deleteSelectedQuestion(_id)}
           key="delete"
         />,
       ]}
     >
-      <Meta className="q-text" title={<div dangerouslySetInnerHTML={{__html: questionText}}></div>} />
-      <Radio.Group className="radio-group">
-        {options.map((option) => (
-          <Radio key={option.id} value={option.id}>
-            <div dangerouslySetInnerHTML={{__html: option.text}}></div>
-          </Radio>
-        ))}
-      </Radio.Group>
+      <div className="question-card-content">
+        <Meta 
+          className="question-card-meta"
+          title={<div dangerouslySetInnerHTML={{__html: questionText}}></div>}
+        />
+        <Radio.Group className="radio-group">
+          {options.map((option) => (
+            <Radio key={option.id} value={option.id}>
+              <div dangerouslySetInnerHTML={{__html: option.text}}></div>
+            </Radio>
+          ))}
+        </Radio.Group>
+      </div>
     </Card>
   );
 };

@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Row, Col, Button, Switch, TreeSelect } from "antd";
+import { Button, Switch } from "antd";
 import {
   TableOutlined,
   IdcardOutlined,
-  FilterOutlined,
+  InboxOutlined,
+  PlusOutlined,
+  DashboardOutlined,
+  FileSearchOutlined,
 } from "@ant-design/icons";
 import QuestionCard from "./QuestionCard";
 import AddQuestion from "./AddQuestion";
@@ -21,8 +24,34 @@ import AddTopic from "./AddTopic";
 import TopicList from "./TopicsList";
 import { Tabs } from "antd";
 import LoadQuestionsModal from "./LoadQuestionsModal";
-import "./questions.css";
 import TopicCard from "./TopicCard";
+
+const ACTIONS = [
+  {
+    icon: <FileSearchOutlined />,
+    label: 'Archive',
+    onClick: (navigate) => navigate("/question/archive"),
+    disabled: (state) => state.addQuestionModal
+  },
+  {
+    icon: <InboxOutlined />,
+    label: 'Load Questions',
+    onClick: (_, setLoadModal) => setLoadModal(true),
+    disabled: (state) => state.loadModal
+  },
+  {
+    icon: <DashboardOutlined />,
+    label: 'Dashboard',
+    onClick: (navigate) => navigate("/dashboard"),
+    disabled: (state) => state.addQuestionModal
+  },
+  {
+    icon: <PlusOutlined />,
+    label: 'Add Question',
+    onClick: (_, __, setAddQuestionModal) => setAddQuestionModal(true),
+    disabled: (state) => state.addQuestionModal
+  }
+];
 
 const QuestionBank = () => {
   const dispatch = useDispatch();
@@ -53,20 +82,8 @@ const QuestionBank = () => {
     setLoadModal(false);
   };
 
-  const openQuestionModal = () => {
-    setAddQuestionModal(true);
-  };
-
-  const openTopicList = () => {
-    setShowTopicsList(true);
-  };
-
   const onChange = (event) => {
-    if (event) {
-      setTableView(true);
-    } else {
-      setTableView(false);
-    }
+    setTableView(event);
   };
 
   const updateQuestionState = (id, payload) => {
@@ -77,23 +94,21 @@ const QuestionBank = () => {
   const questionJSX = (
     <>
       {tableView ? (
-        <Row gutter={[16, 16]}>
-          <QuestionList
-            questions={questions}
-            updateQuestionState={updateQuestionState}
-          />
-        </Row>
+        <QuestionList
+          questions={questions}
+          updateQuestionState={updateQuestionState}
+        />
       ) : (
-        <Row gutter={[16, 16]}>
+        <div className="question-grid">
           {questions?.map((question, index) => (
-            <Col span={8} key={index}>
+            <div key={index} className="question-card">
               <QuestionCard
                 question={question}
                 updateQuestionState={updateQuestionState}
               />
-            </Col>
+            </div>
           ))}
-        </Row>
+        </div>
       )}
     </>
   );
@@ -109,15 +124,13 @@ const QuestionBank = () => {
           updateQuestionState={updateQuestionState}
         />
       ) : (
-        <Row gutter={[16, 16]}>
+        <div className="question-grid">
           {topics?.map((topic, index) => (
-            <Col span={8} key={index}>
-              <TopicCard
-                {...topic}
-              />
-            </Col>
+            <div key={index} className="question-card">
+              <TopicCard {...topic} />
+            </div>
           ))}
-        </Row>
+        </div>
       )}
     </>
   );
@@ -125,6 +138,7 @@ const QuestionBank = () => {
   const onTabChange = (key) => {
     console.log(key);
   };
+
   const items = [
     {
       key: "1",
@@ -138,75 +152,64 @@ const QuestionBank = () => {
     },
   ];
 
+  const state = { addQuestionModal, loadModal };
+
   return (
     <div className="question-bank">
-      <Row className="title-line">
-        <Col span={4}>
+      <div className="title-line">
+        <div className="title-section">
           <h2 className="pop-font">Question Bank</h2>
-        </Col>
-        <Col span={6}>
-          <Switch
-            className="pop-font"
-            style={
-              tableView
-                ? { backgroundColor: "#d3e39a" }
-                : { backgroundColor: "#e39a9c" }
-            }
-            checkedChildren={
-              <b style={{ color: "black" }}>
-                <TableOutlined />
-                &nbsp;Table View
-              </b>
-            }
-            unCheckedChildren={
-              <b style={{ color: "black" }}>
-                <IdcardOutlined />
-                &nbsp;Card View
-              </b>
-            }
-            value={tableView}
-            onChange={(event) => onChange(event)}
-            size="large"
-          />
-        </Col>
-        <Col span={14} className="text-right">
+        </div>
+        <Switch
+          className={`view-switch ${tableView ? 'view-switch-table' : 'view-switch-card'}`}
+          checkedChildren={
+            <b style={{ color: "black" }}>
+              <TableOutlined />
+              &nbsp;Table
+            </b>
+          }
+          unCheckedChildren={
+            <b style={{ color: "black" }}>
+              <IdcardOutlined />
+              &nbsp;Cards
+            </b>
+          }
+          checked={tableView}
+          onChange={onChange}
+          size="large"
+        />
+      </div>
+
+      {/* Desktop/Tablet Action Buttons */}
+      <div className="action-buttons">
+        {ACTIONS.map((action, index) => (
           <Button
-            disabled={addQuestionModal ? true : false}
-            onClick={() => navigate("/question/archive")}
+            key={index}
+            disabled={action.disabled(state)}
+            onClick={() => action.onClick(navigate, setLoadModal, setAddQuestionModal)}
             className="action-button"
           >
-            Archive
+            {action.icon}
+            {action.label}
           </Button>
-          <Button
-            disabled={loadModal ? true : false}
-            onClick={() => setLoadModal(true)}
-            className="action-button"
+        ))}
+      </div>
+
+      {/* Mobile Action Buttons (with labels) */}
+      <div className="mobile-action-buttons">
+        {ACTIONS.map((action, index) => (
+          <button
+            key={index}
+            className="mobile-action-button"
+            disabled={action.disabled(state)}
+            onClick={() => action.onClick(navigate, setLoadModal, setAddQuestionModal)}
           >
-            Load Questions
-          </Button>
-          <Button
-            disabled={addQuestionModal ? true : false}
-            onClick={() => navigate("/dashboard")}
-            className="action-button"
-          >
-            Dashboard
-          </Button>
-          {/* <Button
-            disabled={showTopicsList ? true : false}
-            onClick={openTopicList}
-            className="action-button"
-          >
-            Topics
-          </Button> */}
-          <Button
-            disabled={addQuestionModal ? true : false}
-            onClick={openQuestionModal}
-            className="action-button"
-          >
-            Add Question
-          </Button>
-        </Col>
-      </Row>
+            {action.icon}
+            <span className="mobile-action-button-label">{action.label}</span>
+          </button>
+        ))}
+      </div>
+
       <Tabs defaultActiveKey="1" items={items} onChange={onTabChange} />
 
       {addQuestionModal && (
