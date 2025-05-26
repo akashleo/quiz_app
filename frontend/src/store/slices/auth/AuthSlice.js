@@ -46,6 +46,15 @@ const authSlice = createSlice({
     setResponsedata: (state, action) => {
       state.responseData = action.payload;
     },
+    setToken: (state, action) => {
+      state.authToken = action.payload;
+      state.tokenValidity = true;
+    },
+    setUser: (state, action) => {
+      state.userInfo = action.payload;
+      state.currentUserId = action.payload._id;
+      state.success = true;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(login.pending, (state, payload) => {
@@ -85,7 +94,13 @@ const authSlice = createSlice({
     });
   },
 });
-export const { logOut, clearState, isTokenValid, setResponsedata } =
-  authSlice.actions;
+export const { 
+  logOut, 
+  clearState, 
+  isTokenValid, 
+  setResponsedata,
+  setToken,
+  setUser
+} = authSlice.actions;
 
 export default authSlice.reducer;

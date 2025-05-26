@@ -145,6 +145,17 @@ const Login = () => {
               }}>
                 <Button
                   block
+                  className="login-button google-login-button"
+                  icon={<GoogleOutlined />}
+                  onClick={() => {
+                    window.location.href = `${process.env.REACT_APP_API_URL || 'http://localhost:5000/'}user/auth/google`;
+                  }}
+                  style={{ marginBottom: '10px' }}
+                >
+                  <b>Sign in with Google</b>
+                </Button>
+                <Button
+                  block
                   className="google-button"
                   onClick={() => navigate("/signup")}
                 >

@@ -12,7 +12,6 @@ const ProfileSchema = new Schema(
     },
     password: {
       type: String,
-      required: true,
     },
     fullName: {
       type: String,
@@ -27,7 +26,11 @@ const ProfileSchema = new Schema(
     fastestTime: {
       type: String,
     },
-
+    googleId: {
+      type: String,
+      unique: true,
+      sparse: true,
+    },
     achievements: [String],
     correctAnswers: {
       type: Number,

@@ -10,6 +10,7 @@ import Profile from "./pages/Profile/Profile";
 import SignupPage from "./pages/Login/SignUp";
 import QuestionBank from "./pages/QuestionBank/QuestionBank";
 import ArchivedQuestions from "./pages/QuestionBank/ArchivedQuestions";
+import GoogleAuthCallback from "./pages/Auth/GoogleAuthCallback";
 import { useSelector } from "react-redux";
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
           <Route exact path="/instructions" element={<Instructions />} />
           <Route exact path="/answer" element={<AnsweringPanel />} />
           <Route exact path="/review" element={<ReviewPanel />} />
+          <Route exact path="/auth/google/callback" element={<GoogleAuthCallback />} />
           <Route
             exact
             path="/question/archive"
