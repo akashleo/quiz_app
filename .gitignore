@@ -7,6 +7,9 @@
 /backend/node_modules
 /backend/myKey.json
 
+/backend/.env
+/frontend/.env
+
 # testing
 /coverage
 
