@@ -109,12 +109,22 @@ const QuestionBank = () => {
   const items = [
     {
       key: "1",
-      label: "Question",
+      label: (
+        <span className="tab-label">
+          <b>Questions</b>
+          <span className="tab-count">{questions?.length || 0}</span>
+        </span>
+      ),
       children: questionJSX,
     },
     {
       key: "2",
-      label: "Topics",
+      label: (
+        <span className="tab-label">
+          <b>Topics</b>
+          <span className="tab-count">{topics?.length || 0}</span>
+        </span>
+      ),
       children: topicJSX,
     },
   ];
@@ -165,7 +175,13 @@ const QuestionBank = () => {
         isMobile={true}
       />
 
-      <Tabs defaultActiveKey="1" items={items} onChange={onTabChange} />
+      <Tabs 
+        defaultActiveKey="1" 
+        items={items} 
+        onChange={onTabChange}
+        animated={{ inkBar: true, tabPane: true }}
+        size="large"
+      />
 
       {addQuestionModal && (
         <AddQuestion
