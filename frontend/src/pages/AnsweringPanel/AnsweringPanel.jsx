@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { ClockCircleOutlined } from "@ant-design/icons";
-import { Row, Col, Radio, Image, Space, Button } from "antd";
+import { Button, Typography, Steps } from "antd";
+import { LeftOutlined, RightOutlined, CheckOutlined } from "@ant-design/icons";
 import "./AnsweringPanel.css";
 import ConfirmModal from "../../components/ConfirmModal";
-import Timer from "../../components/Timer";
 import {
   getAllQuestions,
   fetchQuestionById,
@@ -15,6 +14,10 @@ import questionmark from "../../assests/questionmark.png";
 import Navbar from "../../components/Navbar";
 import { updateAnswerMap } from "../../store/slices/answer/AnswerSlice";
 import { useNavigate } from "react-router-dom";
+import QuizHeader from "./QuizHeader";
+import QuizFooter from "./QuizFooter";
+
+const { Title, Text } = Typography;
 
 const AnsweringPanel = () => {
   const [answer, setAnswer] = useState({});
@@ -44,9 +47,16 @@ const AnsweringPanel = () => {
     } else showModal();
   };
 
-  const storeAnswer = (event) => {
+  const previousQuestion = () => {
+    if (current > 1) {
+      dispatch(fetchQuestionById(topicQuestions[current - 2]));
+      setCurrent(current - 1);
+    }
+  };
+
+  const handleOptionClick = (optionId) => {
     const { _id } = currentUserAnswer;
-    const currentAns = { [displayQuestion?._id]: event.target.value };
+    const currentAns = { [displayQuestion?._id]: optionId };
     const updatedAns = { ...answerMap, ...currentAns };
     setAnswer(updatedAns);
     dispatch(updateAnswerMap(updatedAns));
@@ -64,57 +74,70 @@ const AnsweringPanel = () => {
   return (
     <>
       <Navbar />
-      <Row style={{ height: "88vh", marginTop: "12vh" }}>
-        <Col span={24}>
-          <div className="description">
-            <div className="heading">
-              <h1 className="answering-header">History Quiz</h1>
-              <div className="timer-clock">
-                <ClockCircleOutlined />
-                &nbsp;
-                <Timer duration={1} submitQuiz={submitQuiz} />
+      <div className="answering-panel-container-user">
+        <div className="answering-panel-content-user">
+          <QuizHeader 
+            topicName={singleTopic?.name || "Quiz"}
+            duration={20}
+            submitQuiz={submitQuiz}
+          />
+
+          <div className="quiz-content-user">
+            <div className="quiz-main-content-user">
+              <div 
+                className="question-image-container-user"
+                style={{
+                  backgroundImage: `url(${displayQuestion?.image || questionmark})`,
+                }}
+              >
+                <div className="question-tag-user">
+                  <span className="question-number-user">
+                    {current}/{topicQuestions?.length}
+                  </span>
+                </div>
+              </div>
+              
+              <div className="question-content-user">
+                <div className="question-text-user">
+                  <Text>
+                    <div dangerouslySetInnerHTML={{ __html: displayQuestion?.questionText }}></div>
+                  </Text>
+                </div>
+
+                <div className="answer-options-user">
+                  {displayQuestion?.options?.map((option) => (
+                    <div
+                      key={option.id}
+                      className={`answer-option-item-user ${
+                        answer[displayQuestion?._id] === option.id ? 'selected' : ''
+                      }`}
+                      onClick={() => handleOptionClick(option.id)}
+                    >
+                      <div 
+                        className="answer-option-text-user"
+                        dangerouslySetInnerHTML={{ __html: option.text }}
+                      />
+                      {answer[displayQuestion?._id] === option.id && (
+                        <div className="answer-check-icon-user">
+                          <CheckOutlined />
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
-            <h5 className="answering-header">Answer the question below</h5>
-            <Row>
-              <Col xs={24} md={12}>
-                <Image
-                  preview={false}
-                  src={displayQuestion?.image ? displayQuestion?.image : questionmark}
-                  className="question-image"
-                />
-              </Col>
-              <Col xs={24} md={12} className="details">
-                <h3>Question {current}/{topicQuestions?.length}</h3>
-                <br />
-                <div dangerouslySetInnerHTML={{ __html: displayQuestion?.questionText }}></div>
-              </Col>
-            </Row>
-            <div style={{ padding: "20px" }} className="radio-options">
-              <h3>Choose Answer</h3>
-              <Radio.Group
-                onChange={storeAnswer}
-                value={answer[displayQuestion?._id] ? answer[displayQuestion?._id] : null}
-              >
-                <Space direction="vertical">
-                  {displayQuestion?.options?.map((option) => (
-                    <Radio key={option.id} value={option.id}>
-                      <div dangerouslySetInnerHTML={{ __html: option.text }}></div>
-                    </Radio>
-                  ))}
-                </Space>
-              </Radio.Group>
-            </div>
-            <Row>
-              <Col span={24} style={{ textAlign: "right" }}>
-                <Button className="start-button" onClick={() => nextQuestion()}>
-                  {current === topicQuestions.length ? "Submit" : "Next Question"}
-                </Button>
-              </Col>
-            </Row>
+
+            <QuizFooter 
+              current={current}
+              totalQuestions={topicQuestions?.length}
+              onPrevious={previousQuestion}
+              onNext={nextQuestion}
+              onShowModal={showModal}
+            />
           </div>
-        </Col>
-      </Row>
+        </div>
+      </div>
       {open && <ConfirmModal open={open} setOpen={setOpen} submitQuiz={submitQuiz} />}
     </>
   );

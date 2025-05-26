@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { Row, Col, Image, Button } from "antd";
+import { Row, Col, Typography } from "antd";
 import "./Topics.css";
-import subject from "../../assests/qbg2.jpg";
 import Navbar from "../../components/Navbar";
 import { getAllTopics } from "../../store/slices/topic/TopicAction";
 import { useDispatch, useSelector } from "react-redux";
 import TopicCard from "./TopicCard";
 import { createNewAnswer } from "../../store/slices/answer/AnswerAction";
 import { useNavigate } from "react-router-dom";
+
+const { Title } = Typography;
 
 const Topics = () => {
   const dispatch = useDispatch();
@@ -35,15 +36,14 @@ const Topics = () => {
   return (
     <>
       <Navbar />
-      <Row style={{ height: "88vh", marginTop: "12vh" }}>
-        <Col span={24} className="cat-content">
-          <Row>
-            <div>
-              <h2 className="select-topic-head">Select Topic</h2>
-              <p className="featured-cat-name">Featured Category</p>
-            </div>
-          </Row>
-          <Row gutter={[16, 16]}>
+      <div className="topics-container-user">
+        <div className="topics-content-user">
+          <div className="topics-header-user">
+            <Title level={2} className="topics-title-user">Select Topic</Title>
+            <Title level={5} className="topics-subtitle-user">Featured Category</Title>
+          </div>
+          
+          <Row gutter={[24, 24]} className="topics-grid-user">
             {topics.map((item) => {
               if (item.questions?.length > 0) {
                 return (
@@ -59,8 +59,8 @@ const Topics = () => {
               return null;
             })}
           </Row>
-        </Col>
-      </Row>
+        </div>
+      </div>
     </>
   );
 };
