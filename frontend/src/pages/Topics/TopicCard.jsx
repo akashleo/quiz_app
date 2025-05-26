@@ -1,11 +1,12 @@
 // Import necessary React and Ant Design components
 import React from "react";
-import { Row, Col, Card, Image } from "antd";
+import { Row, Col, Card, Typography, Tag, Tooltip } from "antd";
 import "./Topics.css";
-import subject from "../../assests/qbg2.jpg";
-import { CheckCircleOutlined } from "@ant-design/icons";
-import { useDispatch, useSelector } from "react-redux";
-import {getSingleTopic} from '../../store/slices/topic/TopicSlice';
+import { CheckCircleOutlined, ClockCircleOutlined, TrophyOutlined, FileOutlined } from "@ant-design/icons";
+import { useDispatch } from "react-redux";
+import { getSingleTopic } from '../../store/slices/topic/TopicSlice';
+
+const { Title, Text, Paragraph } = Typography;
 
 // Define your TopicCard
 const TopicCard = ({
@@ -14,11 +15,9 @@ const TopicCard = ({
   setTopic,
   topicData,
 }) => {
-  
   const {
     available,
     code,
-    createdAt,
     instructions,
     maxAttempts,
     name,
@@ -29,58 +28,70 @@ const TopicCard = ({
 
   const dispatch = useDispatch();
 
+  const MetricTile = ({ icon, value, label }) => (
+    <div className="metric-tile-user">
+      {icon}
+      <Text className="metric-tile-value-user">{value}</Text>
+      <Text className="metric-tile-label-user">{label}</Text>
+    </div>
+  );
+
   return (
-    <Col span={8}>
+    <Col xs={24} sm={12} lg={8} xl={8}>
       <Card
-        //className={item._id === selectedTopic ? "select-topic" : "topic-card"}
-        key={code}
-        id="topic-card"
+        hoverable
+        className={`topic-card-user ${code === selectedTopic ? 'topic-card-selected-user' : ''}`}
         onClick={() => {
           setSelectedTopic(code);
           setTopic(topicData);
           dispatch(getSingleTopic(topicData));
         }}
       >
-        <div
-          className="topic-card-select"
-          style={
-            code === selectedTopic
-              ? { borderBottom: "15px solid #131313" }
-              : { border: "none" }
-          }
-        >
-          <Row>
-            <Col span={20}>
-              <strong>Code:</strong> {code}
-            </Col>
-            <Col span={4}>
-              {selectedTopic === code && (
-                <CheckCircleOutlined className="select-emoji" />
-              )}
-            </Col>
-          </Row>
-          <Row>
-            <Col span={24} className="topic-card-label">
-              {" "}
-              <strong>Name:</strong> {name}
-            </Col>
-          </Row>
-          <Row>
-            <Col span={24} className="topic-card-label">
-              {" "}
-              <strong>Instructions:</strong>{" "}
-              {instructions?.length > 40
-                ? `${instructions.slice(0, 40)}...`
-                : instructions}
-            </Col>
-          </Row>
-          <Row>
-            <Col span={24}>
-              {" "}
-              <strong>Points:</strong> {points}
-            </Col>
-          </Row>
+        <div className="topic-card-header-user">
+          <div className="topic-title-container-user">
+            <Text className="topic-card-title-user">{name}</Text>
+            <Tag color="blue" className="topic-card-code-user">{code}</Tag>
+          </div>
+          {selectedTopic === code && (
+            <CheckCircleOutlined className="select-emoji-user" />
+          )}
         </div>
+
+        <div className="topic-metrics-user">
+          <MetricTile 
+            icon={<TrophyOutlined />}
+            value={points}
+            label="Points"
+          />
+          {timeLimit && (
+            <MetricTile 
+              icon={<ClockCircleOutlined />}
+              value={`${timeLimit} min`}
+              label="Time"
+            />
+          )}
+          {questions && (
+            <MetricTile 
+              icon={<FileOutlined />}
+              value={questions.length}
+              label="Questions"
+            />
+          )}
+        </div>
+
+        <div className="topic-card-instructions-user">
+          <Tooltip title={instructions || "No instructions provided"}>
+            <Text ellipsis={{ rows: 2 }} className="instructions-text-user">
+              {instructions || "No instructions provided"}
+            </Text>
+          </Tooltip>
+        </div>
+
+        {available === false && (
+          <Tag color="error" className="topic-availability-tag-user">
+            Not Available
+          </Tag>
+        )}
       </Card>
     </Col>
   );
