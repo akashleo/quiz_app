@@ -76,3 +76,66 @@
   letter-spacing: 0em;
   text-align: left;
 }
+
+/* Tablet View (768px to 1024px) */
+@media screen and (max-width: 1024px) {
+  .login-section {
+    margin: 30px auto;
+  }
+
+  .login-text {
+    font-size: 24px;
+    line-height: 36px;
+  }
+
+  .login-text-2 {
+    font-size: 16px;
+    line-height: 24px;
+  }
+}
+
+/* Mobile View (up to 767px) */
+@media screen and (max-width: 767px) {
+  .cover-image-left {
+    height: 200px !important;
+    width: 100% !important;
+  }
+
+  .cover-bg-right {
+    padding: 15px;
+  }
+
+  .login-section {
+    margin: 20px auto;
+  }
+
+  .login-text {
+    font-size: 20px;
+    line-height: 30px;
+  }
+
+  .login-text-2 {
+    font-size: 14px;
+    line-height: 21px;
+  }
+
+  .input-box {
+    height: 40px;
+  }
+
+  .login-button,
+  .google-button {
+    height: 40px;
+  }
+
+  .mobile-full-width {
+    padding: 0 20px !important;
+  }
+}
+
+/* Adjust form container for both tablet and mobile */
+@media screen and (max-width: 1024px) {
+  .form-container {
+    padding: 0 20px !important;
+  }
+}

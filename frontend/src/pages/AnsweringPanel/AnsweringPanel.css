@@ -254,10 +254,14 @@
   flex: 1;
   max-width: 600px;
   margin: 0 auto;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 8px 0;
 }
 
 .quiz-progress-user {
   width: 100%;
+  min-width: min-content;
 }
 
 .quiz-progress-user .ant-steps-item {
@@ -290,7 +294,7 @@
 /* Mobile Styles */
 @media screen and (max-width: 768px) {
   .quiz-footer-user {
-    flex-direction: row;
+    flex-direction: column;
     gap: 16px;
     padding-top: 20px;
   }
@@ -298,29 +302,11 @@
   .quiz-progress-wrapper-user {
     width: 100%;
     order: -1;
-    overflow-x: auto;
-    padding: 8px 0;
     margin: 0;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  .quiz-progress-user {
-    display: flex;
-    align-items: center;
-    min-width: min-content;
-    padding: 0 4px;
   }
 
   .quiz-progress-user .ant-steps-item {
     flex: 0 0 auto;
-    margin: 0 4px !important;
-  }
-
-  .quiz-progress-user .ant-steps-item-tail {
-    padding: 0 8px !important;
-    height: 1px !important;
-    top: 50% !important;
-    margin-top: -1px;
   }
 
   .nav-button-user {
@@ -339,10 +325,6 @@
     width: 10px;
     height: 10px;
     line-height: 10px;
-  }
-
-  .quiz-progress-user .ant-steps-item-tail {
-    padding: 0 6px !important;
   }
 
   .nav-button-user {

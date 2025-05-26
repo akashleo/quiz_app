@@ -53,40 +53,45 @@ const Login = () => {
   }, [responseData]);
 
   return (
-    <Row style={{ height: "100vh" }}>
-      <Col span={10}>
+    <Row style={{ minHeight: "100vh" }}>
+      <Col xs={24} sm={24} md={10} lg={10}>
         <div
           style={{ width: "100%", height: "100%" }}
           className="cover-image-left"
         ></div>
       </Col>
-      <Col span={14}>
+      <Col xs={24} sm={24} md={14} lg={14}>
         <div className="cover-bg-right">
           <Row>
-            <Col span={24}>
-              <p>
+            <Col xs={24}>
+              <p style={{ padding: "0 20px" }}>
                 <LeftOutlined /> Back
               </p>
             </Col>
           </Row>
           <Row className="login-section">
-            <Col span={24}>
+            <Col xs={24}>
               <h2 className="login-text">Login to your Account</h2>
             </Col>
-            <Col span={24}>
+            <Col xs={24}>
               <h5 className="login-text-2">
                 with your registered Email Address
               </h5>
             </Col>
           </Row>
           <Row>
-            <Col span={24}>
+            <Col xs={24}>
               <Form
                 layout={"vertical"}
                 form={form}
                 initialValues={{ layout: "vertical" }}
-                //onValuesChange={onFormLayoutChange}
-                style={{ margin: "0px 150px" }}
+                className="form-container"
+                style={{ 
+                  margin: "0 auto",
+                  maxWidth: "500px",
+                  width: "100%",
+                  padding: "0 20px"
+                }}
                 onFinish={loginFn}
               >
                 <Form.Item
@@ -131,20 +136,21 @@ const Login = () => {
                   </Button>
                 </Form.Item>
               </Form>
-              {/* <Col span={24} style={{ textAlign: "center" }}>
-                <p style={{ margin: "0px auto" }}>OR</p>
-              </Col> */}
               <br />
-              <Col span={24} style={{ padding: "0px 150px" }}>
+              <div className="mobile-full-width" style={{ 
+                margin: "0 auto",
+                maxWidth: "500px",
+                width: "100%",
+                padding: "0 20px"
+              }}>
                 <Button
                   block
                   className="google-button"
                   onClick={() => navigate("/signup")}
                 >
-                  {/* <GoogleOutlined /> &nbsp; &nbsp;*/}
                   <b>Sign Up</b>
                 </Button>
-              </Col>
+              </div>
             </Col>
           </Row>
         </div>
