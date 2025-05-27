@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "../../components/Navbar";
-import { Row, Col, Image, Progress } from "antd";
+import { Row, Col, Image, Progress, Tooltip } from "antd";
 import {
   FlagFilled,
   CheckCircleFilled,
   ClockCircleFilled,
+  QuestionCircleOutlined
 } from "@ant-design/icons";
 import "./Dashboard.css";
 import { useSelector, useDispatch } from "react-redux";
@@ -21,23 +22,44 @@ const Dashboard = () => {
   const { currentUserId } = useSelector((state) => state.auth);
   const [emojiMap, setEmojiMap] = useState({});
 
+  // Calculate level progress
+  const calculateLevelProgress = (level, correctAnswers) => {
+    // Each level requires more correct answers
+    const answersNeededForNextLevel = level * 10;
+    const progress = (correctAnswers / answersNeededForNextLevel) * 100;
+    return Math.min(progress, 100); // Cap at 100%
+  };
+
   useEffect(() => {
     if (currentUserId && Object.keys(singleProfile).length < 1 && !loading) {
       dispatch(getProfileById(currentUserId));
     }
-  }, []);
+  }, [currentUserId, singleProfile, loading, dispatch]);
 
   useEffect(() => {
-    if (singleProfile) {
+    if (singleProfile?.achievements) {
       const counts = {};
       const { achievements } = singleProfile;
-      if (achievements)
-        for (const key of achievements) {
-          counts[key] = counts[key] ? counts[key] + 1 : 1;
-        }
+      for (const key of achievements) {
+        counts[key] = counts[key] ? counts[key] + 1 : 1;
+      }
       setEmojiMap(counts);
     }
   }, [singleProfile]);
+
+  // Format time string for display
+  const formatTime = (timeStr) => {
+    if (!timeStr || timeStr === "") return "No attempts yet";
+    const time = parseFloat(timeStr);
+    if (isNaN(time)) return timeStr;
+    return time < 1 ? `${Math.round(time * 60)} seconds` : `${time} minutes`;
+  };
+
+  // Format quiz passed count
+  const formatQuizPassed = (count) => {
+    if (!count || count === "") return "0";
+    return count;
+  };
 
   return (
     <>
@@ -52,38 +74,52 @@ const Dashboard = () => {
                   <Col xs={24} sm={24} md={6} style={{ textAlign: 'center' }}>
                     <Image 
                       className="avt-dash" 
-                      src={"https://www.w3schools.com/howto/img_avatar.png"} 
+                      src={singleProfile?.image || "https://www.w3schools.com/howto/img_avatar.png"} 
                       preview={false}
+                      style={{
+                        display: 'inline-block',
+                        verticalAlign: 'middle'
+                      }}
                     />
                   </Col>
                   <Col xs={24} sm={24} md={18}>
                     <div className="user-details">
-                      <h2 className="user-name">{singleProfile?.fullName}</h2>
-                      <p className="user-level">
-                        Bonus booster {singleProfile?.level}lv
-                      </p>
+                      <h2 className="user-name">{singleProfile?.fullName || "Loading..."}</h2>
+                      <div className="user-level">
+                        <span>Level {singleProfile?.level || 1}</span>
+                        <Tooltip title="Complete quizzes to level up!">
+                          <QuestionCircleOutlined style={{ marginLeft: '8px' }} />
+                        </Tooltip>
+                      </div>
                     </div>
                     <div className="user-progress">
                       <Progress
-                        percent={70}
-                        showInfo={false}
-                        strokeColor={"#C4C4C4"}
+                        percent={calculateLevelProgress(
+                          singleProfile?.level || 1,
+                          singleProfile?.correctAnswers || 0
+                        )}
+                        showInfo={true}
+                        strokeColor={"#1890ff"}
+                        format={percent => `${Math.round(percent)}%`}
                       />
+                      <div style={{ textAlign: 'right', fontSize: '12px', color: '#666' }}>
+                        Progress to Level {(singleProfile?.level || 1) + 1}
+                      </div>
                     </div>
-                    <Row gutter={[16, 16]} className="quiz-achivement-block">
+                    <Row gutter={[16, 16]} className="quiz-achievement-block">
                       <AchievementCard
                         icon={FlagFilled}
-                        number={singleProfile?.quizPassed || 27}
-                        label="Quiz Passed"
+                        number={formatQuizPassed(singleProfile?.quizPassed)}
+                        label="Quizzes Passed"
                       />
                       <AchievementCard
                         icon={ClockCircleFilled}
-                        number={singleProfile?.fastestTime || "20min"}
+                        number={formatTime(singleProfile?.fastestTime)}
                         label="Fastest Time"
                       />
                       <AchievementCard
                         icon={CheckCircleFilled}
-                        number={singleProfile?.correctAnswers}
+                        number={singleProfile?.correctAnswers || 0}
                         label="Correct Answers"
                       />
                     </Row>
@@ -92,7 +128,16 @@ const Dashboard = () => {
               </div>
 
               {/* Achievements Section */}
-              <Achievements emojiMap={emojiMap} />
+              <div className="achievements-section">
+                <h2>Achievements</h2>
+                {Object.keys(emojiMap).length === 0 ? (
+                  <div className="no-achievements">
+                    <p>Complete quizzes to earn achievements!</p>
+                  </div>
+                ) : (
+                  <Achievements emojiMap={emojiMap} />
+                )}
+              </div>
             </div>
           </div>
         </Col>

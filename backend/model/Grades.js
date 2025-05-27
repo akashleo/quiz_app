@@ -17,6 +17,10 @@ const GradesSchema = new Schema(
       type: Number,
       required: true,
     },
+    achievement: {
+      type: String,  // Will store the emoji unicode
+      required: true,
+    }
   },
   { timestamps: true }
 );
