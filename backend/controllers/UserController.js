@@ -1,6 +1,7 @@
 import Profile from "../model/Profile.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+
 export const getAllUser = async (req, res, next) => {
   let users;
   try {
@@ -47,81 +48,68 @@ export const signup = async (req, res, next) => {
     fullName: req.body.fullName,
     email: req.body.email,
     password: hashedPassword,
-    level: 4,
-    quizPassed: "",
+    level: 1,
+    quizPassed: "0",
     fastestTime: "",
-    correctAnswers: 6,
-    achievements: [
-      "U+1F44A",
-      "U+1F596",
-      "U+1F4A3",
-      "U+1F4AF",
-      "U+1F4AF",
-      "U+270C",
-      "U+270C",
-      "U+2728",
-      "U+1F6AC",
-      "U+26F3",
-      "U+1F308",
-      "U+1F308",
-      "U+1F308",
-    ],
+    correctAnswers: 0,
+    achievements: [],
     role: "user",
     available: true,
     image: "",
+    googleId: req.body.googleId
   });
 
   try {
-    newUser.save();
+    await newUser.save();
+    
+    const { password, ...userWithoutPassword } = newUser.toObject();
+
+    return res.status(200).json({
+      message: "Profile successfully created",
+      status: 200,
+      user: userWithoutPassword
+    });
   } catch (err) {
-    console.log(err);
+    console.error("Error creating user:", err);
+    return res.status(500).json({
+      message: "Error creating user",
+      error: err.message
+    });
   }
-
-  const { password, ...userobj } = newUser._doc;
-
-  res.status(200).json({
-    message: "Profile successfully created",
-    status: 200,
-    user: userobj,
-  });
 };
 
 export const login = async (req, res, next) => {
   const { email, password } = req.body;
 
-  let existingUser;
-
   try {
-    existingUser = await Profile.findOne({ email });
+    const existingUser = await Profile.findOne({ email });
+
+    if (!existingUser) {
+      return res.status(404).json({ message: "Cannot find user" });
+    }
+
+    const isPasswordCorrect = bcrypt.compareSync(password, existingUser.password);
+
+    if (!isPasswordCorrect) {
+      return res.status(400).json({ message: "Incorrect Password", status: 400 });
+    }
+
+    const token = jwt.sign({ sub: email }, "secretkey");
+    
+    const { password: _, ...userWithoutPassword } = existingUser.toObject();
+
+    return res.status(200).json({
+      message: "Login Successful",
+      token,
+      user: userWithoutPassword,
+      status: 200
+    });
+
   } catch (err) {
-    console.log(err);
+    console.error("Login error:", err);
+    return res.status(500).json({
+      message: "Error during login",
+      error: err.message
+    });
   }
-
-  if (!existingUser) {
-    return res.status(404).json({ message: "Cannot find user" });
-  }
-
-  const isPasswordCorrect = bcrypt.compareSync(password, existingUser.password);
-  //console.log(existingUser.password, password)
-
-  if (!isPasswordCorrect) {
-    return res.status(400).json({ message: "Incorrect Password", status: 400 });
-  }
-  const token = jwt.sign({ sub: email }, "secretkey");
-  // if (password === existingUser.password) {
-  //   return res
-  //     .status(200)
-  //     .json({ message: "Login Successful", token, user: existingUser });
-  // } else {
-  //   return res.status(400).json({ message: "Incorrect Password" });
-  // }
-  //const token = jwt.sign({ sub: user.id }, 'secretkey');
-  return res.status(200).json({
-    message: "Login Successful",
-    token,
-    user: existingUser,
-    status: 200,
-  });
-
-  //return res.status(200).json({ message: "Profile login successful" });
 };

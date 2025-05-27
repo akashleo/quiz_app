@@ -293,6 +293,10 @@
 
 /* Mobile Styles */
 @media screen and (max-width: 768px) {
+
+  .ant-steps-vertical{
+    flex-direction: row !important;
+  }
   .quiz-footer-user {
     flex-direction: column;
     gap: 16px;
@@ -316,6 +320,9 @@
 }
 
 @media screen and (max-width: 576px) {
+  .ant-steps-vertical{
+    flex-direction: row !important;
+  }
   .quiz-footer-user {
     gap: 12px;
     padding-top: 16px;

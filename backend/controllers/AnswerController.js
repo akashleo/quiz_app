@@ -1,4 +1,10 @@
 import Answer from "../model/Answer.js";
+import Topic from "../model/Topic.js";
+import Question from "../model/Question.js";
+import Grades from "../model/Grades.js";
+import Profile from "../model/Profile.js";
+import { emojiMap } from "../EmojiMap.js";
+import mongoose from "mongoose";
 
 export const getAllAnswers = async (req, res, next) => {
   let answers;
@@ -75,29 +81,185 @@ export const updateAnswer = async (req, res, next) => {
   return res.status(201).json({ answer: answerObj });
 };
 
+/**
+ * Calculate quiz duration in minutes
+ * @param {Date} startTime
+ * @param {Date} endTime
+ * @returns {number} duration in minutes
+ */
+const calculateDuration = (startTime, endTime) => {
+  const duration = (new Date(endTime) - new Date(startTime)) / (1000 * 60); // Convert to minutes
+  return Math.round(duration * 100) / 100; // Round to 2 decimal places
+};
+
+/**
+ * Get emoji based on marks
+ * @param {number} marks
+ * @returns {string} emoji unicode
+ */
+const getAchievementEmoji = (marks) => {
+  // Map marks to emoji index (0-10)
+  const emojiIndex = Math.min(Math.floor(marks), 10);
+  return emojiMap[emojiIndex];
+};
+
 export const submitAnswer = async (req, res, next) => {
   const { submitted } = req.body;
-  let answer;
-  let answerObj;
-
   const id = req.params.id;
 
+  if (submitted !== true) {
+    return res
+      .status(400)
+      .json({
+        message: "Invalid submission request. 'submitted' must be true.",
+      });
+  }
+
   try {
-    answer = await Answer.findByIdAndUpdate(id, {
-      submitted,
+    // 1. Get the answer document and verify it exists
+    const answerDoc = await Answer.findById(id);
+    if (!answerDoc) {
+      return res.status(404).json({ message: "Answer not found." });
+    }
+
+    if (answerDoc.submitted) {
+      return res
+        .status(400)
+        .json({ message: "This quiz has already been submitted." });
+    }
+
+    // 2. Calculate duration
+    const duration = calculateDuration(answerDoc.createdAt, new Date());
+
+    // 3. Get all questions and calculate marks
+    // Convert Mongoose Map to array of entries
+    const answersArray = Array.from(answerDoc.answers);
+
+    // Extract question IDs (first element of each entry is the key)
+    const questionIds = answersArray
+      .map(([key]) => key)
+      .filter((key) => {
+        const isValid = mongoose.Types.ObjectId.isValid(key);
+        return isValid;
+      });
+
+    if (questionIds.length === 0) {
+      return res.status(400).json({
+        message: "No valid answers found",
+        answers: Object.fromEntries(answersArray),
+        answerDoc,
+      });
+    }
+
+    // Convert string IDs to ObjectIds
+    const objectIds = questionIds.map((id) => new mongoose.Types.ObjectId(id));
+
+    const questions = await Question.find({
+      _id: { $in: objectIds },
+    }).lean();
+
+    console.log("Found Questions:", questions.length); // Debug log
+
+    if (!questions || questions.length === 0) {
+      return res.status(400).json({
+        message: "No questions found for the given answers",
+        questionIds,
+        answers: Object.fromEntries(answersArray),
+      });
+    }
+
+    let correctAnswers = 0;
+    questions.forEach((question) => {
+      const userAnswer = answerDoc.answers.get(question._id.toString());
+      if (userAnswer && parseInt(userAnswer) === question.isCorrect) {
+        correctAnswers++;
+      }
     });
 
-    await answer.save();
-  } catch (err) {
-    console.log(err);
-  }
+    // Get achievement emoji before creating grade
+    const achievementEmoji = getAchievementEmoji(correctAnswers);
 
-  if (!answer) {
-    return res
-      .status(500)
-      .json({ message: "Unable to update answer with this id" });
+    // 4. Create new grade instance with achievement
+    const grade = new Grades({
+      userId: answerDoc.userId,
+      topicId: answerDoc.topicId,
+      marks: correctAnswers,
+      achievement: achievementEmoji,
+    });
+    await grade.save();
+
+    // 5. Update user profile
+    const userProfile = await Profile.findById(answerDoc.userId);
+    if (!userProfile) {
+      throw new Error("User profile not found");
+    }
+
+    // Update achievements array
+    if (!userProfile.achievements) {
+      userProfile.achievements = [];
+    }
+    userProfile.achievements.push(achievementEmoji);
+
+    // Update fastestTime
+    const currentFastestTime = userProfile.fastestTime;
+    if (
+      !currentFastestTime ||
+      currentFastestTime === "" ||
+      parseFloat(duration) < parseFloat(currentFastestTime)
+    ) {
+      userProfile.fastestTime = duration.toString();
+    }
+
+    // Update quizPassed
+    if (correctAnswers >= 5) {
+      const currentPassed = parseInt(userProfile.quizPassed || "0");
+      userProfile.quizPassed = (currentPassed + 1).toString();
+    }
+
+    // Update correctAnswers
+    const currentCorrectAnswers = parseInt(userProfile.correctAnswers || "0");
+    userProfile.correctAnswers = currentCorrectAnswers + correctAnswers;
+
+    // Calculate and update level if needed
+    const currentLevel = parseInt(userProfile.level || "1");
+    const answersNeededForNextLevel = currentLevel * 10;
+    if (userProfile.correctAnswers >= answersNeededForNextLevel) {
+      userProfile.level = (currentLevel + 1).toString();
+    }
+
+    // Save profile updates
+    await userProfile.save();
+
+    // 6. Mark answer as submitted and save
+    answerDoc.submitted = true;
+    await answerDoc.save();
+
+    // 7. Return success response with all updated data
+    return res.status(200).json({
+      message: "Quiz successfully submitted",
+      data: {
+        grade: {
+          marks: correctAnswers,
+          total: questions.length,
+        },
+        duration,
+        achievement: achievementEmoji,
+        profile: {
+          fastestTime: userProfile.fastestTime,
+          quizPassed: userProfile.quizPassed,
+          correctAnswers: userProfile.correctAnswers,
+          achievements: userProfile.achievements,
+          level: userProfile.level
+        },
+      },
+    });
+  } catch (err) {
+    console.error("Error during quiz submission:", err);
+    return res.status(500).json({
+      message: "An error occurred during quiz submission",
+      error: err.message,
+    });
   }
-  return res.status(201).json({ message: "Successfully submitted the quiz" });
 };
 
 export const deleteAnswer = async (req, res, next) => {
