@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Card, Radio } from "antd";
 import { Switch } from "antd";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
-import questionmark from "../../assests/questionmark.png";
+import questionmark from "../../assets/questionmark.png";
 import { deleteQuestion } from "../../store/slices/question/QuestionAction";
 import { useSelector, useDispatch } from "react-redux";
 import "./questions.css";

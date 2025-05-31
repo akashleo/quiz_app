@@ -1,9 +1,7 @@
 import React from 'react';
 import { Row, Col, Card, Progress, Statistic } from 'antd';
 import { TrophyOutlined, FireOutlined, StarOutlined, ThunderboltOutlined } from '@ant-design/icons';
-import Badge1 from '../../assests/Badge_1.png';
-import Badge2 from '../../assests/Badge_2.png';
-import Badge3 from '../../assests/Badge_3.png';
+import questionmark from '../../assets/questionmark.png';
 
 const Achievements = () => {
   // Mock data - replace with actual data from your backend
@@ -13,7 +11,7 @@ const Achievements = () => {
       title: 'Quiz Master',
       description: 'Complete 10 quizzes with score above 80%',
       progress: 80,
-      badge: Badge1,
+      badge: questionmark,
       unlocked: true,
     },
     {
@@ -21,7 +19,7 @@ const Achievements = () => {
       title: 'Speed Demon',
       description: 'Complete a quiz in under 5 minutes',
       progress: 100,
-      badge: Badge2,
+      badge: questionmark,
       unlocked: true,
     },
     {
@@ -29,7 +27,7 @@ const Achievements = () => {
       title: 'Perfect Score',
       description: 'Get 100% in any quiz',
       progress: 60,
-      badge: Badge3,
+      badge: questionmark,
       unlocked: false,
     },
   ];

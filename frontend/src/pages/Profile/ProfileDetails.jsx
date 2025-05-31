@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Input, Button, Upload, message, Spin } from 'antd';
-import { UserOutlined, MailOutlined, UploadOutlined } from '@ant-design/icons';
+import { UserOutlined, MailOutlined, UploadOutlined, CameraOutlined } from '@ant-design/icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateProfile } from '../../store/slices/profile/ProfileAction';
-import defaultAvatar from '../../assests/profilepic.png';
+import defaultAvatar from '../../assets/questionmark.png';
 
 const ProfileDetails = () => {
   const dispatch = useDispatch();
@@ -76,60 +76,69 @@ const ProfileDetails = () => {
 
   return (
     <div className="profile-details">
-      <div className="profile-header">
+      <div className="profile-details-container">
         <div className="avatar-section">
-          <div className="avatar-wrapper">
-            <img src={imageUrl} alt="Profile" className="profile-avatar" />
-            <Upload
-              name="avatar"
-              showUploadList={false}
-              onChange={handleImageUpload}
-              className="avatar-upload"
+          <Upload
+            name="avatar"
+            showUploadList={false}
+            onChange={handleImageUpload}
+            className="avatar-upload"
+          >
+            <div className="avatar-wrapper">
+              <img src={imageUrl} alt="Profile" className="profile-avatar" />
+              <div className="avatar-overlay">
+                <CameraOutlined className="avatar-overlay-icon" />
+              </div>
+            </div>
+          </Upload>
+        </div>
+
+        <div className="form-section">
+          <Form
+            form={form}
+            layout="vertical"
+            onFinish={onFinish}
+            className="profile-form"
+          >
+            <Form.Item
+              name="name"
+              label="Full Name"
+              rules={[{ required: true, message: 'Please input your name!' }]}
             >
-              <Button icon={<UploadOutlined />} loading={uploadLoading}>
-                Change Picture
+              <Input 
+                prefix={<UserOutlined style={{ color: '#8692a6' }} />} 
+                placeholder="Enter your name"
+              />
+            </Form.Item>
+
+            <Form.Item
+              name="email"
+              label="Email"
+              rules={[
+                { required: true, message: 'Please input your email!' },
+                { type: 'email', message: 'Please enter a valid email!' },
+              ]}
+            >
+              <Input 
+                prefix={<MailOutlined style={{ color: '#8692a6' }} />} 
+                placeholder="Enter your email" 
+                disabled 
+              />
+            </Form.Item>
+
+            <Form.Item>
+              <Button 
+                type="primary" 
+                htmlType="submit" 
+                className="update-button"
+                loading={loading}
+              >
+                Update Profile
               </Button>
-            </Upload>
-          </div>
+            </Form.Item>
+          </Form>
         </div>
       </div>
-
-      <Form
-        form={form}
-        layout="vertical"
-        onFinish={onFinish}
-        className="profile-form"
-      >
-        <Form.Item
-          name="name"
-          label="Full Name"
-          rules={[{ required: true, message: 'Please input your name!' }]}
-        >
-          <Input prefix={<UserOutlined />} placeholder="Enter your name" />
-        </Form.Item>
-
-        <Form.Item
-          name="email"
-          label="Email"
-          rules={[
-            { required: true, message: 'Please input your email!' },
-            { type: 'email', message: 'Please enter a valid email!' },
-          ]}
-        >
-          <Input prefix={<MailOutlined />} placeholder="Enter your email" disabled />
-        </Form.Item>
-
-        <Form.Item>
-          <Button 
-            type="primary" 
-            htmlType="submit" 
-            className="update-button"
-            loading={loading}
-          >
-            Update Profile
-          </Button>
-        </Form.Item>
-      </Form>
     </div>
   );
 };

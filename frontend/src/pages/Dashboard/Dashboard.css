@@ -10,7 +10,7 @@
 } */
 
 .dashboard {
-  padding: 2rem;
+  padding: 24px;
 }
 
 .dashboard-content {
@@ -18,14 +18,17 @@
   border-radius: 24px;
   padding: 2rem;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 /* Profile Section */
 .profile-section {
-  background: #f7fafc;
-  border-radius: 20px;
-  padding: 2rem;
-  margin-bottom: 2rem;
+  background: #ffffff;
+  border-radius: 24px;
+  padding: 32px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  margin-bottom: 32px;
 }
 
 .avt-dash {
@@ -33,8 +36,8 @@
   height: 200px !important;
   border-radius: 50%;
   object-fit: cover;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  display: inline-block !important;
+  border: 4px solid #fff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .avt-dash img {
@@ -45,23 +48,28 @@
 }
 
 .user-details {
-  margin-bottom: 1rem;
+  margin-bottom: 24px;
 }
 
 .user-name {
-  font-size: 1.75rem;
-  margin-bottom: 0.5rem;
-  color: #2d3748;
+  font-family: "Josefin Sans", sans-serif;
+  font-size: 32px;
+  font-weight: 700;
+  color: #1a202c;
+  margin: 0;
 }
 
 .user-level {
-  color: #718096;
-  margin-bottom: 1rem;
-  font-size: 1rem;
+  font-family: "Josefin Sans", sans-serif;
+  font-size: 18px;
+  color: #4a5568;
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
 }
 
 .user-progress {
-  margin-bottom: 2rem;
+  margin-bottom: 24px;
 }
 
 /* Achievement Stats */
@@ -193,14 +201,13 @@
   }
 
   .profile-section {
-    padding: 1rem;
-    text-align: center;
+    padding: 24px;
   }
 
   .avt-dash {
-    width: 80px !important;
-    height: 80px !important;
-    margin-bottom: 1rem;
+    width: 150px !important;
+    height: 150px !important;
+    margin-bottom: 24px;
   }
 
   .quiz-achivement {
@@ -233,6 +240,67 @@
 
   .emoji-count {
     font-size: 1rem;
+  }
+
+  .user-name {
+    font-size: 28px;
+  }
+
+  .user-level {
+    font-size: 16px;
+  }
+
+  .stat-number {
+    font-size: 20px;
+  }
+
+  .achievements-section {
+    padding: 24px;
+  }
+
+  .achievements-section h2 {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard {
+    padding: 16px;
+  }
+
+  .profile-section,
+  .achievements-section {
+    padding: 20px;
+    border-radius: 16px;
+  }
+
+  .avt-dash {
+    width: 120px !important;
+    height: 120px !important;
+  }
+
+  .user-name {
+    font-size: 24px;
+  }
+
+  .user-level {
+    font-size: 14px;
+  }
+
+  .stat-number {
+    font-size: 18px;
+  }
+
+  .stat-label {
+    font-size: 12px;
+  }
+
+  .achievements-section h2 {
+    font-size: 18px;
+  }
+
+  .no-achievements p {
+    font-size: 16px;
   }
 }
 

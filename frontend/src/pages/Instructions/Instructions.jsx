@@ -2,7 +2,7 @@ import React from "react";
 import { RightOutlined } from "@ant-design/icons";
 import { Row, Col, Button, Image } from "antd";
 import "./Instructions.css";
-import qstn from "../../assests/qstn.jpg";
+import questionmark from "../../assets/questionmark.png";
 import Navbar from "../../components/Navbar";
 
 const Instructions = () => {
@@ -16,7 +16,7 @@ const Instructions = () => {
             <h5>Read the following instructions</h5>
             <Row>
               <Col xs={24} md={12}>
-                <Image src={qstn} className="question-image"/>
+                <Image src={questionmark} className="question-image"/>
               </Col>
               <Col xs={24} md={12} className="details">
                 <h4>Date: 11/12/22</h4>
