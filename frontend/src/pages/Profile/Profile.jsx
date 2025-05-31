@@ -1,93 +1,45 @@
-import React, { useState } from "react";
-import { Row, Col, Button } from "antd";
+import React from "react";
+import { Tabs } from "antd";
 import Navbar from "../../components/Navbar";
 import "./Profile.css";
-import ProfileImage from "./ProfileImage";
-import ProfileName from "./ProfileName";
-import ProfilePassword from "./ProfilePassword";
+import ProfileDetails from "./ProfileDetails";
 import Achievements from "./Achievements";
-import Grades from "./Grades";
-import WinnerCharts from "./WinnerCharts";
+import ReviewAnswers from "./ReviewAnswers";
 
 const Profile = () => {
-  const [currentModal, setCurrentModal] = useState("image");
-  const [currentTitle, setCurrentTitle] = useState("Display Picture");
-
-  const handleButtonChange = (value) => {
-    setCurrentModal(value);
-    if (value === "image") setCurrentTitle("Display Picture");
-    if (value === "name") setCurrentTitle("Name");
-    if (value === "password") setCurrentTitle("Password");
-    if (value === "achievements") setCurrentTitle("Achievements");
-    if (value === "grades") setCurrentTitle("Grades");
-    if (value === "winner") setCurrentTitle("Winner Charts");
-  };
+  const items = [
+    {
+      key: "1",
+      label: "Profile Details",
+      children: <ProfileDetails />,
+    },
+    {
+      key: "2",
+      label: "Achievements",
+      children: <Achievements />,
+    },
+    {
+      key: "3",
+      label: "Review Answers",
+      children: <ReviewAnswers />,
+    },
+  ];
 
   return (
-    <>
+    <div className="profile-container">
       <Navbar />
-      <Row style={{ height: "88vh", marginTop: "12vh" }}>
-        <Col span={24}>
-          <div className="description">
-            <Row>
-              <Col span={24}>
-                <div className="heading">
-                  <h1 className="answering-header">{currentTitle}</h1>
-                </div>
-              </Col>
-              <Col xs={24} md={16}>
-                {currentModal === "image" && <ProfileImage />}
-                {currentModal === "name" && <ProfileName />}
-                {currentModal === "password" && <ProfilePassword />}
-                {currentModal === "achievements" && <Achievements />}
-                {currentModal === "grades" && <Grades />}
-                {currentModal === "winner" && <WinnerCharts />}
-              </Col>
-              <Col xs={24} md={8}>
-                <div className="profile-actions">
-                  <Button 
-                    className="action-buttons"
-                    onClick={() => handleButtonChange("image")}
-                  >
-                    Display Picture
-                  </Button>
-                  <Button 
-                    className="action-buttons"
-                    onClick={() => handleButtonChange("name")}
-                  >
-                    Name
-                  </Button>
-                  <Button 
-                    className="action-buttons"
-                    onClick={() => handleButtonChange("password")}
-                  >
-                    Password
-                  </Button>
-                  <Button 
-                    className="action-buttons"
-                    onClick={() => handleButtonChange("achievements")}
-                  >
-                    Achievements
-                  </Button>
-                  <Button 
-                    className="action-buttons"
-                    onClick={() => handleButtonChange("grades")}
-                  >
-                    Grades
-                  </Button>
-                  <Button 
-                    className="action-buttons"
-                    onClick={() => handleButtonChange("winner")}
-                  >
-                    Winner Charts
-                  </Button>
-                </div>
-              </Col>
-            </Row>
-          </div>
-        </Col>
-      </Row>
-    </>
+      <div className="profile-content">
+        <div className="profile-card">
+          <h1 className="profile-title">My Profile</h1>
+          <Tabs
+            defaultActiveKey="1"
+            items={items}
+            className="profile-tabs"
+            size="large"
+          />
+        </div>
+      </div>
+    </div>
   );
 };
 

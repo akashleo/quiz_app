@@ -14,7 +14,7 @@
 
 .details {
   padding: 10px;
-  font-family: "Poppins", sans-serif;
+  font-family: "Josefin Sans", sans-serif;
 }
 
 .details h4 {
@@ -34,7 +34,7 @@
   width: 150px;
   background-color: #8692a6;
   box-shadow: none;
-  font-family: "Poppins", sans-serif;
+  font-family: "Josefin Sans", sans-serif;
   border: none;
   border-radius: 30px;
   color: #ffffff;
@@ -44,14 +44,14 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  font-family: "Poppins", sans-serif !important;
+  font-family: "Josefin Sans", sans-serif !important;
 }
 
 .timer-clock {
   border: #ffffff solid;
   font-size: 24px;
   font-weight: 600;
-  font-family: "Poppins", sans-serif !important;
+  font-family: "Josefin Sans", sans-serif !important;
 }
 
 .answering-header {
@@ -61,7 +61,7 @@
 .radio-options{
   font-size: 16px;
   font-weight: 600;
-  font-family: "Poppins", sans-serif !important;
+  font-family: "Josefin Sans", sans-serif !important;
 }
 
 /* Container Styles */

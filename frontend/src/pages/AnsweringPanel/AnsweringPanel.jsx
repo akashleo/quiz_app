@@ -10,7 +10,7 @@ import {
 import { setDisplayQuestion } from "../../store/slices/question/QuestionSlice";
 import { updateAnswer, submitAnswer } from "../../store/slices/answer/AnswerAction";
 import { useDispatch, useSelector } from "react-redux";
-import questionmark from "../../assests/questionmark.png";
+import questionmark from "../../assets/questionmark.png";
 import Navbar from "../../components/Navbar";
 import { updateAnswerMap } from "../../store/slices/answer/AnswerSlice";
 import { useNavigate } from "react-router-dom";

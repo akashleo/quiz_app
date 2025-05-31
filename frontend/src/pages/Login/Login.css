@@ -1,8 +1,10 @@
 .cover-image-left {
-  background-image: url("../../assests/loginbg.jpg");
+  background-image: url('../../assets/loginbg.jpg');
+  background-size: cover;
+  background-position: center;
+  height: 100%;
   /* z-index: 4; */
   background-repeat: no-repeat;
-  background-size: cover;
   /* filter: blur(2px); */
 }
 
@@ -51,7 +53,7 @@
 }
 
 .login-text {
-  font-family: "Poppins", sans-serif !important;
+  font-family: "Josefin Sans", sans-serif !important;
   font-size: 30px;
   font-weight: 700;
   line-height: 45px;
@@ -60,7 +62,7 @@
 }
 
 .login-text-2 {
-  font-family: "Poppins", sans-serif !important;
+  font-family: "Josefin Sans", sans-serif !important;
   font-size: 18px;
   font-weight: 400;
   line-height: 28px;
@@ -69,7 +71,7 @@
 }
 
 .login-label {
-  font-family: "Poppins", sans-serif !important;
+  font-family: "Josefin Sans", sans-serif !important;
   font-size: 16px;
   font-weight: 500;
   line-height: 24px;

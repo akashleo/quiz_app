@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { CloseCircleOutlined, CheckCircleOutlined, LeftOutlined, RightOutlined } from "@ant-design/icons";
 import { Row, Col, Radio, Image, Space, Button, Progress } from "antd";
 import "./ReviewPanel.css";
-import qstn from "../../assests/qstn.jpg";
+import questionmark from "../../assets/questionmark.png";
 import Navbar from "../../components/Navbar";
 
 const ReviewPanel = () => {
@@ -36,7 +36,7 @@ const ReviewPanel = () => {
             <Row gutter={[24, 24]} align="stretch">
               <Col xs={24} md={12} className="image-container">
                 <Image
-                  src={qstn}
+                  src={questionmark}
                   className="question-image"
                   preview={false}
                   alt="Question related image"

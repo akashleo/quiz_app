@@ -6,14 +6,14 @@
 }
 
 .select-topic-head {
-  font-family: "Poppins";
+  font-family: "Josefin Sans", sans-serif;
   font-style: normal;
   font-weight: 700;
   font-size: 1.5rem;
   color: #696f79;
 }
 .featured-cat-name {
-  font-family: "Poppins";
+  font-family: "Josefin Sans", sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 0.8rem;
@@ -27,7 +27,7 @@
   position: absolute;
   left: 10%;
   top: 15%;
-  font-family: "Poppins";
+  font-family: "Josefin Sans", sans-serif;
   font-style: normal;
   font-weight: 700;
   font-size: 1.2rem;
@@ -61,7 +61,7 @@
 }
 
 .topic-card-select {
-  font-family: "Poppins";
+  font-family: "Josefin Sans", sans-serif;
   font-style: normal;
   font-weight: 700;
   font-size: 1rem;
@@ -80,7 +80,7 @@
 
 .topic-card-label {
   margin: 10px 0px;
-  font-family: "Poppins";
+  font-family: "Josefin Sans", sans-serif;
   font-style: normal;
   font-weight: 500;
   font-size: 1.5rem;

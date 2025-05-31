@@ -8,7 +8,7 @@
   margin: 20px;
   display: flex;
   justify-content: center;
-  font-family: "Poppins", sans-serif !important;
+  font-family: "Josefin Sans", sans-serif !important;
 }
 
 .confirm-text {
@@ -16,7 +16,7 @@
   margin: 15px;
   display: flex;
   justify-content: center;
-  font-family: "Poppins", sans-serif !important;
+  font-family: "Josefin Sans", sans-serif !important;
   font-weight: 500;
   text-align: center;
 }
@@ -30,7 +30,7 @@
 .confirm-modal .ant-modal-content .ant-modal-footer .modal-button {
   border: none;
   font-size: 1rem;
-  font-family: "Poppins", sans-serif !important;
+  font-family: "Josefin Sans", sans-serif !important;
   font-weight: 700;
   border-radius: 50%;
   box-shadow: 0px 15px 40px 5px #ededed;

@@ -1,64 +1,416 @@
-.profile-image {
-  margin: 10px 20px;
+.profile-container {
+  min-height: 100vh;
+  background-color: #f8fafc;
 }
 
-.profile-name {
-  margin: 10px 20px;
+.profile-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 100px 20px 40px;
 }
 
-.description {
-  border-radius: 30px;
-  box-shadow: 0px 15px 40px 5px #ededed;
+.profile-card {
   background: #ffffff;
-  padding: 20px;
-  margin: 0px 20px 20px 20px;
+  border-radius: 24px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  padding: 32px;
 }
 
-.action-buttons {
+.profile-title {
+  font-size: 32px;
+  margin: 0 0 24px;
+  color: #1a202c;
+}
+
+/* Profile Details Styles */
+.profile-details {
   width: 100%;
-  background-color: #8692a6;
-  box-shadow: none;
-  font-family: "Poppins", sans-serif;
-  border: none;
-  border-radius: 30px;
-  color: #ffffff;
-  margin-bottom: 10px;
+  margin: 0 auto;
+  padding: 20px 0;
 }
 
-.custom-avt {
-  border-radius: 50%;
+.profile-details-container {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+}
+
+.avatar-section {
+  flex: 1;
+  max-width: 50%;
+}
+
+.avatar-wrapper {
   position: relative;
-  width: 200px;
-  height: 200px;
-  cursor: pointer;
+  width: 300px;
+  height: 300px;
+  margin: 0 auto;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0px 15px 40px 5px #ededed;
 }
 
-.overlay {
-  display: none;
+.profile-avatar {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
-.custom-avt:hover + .overlay {
+.avatar-overlay {
   position: absolute;
-  top: 110px;
-  width: 200px;
-  height: 100px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.6);
+  padding: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.avatar-overlay:hover {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.avatar-overlay-icon {
+  color: white;
+  font-size: 24px;
+}
+
+.form-section {
+  flex: 1;
+  padding: 1rem;
+}
+
+.profile-form .ant-form-item-label > label {
+  font-family: "Josefin Sans", sans-serif !important;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 24px;
+  letter-spacing: 0em;
+  text-align: left;
+  color: #333;
+}
+
+/* Input box styles copied from Login.css */
+.profile-form .ant-input {
+  background: #ffffff;
+  box-shadow: 0px 15px 40px 5px #ededed;
+  border-radius: 30px;
+  border: none !important;
+  height: 46px;
+  padding: 0px 20px;
+}
+
+.profile-form .ant-input:focus,
+.profile-form .ant-input:hover {
+  box-shadow: 0px 15px 40px 5px #ededed;
+}
+
+/* Add placeholder styles */
+.profile-form .ant-input::placeholder {
+  padding: 0px 20px;
+}
+
+.update-button {
+  width: 100%;
+  height: 46px;
+  box-shadow: 0px 15px 40px 5px #ededed;
+  border: none !important;
+  background: #8692a6 !important;
+  border-radius: 30px;
+  color: white;
+  font-weight: bold;
+  font-size: 16px;
+  margin-top: 1rem;
+}
+
+.update-button:hover {
+  background: #717d91 !important;
+}
+
+.avatar-upload .ant-btn {
+  width: 100%;
+  height: 45px;
+  border-radius: 8px;
+  border: 1px solid #1890ff;
+  color: #1890ff;
+  font-weight: bold;
+}
+
+.avatar-upload .ant-btn:hover {
+  background: #f0f5ff;
+}
+
+/* Review Answers Styles */
+.review-answers {
+  width: 100%;
+  padding: 0 0 20px;
+}
+
+.quiz-history-list .ant-list-item {
+  padding: 16px 24px;
+  background: #fff;
+  border-radius: 12px;
+  margin-bottom: 16px;
+  border: 1px solid #e2e8f0;
+  transition: all 0.2s ease;
+}
+
+.quiz-history-list .ant-list-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.quiz-stats {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.correct-count {
+  color: #4a5568;
+  font-size: 14px;
+}
+
+.review-button {
+  border-radius: 20px;
+}
+
+/* Tabs Styles */
+.profile-tabs {
+  margin-top: 20px;
+  width: 100%;
+}
+
+.profile-tabs .ant-tabs-nav {
+  margin-bottom: 24px;
+}
+
+.profile-tabs .ant-tabs-tab {
+  padding: 12px 24px;
+  margin: 0 16px 0 0;
+  transition: all 0.2s ease;
+}
+
+.profile-tabs .ant-tabs-tab-active {
+  background: #f7fafc;
+  border-radius: 8px;
+}
+
+/* Achievements Dashboard Styles */
+.achievements-dashboard {
+  width: 100%;
+  padding: 20px 0;
+}
+
+.section-title {
+  font-size: 24px;
+  color: #2d3748;
+  margin: 32px 0 24px;
+}
+
+.stat-card {
+  height: 100%;
+  text-align: center;
+  border-radius: 16px;
+  transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.stat-icon {
+  margin-bottom: 12px;
+}
+
+.stat-value {
+  font-size: 24px;
+}
+
+.achievement-card {
+  height: 100%;
+  border-radius: 16px;
+  transition: all 0.3s ease;
+}
+
+.achievement-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.achievement-card.locked {
+  opacity: 0.7;
+  background-color: #f7fafc;
+}
+
+.achievement-content {
+  text-align: center;
+  padding: 16px;
+}
+
+.achievement-badge {
+  width: 80px;
+  height: 80px;
+  margin-bottom: 16px;
+}
+
+.achievement-content h3 {
+  margin: 0 0 8px;
+  color: #2d3748;
+  font-size: 18px;
+}
+
+.achievement-content p {
+  color: #718096;
+  margin-bottom: 16px;
+  font-size: 14px;
+}
+
+/* Loading and Error States */
+.profile-loading,
+.profile-error {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: rgba(0, 0, 0, 0.5);
-  border-bottom-left-radius: 100px;
-  border-bottom-right-radius: 100px;
+  min-height: 400px;
 }
 
+.profile-error {
+  color: #e53e3e;
+  text-align: center;
+  font-size: 16px;
+}
 
-.overlay button {
-  width: 100px;
-  height: 20px;
-  background-color: #8692a6;
-  box-shadow: none;
-  font-family: "Poppins", sans-serif;
-  border: none;
-  border-radius: 30px;
-  color: #ffffff;
-  margin-bottom: 10px;
+/* Disabled input styles */
+.ant-input[disabled] {
+  color: #4a5568 !important;
+  cursor: not-allowed;
+  background-color: #f7fafc !important;
+}
+
+/* Responsive Styles */
+@media (max-width: 1024px) {
+  .profile-content {
+    padding: 80px 16px 32px;
+  }
+
+  .profile-card {
+    padding: 24px;
+  }
+
+  .profile-title {
+    font-size: 28px;
+  }
+}
+
+@media (max-width: 768px) {
+  .profile-content {
+    padding: 60px 12px 24px;
+  }
+
+  .profile-details {
+    padding: 10px 0;
+  }
+
+  .profile-details-container {
+    flex-direction: column;
+  }
+
+  .avatar-section {
+    max-width: 100%;
+    margin-bottom: 2rem;
+  }
+
+  .avatar-wrapper {
+    width: 250px;
+    height: 250px;
+  }
+
+  .form-section {
+    width: 100%;
+    padding: 0;
+  }
+
+  .profile-form .ant-input {
+    height: 40px;
+  }
+
+  .update-button {
+    height: 40px;
+  }
+
+  .quiz-history-list .ant-list-item {
+    padding: 12px 16px;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .quiz-stats {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .review-button {
+    width: 100%;
+    margin-top: 12px;
+  }
+
+  .achievements-dashboard {
+    padding: 16px 0;
+  }
+
+  .section-title {
+    font-size: 20px;
+    margin: 24px 0 16px;
+  }
+
+  .stat-card {
+    margin-bottom: 16px;
+  }
+
+  .achievement-badge {
+    width: 60px;
+    height: 60px;
+  }
+
+  .achievement-content h3 {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .profile-card {
+    padding: 16px;
+  }
+
+  .profile-title {
+    font-size: 24px;
+  }
+
+  .profile-tabs .ant-tabs-tab {
+    padding: 8px 16px;
+    margin: 0 8px 0 0;
+  }
+
+  .avatar-wrapper {
+    width: 200px;
+    height: 200px;
+  }
+
+  .profile-form {
+    padding: 0;
+  }
+
+  .stat-value {
+    font-size: 20px;
+  }
+
+  .achievement-content {
+    padding: 12px;
+  }
 }
