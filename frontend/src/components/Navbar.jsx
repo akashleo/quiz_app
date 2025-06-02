@@ -10,7 +10,7 @@ import {
   QuestionCircleOutlined,
   DownOutlined
 } from "@ant-design/icons";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { logOut } from "../store/slices/auth/AuthSlice";
 import SuccessModal from "./SuccessModal";
 import "./components.css";
@@ -22,6 +22,7 @@ const Navbar = () => {
   const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { userInfo } = useSelector((state) => state.auth);
 
   const showModal = () => {
     setOpen(true);
@@ -64,20 +65,27 @@ const Navbar = () => {
     }
   ];
 
-  const getMobileMenuItems = () => [
-    {
-      key: 'start',
-      icon: <PlayCircleOutlined />,
-      label: 'Start Quiz',
-      onClick: startQuiz
-    },
-    {
-      key: 'question-bank',
-      icon: <QuestionCircleOutlined />,
-      label: 'Question Bank',
-      onClick: navigateQuestionBank
+  const getMobileMenuItems = () => {
+    const items = [
+      {
+        key: 'start',
+        icon: <PlayCircleOutlined />,
+        label: 'Start Quiz',
+        onClick: startQuiz
+      }
+    ];
+
+    if (userInfo?.role === 'admin') {
+      items.push({
+        key: 'question-bank',
+        icon: <QuestionCircleOutlined />,
+        label: 'Question Bank',
+        onClick: navigateQuestionBank
+      });
     }
-  ];
+
+    return items;
+  };
 
   return (
     <Header className="navbar sticky">
@@ -106,18 +114,21 @@ const Navbar = () => {
 
         {/* Navigation Buttons - Hidden on mobile */}
         <Col xs={0} sm={6} md={8} className="nav-buttons">
+          {userInfo?.role === 'admin' && (
+            <Button
+              type="text"
+              icon={<QuestionCircleOutlined />}
+              onClick={navigateQuestionBank}
+              className="desktop-only"
+            >
+              Question Bank
+            </Button>
+          )}
           <Button
-            type="primary"
-            icon={<QuestionCircleOutlined />}
-            className="question-bank-button"
-            onClick={navigateQuestionBank}
-          >
-            Question Bank
-          </Button>
-          <Button
-            type="primary"
-            className="start-button"
+            type="text"
+            icon={<PlayCircleOutlined />}
             onClick={startQuiz}
+            className="desktop-only"
           >
             Start Quiz
           </Button>

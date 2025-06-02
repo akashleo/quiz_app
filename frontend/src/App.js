@@ -11,6 +11,7 @@ import SignupPage from "./pages/Login/SignUp";
 import QuestionBank from "./pages/QuestionBank/QuestionBank";
 import ArchivedQuestions from "./pages/QuestionBank/ArchivedQuestions";
 import GoogleAuthCallback from "./pages/Auth/GoogleAuthCallback";
+import PrivateRoute from "./components/PrivateRoute";
 import { useSelector } from "react-redux";
 
 function App() {
@@ -32,9 +33,21 @@ function App() {
           <Route
             exact
             path="/question/archive"
-            element={<ArchivedQuestions />}
+            element={
+              <PrivateRoute requiredRole="admin">
+                <ArchivedQuestions />
+              </PrivateRoute>
+            }
           />
-          <Route exact path="/question" element={<QuestionBank />} />
+          <Route
+            exact
+            path="/question"
+            element={
+              <PrivateRoute requiredRole="admin">
+                <QuestionBank />
+              </PrivateRoute>
+            }
+          />
         </Routes>
       </Router>
     </>
