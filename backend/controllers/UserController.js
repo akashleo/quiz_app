@@ -2,6 +2,15 @@ import Profile from "../model/Profile.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
+const getJwtSecret = () => {
+  const secret = process.env.JWT_SECRET;
+  if (!secret) {
+    console.warn('WARNING: JWT_SECRET not found in environment variables, using fallback key');
+    return "yourFallbackSecretKey";
+  }
+  return secret;
+};
+
 export const getAllUser = async (req, res, next) => {
   let users;
   try {
@@ -94,7 +103,13 @@ export const login = async (req, res, next) => {
       return res.status(400).json({ message: "Incorrect Password", status: 400 });
     }
 
-    const token = jwt.sign({ sub: email }, "secretkey");
+    const secret = getJwtSecret();
+    
+    const token = jwt.sign(
+      { id: existingUser._id, email: existingUser.email, role: existingUser.role },
+      secret,
+      { expiresIn: '1h' }
+    );
     
     const { password: _, ...userWithoutPassword } = existingUser.toObject();
 

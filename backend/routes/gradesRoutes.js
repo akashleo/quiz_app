@@ -1,5 +1,6 @@
 import express from "express";
 const gradeRouter = express.Router();
+import { authenticateToken, authorizeRole } from "../middleware/authMiddleware.js";
 import {
   getAllGrades,
   addGrade,
@@ -11,11 +12,14 @@ import {
 
 //const ProfileControllers = require("../controllers/ProfileController");
 
-gradeRouter.get("/", getAllGrades);
+// Admin access to get all grades
+gradeRouter.get("/", authenticateToken, authorizeRole(['admin']), getAllGrades);
 //gradeRouter.get("/:id", getProfileById);
-gradeRouter.post("/", addGrade);
-gradeRouter.put("/:id", updateGrade);
-gradeRouter.delete("/:id", deleteGrade);
+
+// Authenticated operations for grades
+gradeRouter.post("/", authenticateToken, addGrade);
+gradeRouter.put("/:id", authenticateToken, updateGrade);
+gradeRouter.delete("/:id", authenticateToken, deleteGrade);
 
 //module.exports = gradeRouter;
 

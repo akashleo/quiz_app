@@ -4,91 +4,75 @@ import { errorHandler } from "../../ErrorHandler";
 
 export const addQuestion = createAsyncThunk(
   "addQuestions",
-  async (body, { rejectWithValue }) => {
+  async (body, { rejectWithValue, dispatch }) => {
     try {
       const { data } = await apiConfig.post("questions", body);
-      const resMsg = "error";
       if (data) {
         return data;
       } else {
-        return rejectWithValue(resMsg);
+        return rejectWithValue("Failed to add question");
       }
     } catch (error) {
-      //console.clear()
-      const statusCode = error.response.data.error.status;
-      if (statusCode === 412) {
-        return rejectWithValue(
-          error.response.data.error["validationErrors"][0].msg
-        );
-      } else {
-        return rejectWithValue(error.response.data.error.msg);
-      }
+      return rejectWithValue(errorHandler(error, dispatch));
     }
   }
 );
 
 export const updateQuestion = createAsyncThunk(
   "updateQuestion",
-  async (req, { dispatch }) => {
+  async (req, { rejectWithValue, dispatch }) => {
     try {
       const { data } = await apiConfig.put(`questions/${req.id}`, req.body);
       if (data) {
         return data;
       } else {
-        return "Error on response";
+        return rejectWithValue("Failed to update question");
       }
     } catch (error) {
-      return "Error on catch";
+      return rejectWithValue(errorHandler(error, dispatch));
     }
   }
 );
 
 export const fetchQuestionById = createAsyncThunk(
   "questions/fetchById",
-  async (id, { rejectWithValue }) => {
+  async (id, { rejectWithValue, dispatch }) => {
     try {
       const response = await apiConfig.get(`/questions/${id}`);
       return response.data;
     } catch (error) {
-      // Check if the error response has a data property
-      if (error.response && error.response.data) {
-        return rejectWithValue(error.response.data);
-      } else {
-        // Return a generic error message
-        return rejectWithValue({
-          message: "An error occurred while fetching the question.",
-        });
-      }
+      return rejectWithValue(errorHandler(error, dispatch));
     }
   }
 );
 
-export const deleteQuestion = createAsyncThunk("deleteQuestion", async (id) => {
-  try {
-    const { data } = await apiConfig.delete(`questions/${id}`);
-    if (data) {
-      return data;
-    } else {
-      return "Error on response";
+export const deleteQuestion = createAsyncThunk(
+  "deleteQuestion", 
+  async (id, { rejectWithValue, dispatch }) => {
+    try {
+      const { data } = await apiConfig.delete(`questions/${id}`);
+      if (data) {
+        return data;
+      } else {
+        return rejectWithValue("Failed to delete question");
+      }
+    } catch (error) {
+      return rejectWithValue(errorHandler(error, dispatch));
     }
-  } catch (error) {
-    return "Error on catch";
   }
-});
+);
 
 export const getAllQuestions = createAsyncThunk(
   "getQuestions",
   async (body, { rejectWithValue, dispatch }) => {
     try {
       const { data } = await apiConfig.get("questions", body);
-      const resMsg = "error";
       if (data) {
         return data.questions;
       } else {
-        return rejectWithValue(resMsg);
+        return rejectWithValue("Failed to fetch questions");
       }
     } catch (error) {
-      //console.clear()
       return rejectWithValue(errorHandler(error, dispatch));
     }
   }
@@ -99,14 +83,12 @@ export const getAllArchivedQuestions = createAsyncThunk(
   async (body, { rejectWithValue, dispatch }) => {
     try {
       const { data } = await apiConfig.get("questions/archived", body);
-      const resMsg = "error";
       if (data) {
         return data.questions;
       } else {
-        return rejectWithValue(resMsg);
+        return rejectWithValue("Failed to fetch archived questions");
       }
     } catch (error) {
-      //console.clear()
       return rejectWithValue(errorHandler(error, dispatch));
     }
   }
@@ -114,16 +96,16 @@ export const getAllArchivedQuestions = createAsyncThunk(
 
 export const bulkLoadQuestions = createAsyncThunk(
   "bulkLoadQuestions",
-  async (body) => {
+  async (body, { rejectWithValue, dispatch }) => {
     try {
       const { data } = await apiConfig.post("questions/bulk", body);
       if (data) {
         return data;
       } else {
-        return "error";
+        return rejectWithValue("Failed to bulk load questions");
       }
     } catch (error) {
-      return "error";
+      return rejectWithValue(errorHandler(error, dispatch));
     }
   }
 );

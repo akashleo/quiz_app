@@ -7,8 +7,7 @@
 /backend/node_modules
 /backend/myKey.json
 
-/backend/.env
-/frontend/.env
+
 
 # testing
 /coverage
@@ -42,3 +41,9 @@ next-env.d.ts
 
 # Local Netlify folder
 .netlify
+
+# Environment variables
+/frontend/.env
+/frontend/.env.*
+/backend/.env
+/backend/.env.*
