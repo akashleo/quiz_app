@@ -129,7 +129,6 @@ const Dashboard = () => {
 
               {/* Achievements Section */}
               <div className="achievements-section">
-                <h2>Achievements</h2>
                 {Object.keys(emojiMap).length === 0 ? (
                   <div className="no-achievements">
                     <p>Complete quizzes to earn achievements!</p>

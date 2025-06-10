@@ -1,5 +1,6 @@
 import express from "express";
 const profileRouter = express.Router();
+import { authenticateToken, authorizeRole } from "../middleware/authMiddleware.js";
 import {
   getAllProfiles,
   getProfileById,
@@ -12,11 +13,16 @@ import {
 
 //const ProfileControllers = require("../controllers/ProfileController");
 
-profileRouter.get("/", getAllProfiles);
-profileRouter.get("/:id", getProfileById);
-profileRouter.post("/", addProfile);
-profileRouter.put("/:id", updateProfile);
-profileRouter.delete("/:id", deleteProfile);
+// Admin access to get all profiles
+profileRouter.get("/", authenticateToken, authorizeRole(['admin']), getAllProfiles);
+
+// Authenticated users can view and update their own profiles
+profileRouter.get("/:id", authenticateToken, getProfileById);
+profileRouter.put("/:id", authenticateToken, updateProfile);
+
+// Admin operations
+profileRouter.post("/", authenticateToken, authorizeRole(['admin']), addProfile);
+profileRouter.delete("/:id", authenticateToken, authorizeRole(['admin']), deleteProfile);
 
 //module.exports = profileRouter;
 

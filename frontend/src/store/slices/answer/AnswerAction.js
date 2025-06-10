@@ -1,68 +1,51 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import apiConfig from "../../../AxiosConfig";
+import { errorHandler } from "../../ErrorHandler";
 
 export const createNewAnswer = createAsyncThunk(
   "createNewAnswer",
-  async (body, { rejectWithValue }) => {
+  async (body, { rejectWithValue, dispatch }) => {
     try {
       const { data } = await apiConfig.post("answer", body);
-      const resMsg = "error";
       if (data) {
         return data;
       } else {
-        return rejectWithValue(resMsg);
+        return rejectWithValue("Failed to create answer");
       }
     } catch (error) {
-      const statusCode = error.response.data.error.status;
-      if (statusCode === 412) {
-        return rejectWithValue(
-          error.response.data.error["validationErrors"][0].msg
-        );
-      } else {
-        return rejectWithValue(error.response.data.error.msg);
-      }
+      return rejectWithValue(errorHandler(error, dispatch));
     }
   }
 );
 
 export const updateAnswer = createAsyncThunk(
   "updateAnswer",
-  async (req, { dispatch }) => {
+  async (req, { rejectWithValue, dispatch }) => {
     try {
       const { data } = await apiConfig.put(`answer/${req.id}`, req.body);
       if (data) {
         return data;
       } else {
-        return "Error on response";
+        return rejectWithValue("Failed to update answer");
       }
     } catch (error) {
-      const statusCode = error.response.data.error.status;
-      if (statusCode === 412) {
-        return "Error on response";
-      } else {
-        return "Error on response";
-      }
+      return rejectWithValue(errorHandler(error, dispatch));
     }
   }
 );
 
 export const submitAnswer = createAsyncThunk(
   "submitAnswer",
-  async (req, { dispatch }) => {
+  async (req, { rejectWithValue, dispatch }) => {
     try {
       const { data } = await apiConfig.put(`answer/submit/${req.id}`, req.body);
       if (data) {
         return data;
       } else {
-        return "Error on response";
+        return rejectWithValue("Failed to submit answer");
       }
     } catch (error) {
-      const statusCode = error.response.data.error.status;
-      if (statusCode === 412) {
-        return "Error on response";
-      } else {
-        return "Error on response";
-      }
+      return rejectWithValue(errorHandler(error, dispatch));
     }
   }
 );
