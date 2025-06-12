@@ -1,5 +1,5 @@
 import express from "express";
-import { getAllUser, signup, login } from "../controllers/UserController.js";
+import { getAllUser, signup, login, sendOtp, verifyOtp } from "../controllers/UserController.js";
 import passport from 'passport';
 import jwt from 'jsonwebtoken';
 import { authenticateToken, authorizeRole } from "../middleware/authMiddleware.js";
@@ -47,5 +47,9 @@ userRouter.get('/auth/google/callback',
     res.redirect(`${frontendCallbackUrl}?token=${token}&user=${userStr}`);
   }
 );
+
+// OTP verification routes
+userRouter.post('/verify/send-otp', sendOtp);
+userRouter.post('/verify/validate-otp', verifyOtp);
 
 export default userRouter;
