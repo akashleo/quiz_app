@@ -134,21 +134,25 @@ const Navbar = () => {
           </Button>
         </Col>
 
-        {/* Avatar and Dropdown - Hidden on mobile */}
-        <Col xs={0} sm={4} md={4} className="avatar-container">
-          <Dropdown 
-            menu={{ items: userMenuItems }} 
-            trigger={['click']}
-            placement="bottomRight"
+        {/* Profile and Logout Buttons - Hidden on mobile */}
+        <Col xs={0} sm={4} md={4} className="nav-buttons">
+          <Button
+            type="text"
+            icon={<UserOutlined />}
+            onClick={openProfile}
+            className="desktop-only"
           >
-            <div className="avatar-dropdown">
-              <Avatar 
-                className="avatar-navbar" 
-                src={<img src={"https://www.w3schools.com/howto/img_avatar.png"} alt="avatar" />} 
-              />
-              <DownOutlined className="dropdown-icon" />
-            </div>
-          </Dropdown>
+            Profile
+          </Button>
+          <Button
+            type="text"
+            icon={<LogoutOutlined />}
+            onClick={handleLogout}
+            className="desktop-only"
+            danger
+          >
+            Logout
+          </Button>
         </Col>
 
         {/* Mobile Search Icon */}
