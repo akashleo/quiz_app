@@ -3,39 +3,48 @@ import { Form, Input, Button, Upload, message, Spin } from 'antd';
 import { UserOutlined, MailOutlined, UploadOutlined, CameraOutlined } from '@ant-design/icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateProfile } from '../../store/slices/profile/ProfileAction';
+import { fileUpload } from '../../store/slices/file/FileAction';
 import defaultAvatar from '../../assets/questionmark.png';
+import './Profile.css';
 
-const ProfileDetails = () => {
+const ProfileDetails = ({ singleProfile, loading, error }) => {
   const dispatch = useDispatch();
   const [form] = Form.useForm();
-  const { singleProfile, loading, error } = useSelector((state) => state.profile);
   const [imageUrl, setImageUrl] = useState(defaultAvatar);
   const [uploadLoading, setUploadLoading] = useState(false);
+  const { currentFileUrl } = useSelector((state) => state.file);
 
   useEffect(() => {
-    if (singleProfile?.profilePicture) {
-      setImageUrl(singleProfile.profilePicture);
+    if (singleProfile?.image) {
+      setImageUrl(singleProfile.image);
     }
     
     // Update form with profile data
     form.setFieldsValue({
-      name: singleProfile?.name || '',
+      fullName: singleProfile?.fullName || '',
       email: singleProfile?.email || '',
     });
   }, [singleProfile, form]);
 
-  const onFinish = async (values) => {
+  useEffect(() => {
+    if (currentFileUrl?.url) {
+      setImageUrl(currentFileUrl.url);
+      // Automatically update profile with new image
+      handleProfileUpdate({ image: currentFileUrl.url });
+    }
+  }, [currentFileUrl]);
+
+  const handleProfileUpdate = async (updateData) => {
     try {
-      const updateData = {
+      const result = await dispatch(updateProfile({
         id: singleProfile._id,
         body: {
-          name: values.name,
-          email: values.email,
-          profilePicture: imageUrl !== defaultAvatar ? imageUrl : singleProfile?.profilePicture,
+          ...updateData,
+          fullName: form.getFieldValue('fullName'),
+          email: form.getFieldValue('email'),
         }
-      };
-
-      const result = await dispatch(updateProfile(updateData)).unwrap();
+      })).unwrap();
+      
       if (result) {
         message.success('Profile updated successfully!');
       }
@@ -44,17 +53,27 @@ const ProfileDetails = () => {
     }
   };
 
-  const handleImageUpload = (info) => {
-    if (info.file.status === 'uploading') {
+  const onFinish = (values) => {
+    handleProfileUpdate({
+      fullName: values.fullName,
+      email: values.email,
+      image: imageUrl !== defaultAvatar ? imageUrl : singleProfile?.image,
+    });
+  };
+
+  const handleImageUpload = async (info) => {
+    const file = info.file.originFileObj;
+    if (!file) return;
+
+    try {
       setUploadLoading(true);
-      return;
-    }
-    if (info.file.status === 'done') {
+      const formData = new FormData();
+      formData.append('file', file);
+      await dispatch(fileUpload(formData)).unwrap();
+    } catch (error) {
+      message.error('Failed to upload image');
+    } finally {
       setUploadLoading(false);
-      // In a real application, you would upload to a server and get back a URL
-      // For now, we'll use local file URL
-      setImageUrl(URL.createObjectURL(info.file.originFileObj));
-      message.success('Profile picture updated successfully!');
     }
   };
 
@@ -81,13 +100,21 @@ const ProfileDetails = () => {
           <Upload
             name="avatar"
             showUploadList={false}
-            onChange={handleImageUpload}
+            beforeUpload={(file) => {
+              handleImageUpload({ file: { originFileObj: file } });
+              return false; // Prevent default upload behavior
+            }}
             className="avatar-upload"
           >
             <div className="avatar-wrapper">
-              <img src={imageUrl} alt="Profile" className="profile-avatar" />
+              <img 
+                src={imageUrl} 
+                alt="Profile" 
+                className="profile-avatar" 
+              />
               <div className="avatar-overlay">
                 <CameraOutlined className="avatar-overlay-icon" />
+                {uploadLoading && <Spin className="upload-spinner" />}
               </div>
             </div>
           </Upload>
@@ -101,13 +128,14 @@ const ProfileDetails = () => {
             className="profile-form"
           >
             <Form.Item
-              name="name"
+              name="fullName"
               label="Full Name"
               rules={[{ required: true, message: 'Please input your name!' }]}
             >
               <Input 
                 prefix={<UserOutlined style={{ color: '#8692a6' }} />} 
                 placeholder="Enter your name"
+                className="input-box"
               />
             </Form.Item>
 
@@ -122,6 +150,7 @@ const ProfileDetails = () => {
               <Input 
                 prefix={<MailOutlined style={{ color: '#8692a6' }} />} 
                 placeholder="Enter your email" 
+                className="input-box"
                 disabled 
               />
             </Form.Item>
