@@ -1,8 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { login, signup } from "./AuthActions";
+import { login, signup, refreshToken } from "./AuthActions";
 
 const authToken = localStorage.getItem("authToken")
   ? localStorage.getItem("authToken")
+  : null;
+const refreshTokenStored = localStorage.getItem("refreshToken")
+  ? localStorage.getItem("refreshToken")
   : null;
 const currentUserId = localStorage.getItem("authId")
   ? localStorage.getItem("authId")
@@ -11,6 +14,7 @@ const currentUserId = localStorage.getItem("authId")
 const initialState = {
   loading: false,
   authToken,
+  refreshToken: refreshTokenStored,
   error: null,
   responseData: null,
   success: false,
@@ -25,9 +29,11 @@ const authSlice = createSlice({
   reducers: {
     logOut: (state) => {
       localStorage.removeItem("authToken");
+      localStorage.removeItem("refreshToken");
       localStorage.removeItem("authId");
       state.loading = false;
       state.authToken = null;
+      state.refreshToken = null;
       state.error = null;
       state.responseData = null;
       state.userInfo = null;
@@ -50,6 +56,9 @@ const authSlice = createSlice({
       state.authToken = action.payload;
       state.tokenValidity = true;
     },
+    setRefreshToken: (state, action) => {
+      state.refreshToken = action.payload;
+    },
     setUser: (state, action) => {
       state.userInfo = action.payload;
       state.currentUserId = action.payload._id;
@@ -65,6 +74,7 @@ const authSlice = createSlice({
     builder.addCase(login.fulfilled, (state, action) => {
       state.loading = false;
       state.authToken = action.payload.token;
+      state.refreshToken = action.payload.refreshToken;
       state.currentUserId = action.payload.user._id;
       state.userInfo = action.payload.user;
       state.tokenValidity = true;
@@ -75,6 +85,26 @@ const authSlice = createSlice({
       state.error = action.payload;
       state.responseData = "Invalid User";
       state.success = false;
+    });
+    builder.addCase(refreshToken.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(refreshToken.fulfilled, (state, action) => {
+      state.loading = false;
+      state.authToken = action.payload.token;
+      state.refreshToken = action.payload.refreshToken;
+      state.tokenValidity = true;
+      state.error = null;
+    });
+    builder.addCase(refreshToken.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+      state.authToken = null;
+      state.refreshToken = null;
+      state.tokenValidity = false;
+      state.currentUserId = null;
+      state.userInfo = null;
     });
     builder.addCase(signup.pending, (state, payload) => {
       state.loading = true;
@@ -94,12 +124,14 @@ const authSlice = createSlice({
     });
   },
 });
+
 export const { 
   logOut, 
   clearState, 
   isTokenValid, 
   setResponsedata,
   setToken,
+  setRefreshToken,
   setUser
 } = authSlice.actions;
 

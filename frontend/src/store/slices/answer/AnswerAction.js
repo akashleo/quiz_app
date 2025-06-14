@@ -49,3 +49,19 @@ export const submitAnswer = createAsyncThunk(
     }
   }
 );
+
+export const getReviewedAnswers = createAsyncThunk(
+  "getReviewedAnswers",
+  async (profileId, { rejectWithValue, dispatch }) => {
+    try {
+      const { data } = await apiConfig.get(`answer/${profileId}`);
+      if (data) {
+        return data;
+      } else {
+        return rejectWithValue("Failed to fetch reviewed answers");
+      }
+    } catch (error) {
+      return rejectWithValue(errorHandler(error, dispatch));
+    }
+  }
+);

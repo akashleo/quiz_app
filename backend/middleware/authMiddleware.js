@@ -27,6 +27,15 @@ export const authenticateToken = (req, res, next) => {
         errorName: err.name,
         errorStack: err.stack
       });
+      
+      // Handle specific JWT errors
+      if (err.name === 'TokenExpiredError') {
+        return res.status(401).json({ 
+          message: "Token has expired. Please login again.",
+          error: "TOKEN_EXPIRED"
+        });
+      }
+      
       return res.status(403).json({ 
         message: "Forbidden: Invalid token",
         error: err.message 

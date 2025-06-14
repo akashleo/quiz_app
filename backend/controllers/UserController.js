@@ -105,10 +105,18 @@ export const login = async (req, res, next) => {
 
     const secret = getJwtSecret();
     
+    // Generate access token with longer expiration (24 hours)
     const token = jwt.sign(
       { id: existingUser._id, email: existingUser.email, role: existingUser.role },
       secret,
-      { expiresIn: '1h' }
+      { expiresIn: '24h' }
+    );
+
+    // Generate refresh token (7 days)
+    const refreshToken = jwt.sign(
+      { id: existingUser._id },
+      secret,
+      { expiresIn: '7d' }
     );
     
     const { password: _, ...userWithoutPassword } = existingUser.toObject();
@@ -116,6 +124,7 @@ export const login = async (req, res, next) => {
     return res.status(200).json({
       message: "Login Successful",
       token,
+      refreshToken,
       user: userWithoutPassword,
       status: 200
     });
@@ -125,6 +134,55 @@ export const login = async (req, res, next) => {
     return res.status(500).json({
       message: "Error during login",
       error: err.message
+    });
+  }
+};
+
+export const refreshToken = async (req, res) => {
+  const { refreshToken } = req.body;
+
+  if (!refreshToken) {
+    return res.status(401).json({ message: "Refresh token is required" });
+  }
+
+  try {
+    const secret = getJwtSecret();
+    
+    // Verify the refresh token
+    const decoded = jwt.verify(refreshToken, secret);
+    
+    // Get user from database
+    const user = await Profile.findById(decoded.id);
+    
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Generate new access token
+    const newToken = jwt.sign(
+      { id: user._id, email: user.email, role: user.role },
+      secret,
+      { expiresIn: '24h' }
+    );
+
+    // Generate new refresh token
+    const newRefreshToken = jwt.sign(
+      { id: user._id },
+      secret,
+      { expiresIn: '7d' }
+    );
+
+    return res.status(200).json({
+      message: "Token refreshed successfully",
+      token: newToken,
+      refreshToken: newRefreshToken
+    });
+
+  } catch (err) {
+    console.error("Token refresh error:", err);
+    return res.status(401).json({ 
+      message: "Invalid refresh token",
+      error: err.message 
     });
   }
 };

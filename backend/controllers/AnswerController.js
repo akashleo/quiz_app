@@ -281,3 +281,93 @@ export const deleteAnswer = async (req, res, next) => {
     .status(201)
     .json({ answer, message: "Answer successfully deleted" });
 };
+
+export const getAllAnswersByProfileId = async (req, res, next) => {
+  const profileId = req.params.id;
+
+  try {
+    // Validate if profileId is a valid MongoDB ObjectId
+    if (!mongoose.Types.ObjectId.isValid(profileId)) {
+      return res.status(400).json({ 
+        message: "Invalid profile ID format" 
+      });
+    }
+
+    // Find all answers for the given profile ID and populate topic details
+    const answers = await Answer.find({ userId: profileId })
+      .populate({
+        path: 'topicId',
+        select: 'name description',
+        model: Topic
+      })
+      .sort({ createdAt: -1 })
+      .lean();
+
+    if (!answers || answers.length === 0) {
+      return res.status(404).json({ 
+        message: "No answers found for this profile" 
+      });
+    }
+
+    // Process each answer
+    const answersWithDetails = await Promise.all(answers.map(async (answer) => {
+      // Get all question IDs from the answers object (not Map since we used .lean())
+      const questionIds = Object.keys(answer.answers)
+        .filter(key => mongoose.Types.ObjectId.isValid(key))
+        .map(id => new mongoose.Types.ObjectId(id));
+
+      // Fetch all questions for this answer
+      const questions = await Question.find({
+        _id: { $in: questionIds }
+      }).select('questionText options isCorrect').lean();
+
+      // Calculate correct answers and prepare reviewed answers
+      let correctCount = 0;
+      const reviewedAnswers = questions.map(question => {
+        const userAnswer = answer.answers[question._id.toString()];
+        const isCorrect = userAnswer && parseInt(userAnswer) === question.isCorrect;
+        if (isCorrect) correctCount++;
+
+        return {
+          questionId: question._id,
+          questionText: question.questionText,
+          userAnswer: userAnswer ? parseInt(userAnswer) : null,
+          correctAnswer: question.isCorrect,
+          options: question.options,
+          isCorrect: isCorrect
+        };
+      });
+
+      // Calculate score percentage
+      const scorePercentage = questions.length > 0 
+        ? Math.round((correctCount / questions.length) * 100) 
+        : 0;
+
+      // Return enhanced answer object
+      return {
+        _id: answer._id,
+        topic: answer.topicId,
+        submittedAt: answer.createdAt,
+        submitted: answer.submitted,
+        reviewedAnswers,
+        score: {
+          correct: correctCount,
+          total: questions.length,
+          percentage: scorePercentage
+        }
+      };
+    }));
+
+    return res.status(200).json({
+      message: "Successfully retrieved answers",
+      data: answersWithDetails
+    });
+
+  } catch (error) {
+    console.error("Error fetching answers by profile ID:", error);
+    return res.status(500).json({
+      message: "An error occurred while fetching answers",
+      error: error.message
+    });
+  }
+};
