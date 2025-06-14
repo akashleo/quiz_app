@@ -46,6 +46,10 @@ const ProfileSchema = new Schema(
     image: {
       type: String,
     },
+    isVerified: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );
