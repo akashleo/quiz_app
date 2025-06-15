@@ -1,12 +1,13 @@
 import "./App.css";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import Login from "./pages/Login/Login";
+import AdminLogin from "./pages/Login/AdminLogin";
+import AdminRegister from "./pages/Login/AdminRegister";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import Topics from "./pages/Topics/Topics";
 import Instructions from "./pages/Instructions/Instructions";
 import AnsweringPanel from "./pages/AnsweringPanel/AnsweringPanel";
 import Profile from "./pages/Profile/Profile";
-import AdminLogin from "./pages/Login/AdminLogin";
 import QuestionBank from "./pages/QuestionBank/QuestionBank";
 import ArchivedQuestions from "./pages/QuestionBank/ArchivedQuestions";
 import GoogleAuthCallback from "./pages/Auth/GoogleAuthCallback";
@@ -21,7 +22,9 @@ function App() {
       <Router>
         <Routes>
           <Route exact path="/" element={<Login />} />
-          <Route exact path="/admin/login" element={<AdminLogin />} />
+          <Route exact path="/login" element={<Login />} />
+          <Route exact path="/admin-login" element={<AdminLogin />} />
+          <Route exact path="/admin-register" element={<AdminRegister />} />
           <Route exact path="/dashboard" element={<Dashboard />} />
           <Route exact path="/profile" element={<Profile />} />
           <Route exact path="/topics" element={<Topics />} />

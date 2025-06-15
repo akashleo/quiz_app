@@ -1,5 +1,5 @@
 import express from "express";
-import { getAllUser, signup, login, refreshToken, sendOtp, verifyOtp } from "../controllers/UserController.js";
+import { getAllUser, login, refreshToken, sendOtp, verifyOtp, requestAdminAccess, approveAdminRequest, rejectAdminRequest } from "../controllers/UserController.js";
 import passport from 'passport';
 import jwt from 'jsonwebtoken';
 import { authenticateToken, authorizeRole } from "../middleware/authMiddleware.js";
@@ -19,7 +19,6 @@ const userRouter = express.Router();
 userRouter.get('/', authenticateToken, authorizeRole(['admin']), getAllUser);
 
 // Public routes
-userRouter.post('/signup', signup);
 userRouter.post('/login', login);
 userRouter.post('/refresh-token', refreshToken);
 
@@ -60,5 +59,10 @@ userRouter.get('/auth/google/callback',
 // OTP verification routes
 userRouter.post('/verify/send-otp', sendOtp);
 userRouter.post('/verify/validate-otp', verifyOtp);
+
+// Admin request routes
+userRouter.post('/admin/request', requestAdminAccess);
+userRouter.patch('/admin/approve/:profileId', authenticateToken, authorizeRole(['admin']), approveAdminRequest);
+userRouter.patch('/admin/reject/:profileId', authenticateToken, authorizeRole(['admin']), rejectAdminRequest);
 
 export default userRouter;

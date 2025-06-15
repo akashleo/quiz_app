@@ -100,7 +100,7 @@ const Navbar = () => {
 
       <Row align="middle" className="navbar-row">
         <Col xs={14} sm={6} md={4} className="quiz-logo" onClick={() => navigate("/dashboard")}>
-          Quiz Game
+          EmoQuiz
         </Col>
         
         {/* Search Bar - Hidden on mobile */}

@@ -50,6 +50,15 @@ const ProfileSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    adminAccessRequested: {
+      type: String,
+      enum: ["PENDING", "APPROVED", "REJECTED", ""],
+      default: "",
+    },
+    authorisedBy: {
+      type: String,
+      default: "",
+    },
   },
   { timestamps: true }
 );

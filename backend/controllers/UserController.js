@@ -2,7 +2,7 @@ import Profile from "../model/Profile.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import Otp from "../model/Otp.js";
-import nodemailer from "nodemailer";
+import { Resend } from 'resend';
 
 const getJwtSecret = () => {
   const secret = process.env.JWT_SECRET;
@@ -18,26 +18,47 @@ const getJwtSecret = () => {
 // Generate a 6-digit numeric OTP
 const generateNumericOtp = () => Math.floor(100000 + Math.random() * 900000).toString();
 
-// Configure nodemailer transporter using environment variables
-const transporter = nodemailer.createTransport({
-  host: process.env.EMAIL_HOST || "smtp.gmail.com",
-  port: process.env.EMAIL_PORT ? parseInt(process.env.EMAIL_PORT) : 465,
-  secure: true,
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-});
-
 // Send OTP email helper
 const sendOtpMail = async (to, otp) => {
-  const mailOptions = {
-    from: process.env.EMAIL_FROM || process.env.EMAIL_USER,
-    to,
-    subject: "Your Verification OTP",
-    html: `<p>Your verification code is: <b>${otp}</b></p><p>This code will expire in 10 minutes.</p>`,
-  };
-  return transporter.sendMail(mailOptions);
+  const resend = new Resend(`${process.env.RESEND_SECRET_KEY}`);
+  // Check if Resend secret key is available
+  if (!process.env.RESEND_SECRET_KEY) {
+    throw new Error('RESEND_SECRET_KEY not configured. Please check your environment variables.');
+  }
+  
+  console.log('Sending email to:', to);
+  console.log('OTP:', otp);
+  console.log('Resend key configured:', process.env.RESEND_SECRET_KEY, process.env.EMAIL_FROM);
+  
+  try {
+    const { data, error } = await resend.emails.send({
+      from: process.env.EMAIL_FROM || 'Emo Quiz <emoquiz@akashghosh.xyz>',
+      to: [to],
+      subject: 'Your Verification OTP',
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+          <h2 style="color: #333;">Email Verification</h2>
+          <p>Your verification code is:</p>
+          <div style="background-color: #f4f4f4; padding: 20px; text-align: center; margin: 20px 0;">
+            <span style="font-size: 32px; font-weight: bold; color: #007bff; letter-spacing: 8px;">${otp}</span>
+          </div>
+          <p style="color: #666;">This code will expire in 10 minutes.</p>
+          <p style="color: #666;">If you didn't request this verification, please ignore this email.</p>
+        </div>
+      `,
+    });
+
+    if (error) {
+      console.error('Resend error:', error);
+      throw new Error(`Failed to send email: ${error.message}`);
+    }
+
+    console.log('Email sent successfully:', data);
+    return data;
+  } catch (err) {
+    console.error('Error sending email with Resend:', err);
+    throw err;
+  }
 };
 
 // ---------------- OTP Controllers ----------------
@@ -164,78 +185,6 @@ const validateEmail = (email) => {
   return regex.test(email);
 };
 
-export const signup = async (req, res, next) => {
-  const { email, role } = req.body;
-
-  if (!validateEmail(email)) {
-    return res.status(403).json({ message: "Invalid email format" });
-  }
-
-  let existingUser;
-
-  try {
-    existingUser = await Profile.findOne({ email });
-  } catch (err) {
-    console.log(err);
-  }
-
-  if (existingUser) {
-    return res
-      .status(400)
-      .json({ message: "Profile already exists, Login instead" });
-  }
-
-  const hashedPassword = bcrypt.hashSync(req.body.password);
-
-  // Set isVerified based on role and signup method
-  const isVerified = role !== "admin"; // Only admins need verification
-
-  const newUser = new Profile({
-    fullName: req.body.fullName,
-    email: req.body.email,
-    password: hashedPassword,
-    level: 1,
-    quizPassed: "0",
-    fastestTime: "",
-    correctAnswers: 0,
-    achievements: [],
-    role: role || "user",
-    available: true,
-    image: "",
-    googleId: req.body.googleId,
-    isVerified
-  });
-
-  try {
-    await newUser.save();
-    
-    const { password, ...userWithoutPassword } = newUser.toObject();
-
-    // For admin users, send verification OTP
-    if (role === "admin") {
-      try {
-        await sendOtp(req, res);
-        return;
-      } catch (err) {
-        console.error("Error sending OTP:", err);
-        // Continue with response even if OTP fails
-      }
-    }
-
-    return res.status(200).json({
-      message: "Profile successfully created",
-      status: 200,
-      user: userWithoutPassword
-    });
-  } catch (err) {
-    console.error("Error creating user:", err);
-    return res.status(500).json({
-      message: "Error creating user",
-      error: err.message
-    });
-  }
-};
-
 export const login = async (req, res, next) => {
   const { email, password } = req.body;
 
@@ -337,6 +286,190 @@ export const refreshToken = async (req, res) => {
     return res.status(401).json({ 
       message: "Invalid refresh token",
       error: err.message 
+    });
+  }
+};
+
+// Admin access request function
+export const requestAdminAccess = async (req, res, next) => {
+  const { email } = req.body;
+
+  if (!validateEmail(email)) {
+    return res.status(403).json({ message: "Invalid email format" });
+  }
+
+  let existingUser;
+
+  try {
+    existingUser = await Profile.findOne({ email });
+  } catch (err) {
+    console.log(err);
+  }
+
+  if (existingUser) {
+    return res
+      .status(400)
+      .json({ message: "Profile already exists, Login instead" });
+  }
+
+  const hashedPassword = bcrypt.hashSync(req.body.password);
+
+  const newUser = new Profile({
+    fullName: req.body.fullName,
+    email: req.body.email,
+    password: hashedPassword,
+    level: 1,
+    quizPassed: "0",
+    fastestTime: "",
+    correctAnswers: 0,
+    achievements: [],
+    role: "user", // Default role as user
+    available: true,
+    image: "",
+    isVerified: false,
+    adminAccessRequested: "PENDING",
+    authorisedBy: ""
+  });
+
+  try {
+    await newUser.save();
+    
+    const { password, ...userWithoutPassword } = newUser.toObject();
+
+    return res.status(200).json({
+      message: "Admin access request submitted successfully",
+      status: 200,
+      user: userWithoutPassword
+    });
+  } catch (err) {
+    console.error("Error creating admin access request:", err);
+    return res.status(500).json({
+      message: "Error creating admin access request",
+      error: err.message
+    });
+  }
+};
+
+// Approve admin access request
+export const approveAdminRequest = async (req, res, next) => {
+  const { profileId } = req.params;
+  const { email } = req.body;
+
+  if (!email || !validateEmail(email)) {
+    return res.status(400).json({ message: "Valid email is required" });
+  }
+
+  if (!profileId) {
+    return res.status(400).json({ message: "Profile ID is required" });
+  }
+
+  try {
+    // Verify the authorizing user has admin role
+    const authorizingUser = await Profile.findOne({ email });
+    if (!authorizingUser) {
+      return res.status(404).json({ message: "Authorizing user not found" });
+    }
+
+    if (authorizingUser.role !== "admin") {
+      return res.status(403).json({ message: "Only admin users can approve requests" });
+    }
+
+    // Find and update the requested profile
+    const profileToUpdate = await Profile.findById(profileId);
+    if (!profileToUpdate) {
+      return res.status(404).json({ message: "Profile not found" });
+    }
+
+    if (profileToUpdate.adminAccessRequested !== "PENDING") {
+      return res.status(400).json({ message: "Request is not in pending state" });
+    }
+
+    // Update the profile
+    const updatedProfile = await Profile.findByIdAndUpdate(
+      profileId,
+      {
+        adminAccessRequested: "APPROVED",
+        authorisedBy: email,
+        role: "admin", // Grant admin role
+        isVerified: true // Admin users should be verified
+      },
+      { new: true }
+    );
+
+    const { password, ...profileWithoutPassword } = updatedProfile.toObject();
+
+    return res.status(200).json({
+      message: "Admin access request approved successfully",
+      status: 200,
+      profile: profileWithoutPassword
+    });
+
+  } catch (err) {
+    console.error("Error approving admin request:", err);
+    return res.status(500).json({
+      message: "Error approving admin request",
+      error: err.message
+    });
+  }
+};
+
+// Reject admin access request
+export const rejectAdminRequest = async (req, res, next) => {
+  const { profileId } = req.params;
+  const { email } = req.body;
+
+  if (!email || !validateEmail(email)) {
+    return res.status(400).json({ message: "Valid email is required" });
+  }
+
+  if (!profileId) {
+    return res.status(400).json({ message: "Profile ID is required" });
+  }
+
+  try {
+    // Verify the authorizing user has admin role
+    const authorizingUser = await Profile.findOne({ email });
+    if (!authorizingUser) {
+      return res.status(404).json({ message: "Authorizing user not found" });
+    }
+
+    if (authorizingUser.role !== "admin") {
+      return res.status(403).json({ message: "Only admin users can reject requests" });
+    }
+
+    // Find and update the requested profile
+    const profileToUpdate = await Profile.findById(profileId);
+    if (!profileToUpdate) {
+      return res.status(404).json({ message: "Profile not found" });
+    }
+
+    if (profileToUpdate.adminAccessRequested !== "PENDING") {
+      return res.status(400).json({ message: "Request is not in pending state" });
+    }
+
+    // Update the profile
+    const updatedProfile = await Profile.findByIdAndUpdate(
+      profileId,
+      {
+        adminAccessRequested: "REJECTED",
+        authorisedBy: email
+      },
+      { new: true }
+    );
+
+    const { password, ...profileWithoutPassword } = updatedProfile.toObject();
+
+    return res.status(200).json({
+      message: "Admin access request rejected",
+      status: 200,
+      profile: profileWithoutPassword
+    });
+
+  } catch (err) {
+    console.error("Error rejecting admin request:", err);
+    return res.status(500).json({
+      message: "Error rejecting admin request",
+      error: err.message
     });
   }
 };
