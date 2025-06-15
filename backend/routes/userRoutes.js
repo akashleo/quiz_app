@@ -1,5 +1,5 @@
 import express from "express";
-import { getAllUser, signup, login } from "../controllers/UserController.js";
+import { getAllUser, login, refreshToken, sendOtp, verifyOtp, requestAdminAccess, approveAdminRequest, rejectAdminRequest } from "../controllers/UserController.js";
 import passport from 'passport';
 import jwt from 'jsonwebtoken';
 import { authenticateToken, authorizeRole } from "../middleware/authMiddleware.js";
@@ -19,8 +19,8 @@ const userRouter = express.Router();
 userRouter.get('/', authenticateToken, authorizeRole(['admin']), getAllUser);
 
 // Public routes
-userRouter.post('/signup', signup);
 userRouter.post('/login', login);
+userRouter.post('/refresh-token', refreshToken);
 
 // Route to initiate Google authentication
 userRouter.get('/auth/google',
@@ -35,17 +35,34 @@ userRouter.get('/auth/google/callback',
     // req.user here comes from googleStrategy and should already have the role.
     const secret = getJwtSecret();
     
+    // Generate access token with longer expiration (24 hours)
     const token = jwt.sign(
       { id: req.user._id, email: req.user.email, role: req.user.role }, 
       secret,
-      { expiresIn: '1h' }
+      { expiresIn: '24h' }
+    );
+
+    // Generate refresh token (7 days)
+    const refreshTokenValue = jwt.sign(
+      { id: req.user._id },
+      secret,
+      { expiresIn: '7d' }
     );
     
     const userStr = encodeURIComponent(JSON.stringify(req.user));
     
     const frontendCallbackUrl = process.env.FRONTEND_CALLBACK_URL || 'http://localhost:3000/auth/google/callback';
-    res.redirect(`${frontendCallbackUrl}?token=${token}&user=${userStr}`);
+    res.redirect(`${frontendCallbackUrl}?token=${token}&refreshToken=${refreshTokenValue}&user=${userStr}`);
   }
 );
+
+// OTP verification routes
+userRouter.post('/verify/send-otp', sendOtp);
+userRouter.post('/verify/validate-otp', verifyOtp);
+
+// Admin request routes
+userRouter.post('/admin/request', requestAdminAccess);
+userRouter.patch('/admin/approve/:profileId', authenticateToken, authorizeRole(['admin']), approveAdminRequest);
+userRouter.patch('/admin/reject/:profileId', authenticateToken, authorizeRole(['admin']), rejectAdminRequest);
 
 export default userRouter;

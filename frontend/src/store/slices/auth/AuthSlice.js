@@ -1,8 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { login, signup } from "./AuthActions";
+import { login, adminRegister, adminApproved, adminRejected, refreshToken, sendOtp, verifyOtp } from "./AuthActions";
 
 const authToken = localStorage.getItem("authToken")
   ? localStorage.getItem("authToken")
+  : null;
+const refreshTokenStored = localStorage.getItem("refreshToken")
+  ? localStorage.getItem("refreshToken")
   : null;
 const currentUserId = localStorage.getItem("authId")
   ? localStorage.getItem("authId")
@@ -11,12 +14,18 @@ const currentUserId = localStorage.getItem("authId")
 const initialState = {
   loading: false,
   authToken,
+  refreshToken: refreshTokenStored,
   error: null,
   responseData: null,
   success: false,
   userInfo: null,
   currentUserId: currentUserId,
   tokenValidity: authToken ? true : false,
+  // OTP related state
+  otpLoading: false,
+  otpSent: false,
+  otpVerified: false,
+  otpError: null,
 };
 
 const authSlice = createSlice({
@@ -25,9 +34,11 @@ const authSlice = createSlice({
   reducers: {
     logOut: (state) => {
       localStorage.removeItem("authToken");
+      localStorage.removeItem("refreshToken");
       localStorage.removeItem("authId");
       state.loading = false;
       state.authToken = null;
+      state.refreshToken = null;
       state.error = null;
       state.responseData = null;
       state.userInfo = null;
@@ -40,6 +51,12 @@ const authSlice = createSlice({
       state.error = null;
       state.success = false;
     },
+    clearOtpState: (state) => {
+      state.otpLoading = false;
+      state.otpSent = false;
+      state.otpVerified = false;
+      state.otpError = null;
+    },
     isTokenValid: (state, action) => {
       state.tokenValidity = action.payload;
     },
@@ -49,6 +66,9 @@ const authSlice = createSlice({
     setToken: (state, action) => {
       state.authToken = action.payload;
       state.tokenValidity = true;
+    },
+    setRefreshToken: (state, action) => {
+      state.refreshToken = action.payload;
     },
     setUser: (state, action) => {
       state.userInfo = action.payload;
@@ -65,6 +85,7 @@ const authSlice = createSlice({
     builder.addCase(login.fulfilled, (state, action) => {
       state.loading = false;
       state.authToken = action.payload.token;
+      state.refreshToken = action.payload.refreshToken;
       state.currentUserId = action.payload.user._id;
       state.userInfo = action.payload.user;
       state.tokenValidity = true;
@@ -76,30 +97,115 @@ const authSlice = createSlice({
       state.responseData = "Invalid User";
       state.success = false;
     });
-    builder.addCase(signup.pending, (state, payload) => {
+    builder.addCase(refreshToken.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(refreshToken.fulfilled, (state, action) => {
+      state.loading = false;
+      state.authToken = action.payload.token;
+      state.refreshToken = action.payload.refreshToken;
+      state.tokenValidity = true;
+      state.error = null;
+    });
+    builder.addCase(refreshToken.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+      state.authToken = null;
+      state.refreshToken = null;
+      state.tokenValidity = false;
+      state.currentUserId = null;
+      state.userInfo = null;
+    });
+    builder.addCase(adminRegister.pending, (state, payload) => {
       state.loading = true;
       state.error = null;
       state.success = false;
     });
-    builder.addCase(signup.fulfilled, (state, action) => {
+    builder.addCase(adminRegister.fulfilled, (state, action) => {
       state.loading = false;
       state.success = true;
       state.currentUserId = action.payload.user._id;
       state.userInfo = action.payload.user;
     });
-    builder.addCase(signup.rejected, (state, action) => {
+    builder.addCase(adminRegister.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload;
       state.success = false;
     });
+    builder.addCase(adminApproved.pending, (state, payload) => {
+      state.loading = true;
+      state.error = null;
+      state.success = false;
+    });
+    builder.addCase(adminApproved.fulfilled, (state, action) => {
+      state.loading = false;
+      state.success = true;
+      state.currentUserId = action.payload.user._id;
+      state.userInfo = action.payload.user;
+    });
+    builder.addCase(adminApproved.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+      state.success = false;
+    });
+    builder.addCase(adminRejected.pending, (state, payload) => {
+      state.loading = true;
+      state.error = null;
+      state.success = false;
+    });
+    builder.addCase(adminRejected.fulfilled, (state, action) => {
+      state.loading = false;
+      state.success = true;
+      state.currentUserId = action.payload.user._id;
+      state.userInfo = action.payload.user;
+    });
+    builder.addCase(adminRejected.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+      state.success = false;
+    });
+    // OTP extraReducers
+    builder.addCase(sendOtp.pending, (state) => {
+      state.otpLoading = true;
+      state.otpError = null;
+      state.otpSent = false;
+    });
+    builder.addCase(sendOtp.fulfilled, (state, action) => {
+      state.otpLoading = false;
+      state.otpSent = true;
+      state.otpError = null;
+    });
+    builder.addCase(sendOtp.rejected, (state, action) => {
+      state.otpLoading = false;
+      state.otpError = action.payload;
+      state.otpSent = false;
+    });
+    builder.addCase(verifyOtp.pending, (state) => {
+      state.otpLoading = true;
+      state.otpError = null;
+    });
+    builder.addCase(verifyOtp.fulfilled, (state, action) => {
+      state.otpLoading = false;
+      state.otpVerified = true;
+      state.otpError = null;
+    });
+    builder.addCase(verifyOtp.rejected, (state, action) => {
+      state.otpLoading = false;
+      state.otpError = action.payload;
+      state.otpVerified = false;
+    });
   },
 });
+
 export const { 
   logOut, 
   clearState, 
+  clearOtpState,
   isTokenValid, 
   setResponsedata,
   setToken,
+  setRefreshToken,
   setUser
 } = authSlice.actions;
 

@@ -66,7 +66,7 @@ export const getProfileById = createAsyncThunk('getProfileById',
 export const updateProfile = createAsyncThunk('updateProfiles',
   async (payload, { rejectWithValue }) => {
     try {
-      const { data } = await apiConfig.post(
+      const { data } = await apiConfig.put(
         `profiles/${payload.id}`,
         payload.body
       );

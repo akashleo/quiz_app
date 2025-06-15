@@ -46,6 +46,19 @@ const ProfileSchema = new Schema(
     image: {
       type: String,
     },
+    isVerified: {
+      type: Boolean,
+      default: false,
+    },
+    adminAccessRequested: {
+      type: String,
+      enum: ["PENDING", "APPROVED", "REJECTED", ""],
+      default: "",
+    },
+    authorisedBy: {
+      type: String,
+      default: "",
+    },
   },
   { timestamps: true }
 );

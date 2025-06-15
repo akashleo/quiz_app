@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { createNewAnswer, updateAnswer, submitAnswer } from "./AnswerAction";
+import { createNewAnswer, updateAnswer, submitAnswer, getReviewedAnswers } from "./AnswerAction";
 
 const initialState = {
   loading: false,
@@ -9,6 +9,7 @@ const initialState = {
   userAllAnswers: [],
   answerMap: {},
   success: false,
+  reviewedAnswers: [],
 };
 
 const answerSlice = createSlice({
@@ -25,6 +26,9 @@ const answerSlice = createSlice({
       state.error = null;
       state.success = false;
       state.answerMap = action.payload;
+    },
+    clearReviewedAnswers: (state) => {
+      state.reviewedAnswers = [];
     },
   },
   extraReducers: (builder) => {
@@ -77,9 +81,22 @@ const answerSlice = createSlice({
       state.error = action.payload;
       state.success = false;
     });
+
+    builder.addCase(getReviewedAnswers.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(getReviewedAnswers.fulfilled, (state, action) => {
+      state.loading = false;
+      state.reviewedAnswers = action.payload.data;
+    });
+    builder.addCase(getReviewedAnswers.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    });
   },
 });
 
-export const { clearState, updateAnswerMap } = answerSlice.actions;
+export const { clearState, updateAnswerMap, clearReviewedAnswers } = answerSlice.actions;
 
 export default answerSlice.reducer;

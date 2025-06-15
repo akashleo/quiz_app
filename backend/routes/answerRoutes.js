@@ -7,11 +7,12 @@ import {
   updateAnswer,
   deleteAnswer,
   submitAnswer,
+  getAllAnswersByProfileId
 } from "../controllers/AnswerController.js";
 
 // All answer operations require authentication
 answerRouter.get("/", authenticateToken, getAllAnswers);
-//answerRouter.get("/:id", getProfileById);
+answerRouter.get("/:id", authenticateToken, getAllAnswersByProfileId);
 answerRouter.post("/", authenticateToken, createNewAnswer);
 answerRouter.put("/:id", authenticateToken, updateAnswer);
 answerRouter.put("/submit/:id", authenticateToken, submitAnswer);
