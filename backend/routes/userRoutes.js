@@ -1,5 +1,5 @@
 import express from "express";
-import { getAllUser, login, refreshToken, sendOtp, verifyOtp, requestAdminAccess, approveAdminRequest, rejectAdminRequest } from "../controllers/UserController.js";
+import { getAllUser, adminLogin, refreshToken, sendOtp, verifyOtp, requestAdminAccess, approveAdminRequest, rejectAdminRequest } from "../controllers/UserController.js";
 import passport from 'passport';
 import jwt from 'jsonwebtoken';
 import { authenticateToken, authorizeRole } from "../middleware/authMiddleware.js";
@@ -19,7 +19,7 @@ const userRouter = express.Router();
 userRouter.get('/', authenticateToken, authorizeRole(['admin']), getAllUser);
 
 // Public routes
-userRouter.post('/login', login);
+userRouter.post('/login', adminLogin);
 userRouter.post('/refresh-token', refreshToken);
 
 // Route to initiate Google authentication

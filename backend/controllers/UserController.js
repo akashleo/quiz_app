@@ -185,7 +185,7 @@ const validateEmail = (email) => {
   return regex.test(email);
 };
 
-export const login = async (req, res, next) => {
+export const adminLogin = async (req, res, next) => {
   const { email, password } = req.body;
 
   try {
@@ -195,9 +195,14 @@ export const login = async (req, res, next) => {
       return res.status(404).json({ message: "Cannot find user" });
     }
 
-    // For admin users, check email verification
-    if (existingUser.role === "admin" && !existingUser.isVerified) {
-      return res.status(403).json({ message: "Please verify your email first" });
+    // Only allow admin login if role is admin and request is approved
+    if (
+      existingUser.role !== "admin" ||
+      existingUser.adminAccessRequested !== "APPROVED"
+    ) {
+      return res.status(403).json({
+        message: "Admin access not approved or user is not an admin",
+      });
     }
 
     const isPasswordCorrect = bcrypt.compareSync(password, existingUser.password);
@@ -207,36 +212,35 @@ export const login = async (req, res, next) => {
     }
 
     const secret = getJwtSecret();
-    
+
     // Generate access token with longer expiration (24 hours)
     const token = jwt.sign(
       { id: existingUser._id, email: existingUser.email, role: existingUser.role },
       secret,
-      { expiresIn: '24h' }
+      { expiresIn: "24h" }
     );
 
     // Generate refresh token (7 days)
     const refreshToken = jwt.sign(
       { id: existingUser._id },
       secret,
-      { expiresIn: '7d' }
+      { expiresIn: "7d" }
     );
-    
+
     const { password: _, ...userWithoutPassword } = existingUser.toObject();
 
     return res.status(200).json({
-      message: "Login Successful",
+      message: "Admin Login Successful",
       token,
       refreshToken,
       user: userWithoutPassword,
-      status: 200
+      status: 200,
     });
-
   } catch (err) {
-    console.error("Login error:", err);
+    console.error("Admin login error:", err);
     return res.status(500).json({
-      message: "Error during login",
-      error: err.message
+      message: "Error during admin login",
+      error: err.message,
     });
   }
 };
@@ -326,7 +330,7 @@ export const requestAdminAccess = async (req, res, next) => {
     role: "user", // Default role as user
     available: true,
     image: "",
-    isVerified: false,
+    isVerified: true,
     adminAccessRequested: "PENDING",
     authorisedBy: ""
   });
