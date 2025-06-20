@@ -3,12 +3,15 @@ import { Button, Typography, Steps } from "antd";
 import { LeftOutlined, RightOutlined, CheckOutlined } from "@ant-design/icons";
 import "./AnsweringPanel.css";
 import ConfirmModal from "../../components/ConfirmModal";
+import InstructionsModal from "../../components/InstructionsModal";
+import SubmissionSuccessModal from "../../components/SubmissionSuccessModal";
 import {
   getAllQuestions,
   fetchQuestionById,
 } from "../../store/slices/question/QuestionAction";
 import { setDisplayQuestion } from "../../store/slices/question/QuestionSlice";
 import { updateAnswer, submitAnswer } from "../../store/slices/answer/AnswerAction";
+import { getProfileById } from "../../store/slices/profile/ProfileAction";
 import { useDispatch, useSelector } from "react-redux";
 import questionmark from "../../assets/questionmark.png";
 import Navbar from "../../components/Navbar";
@@ -26,9 +29,13 @@ const AnsweringPanel = () => {
   const navigate = useNavigate();
   const { displayQuestion } = useSelector((state) => state.question);
   const { singleTopic, topicQuestions } = useSelector((state) => state.topic);
-  const { currentUserAnswer, answerMap } = useSelector((state) => state.answer);
+  const { currentUserAnswer, answerMap, answerSuccess } = useSelector((state) => state.answer);
+  const { currentUserId } = useSelector((state) => state.auth);
 
   const [open, setOpen] = useState(false);
+  const [showInstructions, setShowInstructions] = useState(true);
+  const [quizStarted, setQuizStarted] = useState(false);
+  const [showSubmissionSuccess, setShowSubmissionSuccess] = useState(false);
 
   const showModal = () => {
     setOpen(true);
@@ -36,8 +43,29 @@ const AnsweringPanel = () => {
 
   useEffect(() => {
     dispatch(updateAnswerMap({}));
-    dispatch(fetchQuestionById(topicQuestions[0]));
-  }, []);
+    if (quizStarted && topicQuestions.length > 0) {
+      dispatch(fetchQuestionById(topicQuestions[0]));
+    }
+  }, [quizStarted, topicQuestions]);
+
+  const handleInstructionsClose = () => {
+    setShowInstructions(false);
+    setQuizStarted(true);
+  };
+
+  // Watch for successful answer submission
+  useEffect(() => {
+    if (answerSuccess && !showInstructions && quizStarted) {
+      setShowSubmissionSuccess(true);
+    }
+  }, [answerSuccess]);
+
+  const handleGoToDashboard = () => {
+    setShowSubmissionSuccess(false);
+    // Dispatch getProfileById to update dashboard data
+    dispatch(getProfileById(currentUserId));
+    navigate("/dashboard");
+  };
 
   const nextQuestion = () => {
     if (current < topicQuestions.length) {
@@ -68,77 +96,93 @@ const AnsweringPanel = () => {
     setAnswer({});
     dispatch(updateAnswerMap({}));
     dispatch(submitAnswer({ id: _id, body: { submitted: true } }));
-    navigate("/dashboard");
+    // Remove immediate navigation - let the success modal handle it
   };
 
   return (
     <>
       <Navbar />
-      <div className="answering-panel-container-user">
-        <div className="answering-panel-content-user">
-          <QuizHeader 
-            topicName={singleTopic?.name || "Quiz"}
-            duration={20}
-            submitQuiz={submitQuiz}
-          />
-
-          <div className="quiz-content-user">
-            <div className="quiz-main-content-user">
-              <div 
-                className="question-image-container-user"
-                style={{
-                  backgroundImage: `url(${displayQuestion?.image || questionmark})`,
-                }}
-              >
-                <div className="question-tag-user">
-                  <span className="question-number-user">
-                    {current}/{topicQuestions?.length}
-                  </span>
-                </div>
-              </div>
-              
-              <div className="question-content-user">
-                <div className="question-text-user">
-                  <Text>
-                    <div dangerouslySetInnerHTML={{ __html: displayQuestion?.questionText }}></div>
-                  </Text>
-                </div>
-
-                <div className="answer-options-user">
-                  {displayQuestion?.options?.map((option) => (
-                    <div
-                      key={option.id}
-                      className={`answer-option-item-user ${
-                        answer[displayQuestion?._id] === option.id ? 'selected' : ''
-                      }`}
-                      onClick={() => handleOptionClick(option.id)}
-                    >
-                      <div 
-                        className="answer-option-text-user"
-                        dangerouslySetInnerHTML={{ __html: option.text }}
-                      />
-                      {answer[displayQuestion?._id] === option.id && (
-                        <div className="answer-check-icon-user">
-                          <CheckOutlined />
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            <QuizFooter 
-              current={current}
-              totalQuestions={topicQuestions?.length}
-              onPrevious={previousQuestion}
-              onNext={nextQuestion}
-              onShowModal={showModal}
+      {showInstructions && (
+        <InstructionsModal 
+          open={showInstructions} 
+          onClose={handleInstructionsClose} 
+        />
+      )}
+      
+      {quizStarted && (
+        <div className="answering-panel-container-user">
+          <div className="answering-panel-content-user">
+            <QuizHeader 
+              topicName={singleTopic?.name || "Quiz"}
+              duration={20}
+              submitQuiz={submitQuiz}
             />
+
+            <div className="quiz-content-user">
+              <div className="quiz-main-content-user">
+                <div 
+                  className="question-image-container-user"
+                  style={{
+                    backgroundImage: `url(${displayQuestion?.image || questionmark})`,
+                  }}
+                >
+                  <div className="question-tag-user">
+                    <span className="question-number-user">
+                      {current}/{topicQuestions?.length}
+                    </span>
+                  </div>
+                </div>
+                
+                <div className="question-content-user">
+                  <div className="question-text-user">
+                    <Text>
+                      <div dangerouslySetInnerHTML={{ __html: displayQuestion?.questionText }}></div>
+                    </Text>
+                  </div>
+
+                  <div className="answer-options-user">
+                    {displayQuestion?.options?.map((option) => (
+                      <div
+                        key={option.id}
+                        className={`answer-option-item-user ${
+                          answer[displayQuestion?._id] === option.id ? 'selected' : ''
+                        }`}
+                        onClick={() => handleOptionClick(option.id)}
+                      >
+                        <div 
+                          className="answer-option-text-user"
+                          dangerouslySetInnerHTML={{ __html: option.text }}
+                        />
+                        {answer[displayQuestion?._id] === option.id && (
+                          <div className="answer-check-icon-user">
+                            <CheckOutlined />
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <QuizFooter 
+                current={current}
+                totalQuestions={topicQuestions?.length}
+                onPrevious={previousQuestion}
+                onNext={nextQuestion}
+                onShowModal={showModal}
+              />
+            </div>
           </div>
         </div>
-      </div>
+      )}
+      
       {open && <ConfirmModal open={open} setOpen={setOpen} submitQuiz={submitQuiz} />}
+      {showSubmissionSuccess && (
+        <SubmissionSuccessModal
+          open={showSubmissionSuccess}
+          onGoToDashboard={handleGoToDashboard}
+        />
+      )}
     </>
   );
 };
