@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Layout, Input, Button, Avatar, Row, Col, Drawer, Menu, Dropdown } from "antd";
 import { 
@@ -11,7 +11,7 @@ import {
   DownOutlined
 } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
-import { logOut } from "../store/slices/auth/AuthSlice";
+import { logOut, setUser } from "../store/slices/auth/AuthSlice";
 import SuccessModal from "./SuccessModal";
 import "./components.css";
 
@@ -27,6 +27,13 @@ const Navbar = () => {
   const showModal = () => {
     setOpen(true);
   };
+
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (!userInfo) {
+      dispatch(setUser(user));
+    }
+  }, [userInfo]);
 
   const startQuiz = () => {
     navigate("/topics");

@@ -45,6 +45,40 @@ export const getAllProfiles = createAsyncThunk('getProfiles',
   }
 );
 
+export const getAllProfilesAdmin = createAsyncThunk('getProfilesAdmin',
+  async (_, { rejectWithValue, dispatch }) => {
+    try {
+      const { data } = await apiConfig.get('profiles');
+      if (data?.profiles) {
+        return data.profiles;
+      } else {
+        return rejectWithValue("No profiles found");
+      }
+    } catch (error) {
+      return rejectWithValue(errorHandler(error, dispatch));
+    }
+  }
+);
+
+export const getPendingAdminRequests = createAsyncThunk('getPendingAdminRequests',
+  async (_, { rejectWithValue, dispatch }) => {
+    try {
+      const { data } = await apiConfig.get('profiles/admin/pending-requests');
+      if (data?.pendingRequests) {
+        return {
+          pendingRequests: data.pendingRequests,
+          count: data.count,
+          message: data.message
+        };
+      } else {
+        return rejectWithValue("No pending requests found");
+      }
+    } catch (error) {
+      return rejectWithValue(errorHandler(error, dispatch));
+    }
+  }
+);
+
 export const getProfileById = createAsyncThunk('getProfileById',
   async (id, { rejectWithValue, dispatch }) => {
     try {

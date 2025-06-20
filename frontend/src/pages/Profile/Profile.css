@@ -863,3 +863,116 @@
   height: 46px;
   padding: 0px 20px;
 }
+
+/* Admin Tabs Styles */
+.user-list-container,
+.admin-requests-container {
+  padding: 20px 0;
+}
+
+.user-list-header,
+.admin-requests-header {
+  margin-bottom: 24px;
+}
+
+.user-list-header h2,
+.admin-requests-header h2 {
+  color: #2d3748;
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.admin-requests-header p {
+  color: #718096;
+  font-size: 14px;
+  margin: 0;
+}
+
+.user-management-table,
+.admin-requests-table {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+}
+
+.user-management-table .ant-table-thead > tr > th,
+.admin-requests-table .ant-table-thead > tr > th {
+  background: #f8fafc;
+  color: #4a5568;
+  font-weight: 600;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.user-management-table .ant-table-tbody > tr > td,
+.admin-requests-table .ant-table-tbody > tr > td {
+  border-bottom: 1px solid #f1f5f9;
+  vertical-align: middle;
+}
+
+.user-management-table .ant-table-tbody > tr:hover > td,
+.admin-requests-table .ant-table-tbody > tr:hover > td {
+  background: #f8fafc;
+}
+
+.user-management-table .ant-btn,
+.admin-requests-table .ant-btn {
+  border-radius: 8px;
+  font-weight: 500;
+}
+
+.user-management-table .ant-btn-primary,
+.admin-requests-table .ant-btn-primary {
+  background: #3182ce;
+  border-color: #3182ce;
+}
+
+.user-management-table .ant-btn-primary:hover,
+.admin-requests-table .ant-btn-primary:hover {
+  background: #2c5aa0;
+  border-color: #2c5aa0;
+}
+
+.user-management-table .ant-btn-primary.ant-btn-dangerous,
+.admin-requests-table .ant-btn-primary.ant-btn-dangerous {
+  background: #e53e3e;
+  border-color: #e53e3e;
+}
+
+.user-management-table .ant-btn-primary.ant-btn-dangerous:hover,
+.admin-requests-table .ant-btn-primary.ant-btn-dangerous:hover {
+  background: #c53030;
+  border-color: #c53030;
+}
+
+/* Access Denied Styles */
+.access-denied {
+  text-align: center;
+  padding: 50px;
+  color: #718096;
+}
+
+.access-denied h3 {
+  color: #4a5568;
+  margin-bottom: 12px;
+}
+
+/* Mobile Responsive for Admin Tables */
+@media (max-width: 768px) {
+  .user-list-header h2,
+  .admin-requests-header h2 {
+    font-size: 20px;
+  }
+  
+  .user-management-table,
+  .admin-requests-table {
+    font-size: 12px;
+  }
+  
+  .user-management-table .ant-btn,
+  .admin-requests-table .ant-btn {
+    font-size: 11px;
+    padding: 2px 6px;
+    height: auto;
+  }
+}

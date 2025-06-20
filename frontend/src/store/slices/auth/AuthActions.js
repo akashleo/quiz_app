@@ -10,6 +10,7 @@ export const login = createAsyncThunk(
       localStorage.setItem("authToken", data?.token);
       localStorage.setItem("refreshToken", data?.refreshToken);
       localStorage.setItem("authId", data?.user._id);
+      localStorage.setItem('user', JSON.stringify(data?.user));
       if (data?.status === 200) {
         return data;
       } else {
@@ -101,9 +102,9 @@ export const adminRegister = createAsyncThunk(
 
 export const adminApproved = createAsyncThunk(
   "user/adminApproved",
-  async (body, { rejectWithValue, dispatch }) => {
+  async ({ profileId, email }, { rejectWithValue, dispatch }) => {
     try {
-      const { data } = await apiConfig.post("user/admin/approved", body);
+      const { data } = await apiConfig.patch(`user/admin/approve/${profileId}`, { email });
 
       if (data?.status === 200) {
         return data;
@@ -118,9 +119,9 @@ export const adminApproved = createAsyncThunk(
 
 export const adminRejected = createAsyncThunk(
   "user/adminRejected",
-  async (body, { rejectWithValue, dispatch }) => {
+  async ({ profileId, email }, { rejectWithValue, dispatch }) => {
     try {
-      const { data } = await apiConfig.post("user/admin/rejected", body);
+      const { data } = await apiConfig.patch(`user/admin/reject/${profileId}`, { email });
 
       if (data?.status === 200) {
         return data;
@@ -132,3 +133,4 @@ export const adminRejected = createAsyncThunk(
     }
   }
 );
+

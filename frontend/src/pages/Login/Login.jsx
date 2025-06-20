@@ -1,12 +1,14 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { GoogleOutlined, UserOutlined } from "@ant-design/icons";
 import { Row, Col, Button } from "antd";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 import "./Login.css";
 
 const Login = () => {
   const navigate = useNavigate();
+  const { tokenValidity } = useSelector((state) => state.auth);
 
   const handleGoogleLogin = () => {
     window.location.href = `${process.env.REACT_APP_API_URL || 'http://localhost:5000/'}user/auth/google`;
@@ -15,6 +17,13 @@ const Login = () => {
   const handleAdminLogin = () => {
     navigate("/admin-login");
   };
+
+  useEffect(() => {
+    if (tokenValidity === true) {
+      navigate("/dashboard");
+    }
+  }, [tokenValidity]);
+
 
   return (
     <div className="login-container">

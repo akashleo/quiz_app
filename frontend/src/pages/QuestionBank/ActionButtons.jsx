@@ -3,7 +3,6 @@ import { Button } from 'antd';
 import {
   FileSearchOutlined,
   InboxOutlined,
-  DashboardOutlined,
   PlusOutlined,
 } from '@ant-design/icons';
 import './questions.css';
@@ -20,12 +19,6 @@ const ACTIONS = [
     label: 'Load Questions',
     onClick: (_, setLoadModal) => setLoadModal(true),
     disabled: (state) => state.loadModal
-  },
-  {
-    icon: <DashboardOutlined />,
-    label: 'Dashboard',
-    onClick: (navigate) => navigate("/dashboard"),
-    disabled: (state) => state.addQuestionModal
   },
   {
     icon: <PlusOutlined />,
