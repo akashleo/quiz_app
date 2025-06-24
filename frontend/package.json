@@ -23,6 +23,9 @@
     "redux-logger": "^3.0.6",
     "web-vitals": "^2.1.4"
   },
+  "engines": {
+    "node": ">=18"
+  },
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "autoprefixer": "^10.4.21",
