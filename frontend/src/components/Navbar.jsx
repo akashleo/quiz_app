@@ -9,9 +9,8 @@ import {
   LogoutOutlined,
   QuestionCircleOutlined,
   DownOutlined,
-  SunOutlined,
-  MoonOutlined
 } from "@ant-design/icons";
+import { Sun, Moon } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { logOut, setUser } from "../store/slices/auth/AuthSlice";
 import SuccessModal from "./SuccessModal";
@@ -125,7 +124,7 @@ const Navbar = () => {
           {/* Theme Toggle */}
           <Button
             type="text"
-            icon={theme === 'light' ? <MoonOutlined /> : <SunOutlined />}
+            icon={theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
             onClick={toggleTheme}
             className="theme-toggle-button"
             title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
@@ -173,7 +172,7 @@ const Navbar = () => {
         <Col xs={14} sm={0} className="mobile-search">
           <Button
             type="text"
-            icon={theme === 'light' ? <MoonOutlined /> : <SunOutlined />}
+            icon={theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
             onClick={toggleTheme}
             className="theme-toggle-button"
           />
