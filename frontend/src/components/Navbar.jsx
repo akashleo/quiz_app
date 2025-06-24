@@ -8,11 +8,14 @@ import {
   PlayCircleOutlined,
   LogoutOutlined,
   QuestionCircleOutlined,
-  DownOutlined
+  DownOutlined,
+  SunOutlined,
+  MoonOutlined
 } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
 import { logOut, setUser } from "../store/slices/auth/AuthSlice";
 import SuccessModal from "./SuccessModal";
+import { useTheme } from "../contexts/ThemeContext";
 import "./components.css";
 
 const { Header } = Layout;
@@ -23,6 +26,7 @@ const Navbar = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { userInfo } = useSelector((state) => state.auth);
+  const { theme, toggleTheme } = useTheme();
 
   const showModal = () => {
     setOpen(true);
@@ -72,98 +76,107 @@ const Navbar = () => {
     }
   ];
 
-  const getMobileMenuItems = () => {
-    const items = [
-      {
-        key: 'start',
-        icon: <PlayCircleOutlined />,
-        label: 'Start Quiz',
-        onClick: startQuiz
-      }
-    ];
-
-    if (userInfo?.role === 'admin') {
-      items.push({
-        key: 'question-bank',
-        icon: <QuestionCircleOutlined />,
-        label: 'Question Bank',
-        onClick: navigateQuestionBank
-      });
+  const getMobileMenuItems = () => [
+    {
+      key: 'start',
+      icon: <PlayCircleOutlined />,
+      label: 'Start Quiz',
+      onClick: startQuiz
+    },
+    userInfo?.role === 'admin' && {
+      key: 'questionBank',
+      icon: <QuestionCircleOutlined />,
+      label: 'Question Bank',
+      onClick: navigateQuestionBank
     }
-
-    return items;
-  };
+  ].filter(Boolean);
 
   return (
     <Header className="navbar sticky">
-      {/* Mobile Menu Button */}
-      <div className="mobile-menu-button">
-        <Button
-          type="text"
-          icon={<MenuOutlined />}
-          onClick={() => setMobileDrawerOpen(true)}
-        />
-      </div>
-
-      <Row align="middle" className="navbar-row">
-        <Col xs={14} sm={6} md={4} className="quiz-logo" onClick={() => navigate("/dashboard")}>
-          EmoQuiz
+      <Row className="navbar-row" align="middle">
+        {/* Mobile Menu Button */}
+        <Col xs={2} sm={0}>
+          <Button
+            type="text"
+            icon={<MenuOutlined />}
+            onClick={() => setMobileDrawerOpen(true)}
+            className="mobile-menu-button"
+          />
         </Col>
-        
+
+        {/* Logo */}
+        <Col xs={8} sm={6} md={4}>
+          <div className="quiz-logo" onClick={() => navigate('/dashboard')}>
+            QUIZ
+          </div>
+        </Col>
+
         {/* Search Bar - Hidden on mobile */}
-        <Col xs={0} sm={8} md={8} className="searchbar">
+        <Col xs={0} sm={10} md={12} className="searchbar">
           <Input
-            placeholder="Search..."
+            placeholder="Search"
             prefix={<SearchOutlined />}
             className="search"
           />
         </Col>
 
-        {/* Navigation Buttons - Hidden on mobile */}
-        <Col xs={0} sm={6} md={8} className="nav-buttons">
+        {/* Desktop Navigation */}
+        <Col xs={0} sm={8} md={8} className="nav-buttons">
+          {/* Theme Toggle */}
+          <Button
+            type="text"
+            icon={theme === 'light' ? <MoonOutlined /> : <SunOutlined />}
+            onClick={toggleTheme}
+            className="theme-toggle-button"
+            title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
+          />
+
+          {/* Question Bank Button for Admin */}
           {userInfo?.role === 'admin' && (
             <Button
-              type="text"
+              type="primary"
               icon={<QuestionCircleOutlined />}
               onClick={navigateQuestionBank}
-              className="desktop-only"
+              className="question-bank-button"
             >
               Question Bank
             </Button>
           )}
+
+          {/* Start Quiz Button */}
           <Button
-            type="text"
-            icon={<PlayCircleOutlined />}
+            type="default"
             onClick={startQuiz}
-            className="desktop-only"
+            className="start-button"
           >
             Start Quiz
           </Button>
+
+          {/* Avatar with Dropdown */}
+          <Dropdown
+            menu={{ items: userMenuItems }}
+            placement="bottomRight"
+            trigger={['click']}
+          >
+            <div className="avatar-dropdown">
+              <Avatar 
+                icon={<UserOutlined />} 
+                src={userInfo?.profilePicture}
+                className="avatar-navbar"
+              />
+              <DownOutlined className="dropdown-icon" />
+            </div>
+          </Dropdown>
         </Col>
 
-        {/* Profile and Logout Buttons - Hidden on mobile */}
-        <Col xs={0} sm={4} md={4} className="nav-buttons">
+        {/* Mobile Search and Theme Toggle */}
+        <Col xs={14} sm={0} className="mobile-search">
           <Button
             type="text"
-            icon={<UserOutlined />}
-            onClick={openProfile}
-            className="desktop-only"
-          >
-            Profile
-          </Button>
-          <Button
-            type="text"
-            icon={<LogoutOutlined />}
-            onClick={handleLogout}
-            className="desktop-only"
-            danger
-          >
-            Logout
-          </Button>
-        </Col>
-
-        {/* Mobile Search Icon */}
-        <Col xs={10} sm={0} className="mobile-search">
+            icon={theme === 'light' ? <MoonOutlined /> : <SunOutlined />}
+            onClick={toggleTheme}
+            className="theme-toggle-button"
+          />
           <Button
             type="text"
             icon={<SearchOutlined />}

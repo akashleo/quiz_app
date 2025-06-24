@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Form,
   Input,
@@ -9,9 +9,11 @@ import {
   Row,
   Col,
   Upload,
-  Progress
+  Progress,
+  message,
+  Spin
 } from "antd";
-import { UploadOutlined } from "@ant-design/icons";
+import { UploadOutlined, LoadingOutlined } from "@ant-design/icons";
 
 import { Packer } from "file-saver";
 //import { ObjectId } from 'bson';
@@ -22,11 +24,15 @@ import { fileUpload } from "../../store/slices/file/FileAction";
 import Typography from "antd/es/typography/Typography";
 //import { current } from "@reduxjs/toolkit";
 
-const LoadQuestions = ({ loadModal,setLoadModal, handleOk, topics }) => {
+const LoadQuestions = ({ loadModal, setLoadModal, handleOk, topics }) => {
   const [form] = Form.useForm();
   const dispatch = useDispatch();
+  const [fileList, setFileList] = useState([]);
+  const [uploading, setUploading] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
-  const { currentFileUrl } = useSelector((state) => state.file);
+  const { currentFileUrl, loading: fileLoading } = useSelector((state) => state.file);
+  const { loading: questionLoading, error: questionError } = useSelector((state) => state.question);
 
   const [topicOptions, setTopicOptions] = useState([]);
   const [topicId, setTopicId] = useState(0);
@@ -39,28 +45,49 @@ const LoadQuestions = ({ loadModal,setLoadModal, handleOk, topics }) => {
       };
     });
     setTopicOptions(topicOption);
-  }, []);
+  }, [topics]);
 
-  const handleFormSubmit = (obj) => {
-    console.log(obj);
-    //const {topicId, questionText } = obj;
-    // Do something with the form values, e.g. submit to a server
-    const tempLoad = {
-      params: {
-        count: obj.amtCount,
-        category: obj.categoryId,
-      },
-      image: currentFileUrl,
-    };
-    console.log(tempLoad);
-    handleOk();
-    dispatch(bulkLoadQuestions(tempLoad));
-    //setLoadModal(false);
-  };
+  // Handle question loading state changes
+  useEffect(() => {
+    if (submitting) {
+      if (!questionLoading && !questionError) {
+        // Success case
+        setSubmitting(false);
+        message.success('Questions loaded successfully!');
+        form.resetFields();
+        setFileList([]);
+        setTopicId(0);
+        handleOk();
+      } else if (!questionLoading && questionError) {
+        // Error case
+        setSubmitting(false);
+        message.error(`Failed to load questions: ${questionError}`);
+      }
+    }
+  }, [questionLoading, questionError, submitting, form, handleOk]);
 
-  const handleCountChange = (value) => {
-    console.log(value);
-    console.log(topicId)
+  const handleFormSubmit = async (obj) => {
+    if (!currentFileUrl) {
+      message.error('Please upload an image first');
+      return;
+    }
+
+    try {
+      setSubmitting(true);
+      const tempLoad = {
+        params: {
+          count: obj.amtCount,
+          category: obj.categoryId,
+        },
+        image: currentFileUrl,
+      };
+      
+      await dispatch(bulkLoadQuestions(tempLoad));
+    } catch (error) {
+      setSubmitting(false);
+      message.error('An unexpected error occurred while loading questions');
+      console.error('Bulk load error:', error);
+    }
   };
 
   const handleTopicChange = (value) => {
@@ -69,11 +96,58 @@ const LoadQuestions = ({ loadModal,setLoadModal, handleOk, topics }) => {
   };
 
   const imageUpload = (file) => {
+    setUploading(true);
     let formData = new FormData();
     formData.append("file", file);
-    console.log("formData", formData);
-    dispatch(fileUpload(formData));
+    dispatch(fileUpload(formData))
+      .then(() => {
+        setUploading(false);
+        message.success('Image uploaded successfully');
+      })
+      .catch((error) => {
+        setUploading(false);
+        message.error('Failed to upload image');
+        console.error('Upload error:', error);
+      });
   };
+
+  const uploadProps = {
+    beforeUpload: (file) => {
+      const isImage = file.type.startsWith('image/');
+      if (!isImage) {
+        message.error('You can only upload image files!');
+        return Upload.LIST_IGNORE;
+      }
+
+      const isLt5M = file.size / 1024 / 1024 < 5;
+      if (!isLt5M) {
+        message.error('Image must be smaller than 5MB!');
+        return Upload.LIST_IGNORE;
+      }
+
+      imageUpload(file);
+      return false;
+    },
+    maxCount: 1,
+    fileList: fileList,
+    onChange: ({ fileList }) => setFileList(fileList),
+    onRemove: () => {
+      setFileList([]);
+    }
+  };
+
+  const handleCancel = () => {
+    if (submitting || uploading) {
+      message.warning('Please wait for the current operation to complete');
+      return;
+    }
+    form.resetFields();
+    setFileList([]);
+    setTopicId(0);
+    handleOk();
+  };
+
+  const isFormDisabled = uploading || submitting || fileLoading;
 
   return (
     <Modal
@@ -81,83 +155,92 @@ const LoadQuestions = ({ loadModal,setLoadModal, handleOk, topics }) => {
       title={"Load Questions"}
       style={{ zIndex: 10 }}
       open={loadModal}
-      onOk={handleOk}
-      onCancel={handleOk}
+      onCancel={handleCancel}
       footer={false}
+      closable={!submitting && !uploading}
+      maskClosable={!submitting && !uploading}
     >
       <div className="add-form">
-        <Form form={form} onFinish={handleFormSubmit} layout="vertical">
-          <Form.Item
-            label={<b>Question Count</b>}
-            name="amtCount"
-            rules={[
-              {
-                required: true,
-                message: "Please enter the correct answer",
-              },
-            ]}
-          >
-            <Select
-              disabled={false}
-              style={{ width: "100%" }}
-              placeholder="Please select"
-              onChange={handleCountChange}
-              options={[
-                { label: 10, value: 10 },
-                { label: 20, value: 20 },
+        <Spin spinning={submitting} tip="Loading questions..." size="large">
+          <Form form={form} onFinish={handleFormSubmit} layout="vertical">
+            <Form.Item
+              label={<b>Question Count</b>}
+              name="amtCount"
+              rules={[
+                {
+                  required: true,
+                  message: "Please select question count",
+                },
               ]}
-            />
-          </Form.Item>
-          <Form.Item
-            label={<b>Topic</b>}
-            name="categoryId"
-            rules={[
-              {
-                required: true,
-                message: "Please select the Topic",
-              },
-            ]}
-          >
-            <Select
-              //mode="multiple"
-              disabled={false}
-              style={{ width: "100%" }}
-              placeholder="Please select"
-              //defaultValue={["a10", "c12"]}
-              onChange={handleTopicChange}
-              options={topicOptions}
-            />
-          </Form.Item>
-          <Form.Item
-            label={<b>Topic ID</b>}
-            name="topicId"
-          >
-            <Typography.Title level={3} code strong>{topicId}</Typography.Title>
-          </Form.Item>
-          <Form.Item>
-            <Space.Compact style={{ width: "100%" }}>
-              <Upload
-                beforeUpload={(file, fileList) => {
-                  // Access file content here and do something with it
-                  console.log(file);
-                  imageUpload(file);
-                  // Prevent upload
-                  return false;
-                }}
-              >
-                <Button icon={<UploadOutlined />}>Click to Upload</Button>
+            >
+              <Select
+                disabled={isFormDisabled}
+                style={{ width: "100%" }}
+                placeholder="Please select"
+                options={[
+                  { label: 10, value: 10 },
+                  { label: 20, value: 20 },
+                ]}
+              />
+            </Form.Item>
+            <Form.Item
+              label={<b>Topic</b>}
+              name="categoryId"
+              rules={[
+                {
+                  required: true,
+                  message: "Please select the Topic",
+                },
+              ]}
+            >
+              <Select
+                disabled={isFormDisabled}
+                style={{ width: "100%" }}
+                placeholder="Please select"
+                onChange={handleTopicChange}
+                options={topicOptions}
+              />
+            </Form.Item>
+            <Form.Item
+              label={<b>Topic ID</b>}
+              name="topicId"
+            >
+              <Typography.Title level={3} code strong>{topicId || 'Select a topic'}</Typography.Title>
+            </Form.Item>
+            <Form.Item
+              label={<b>Upload Image</b>}
+              required
+              tooltip="Please upload an image file (max: 5MB)"
+            >
+              <Upload {...uploadProps} disabled={isFormDisabled}>
+                <Button 
+                  icon={<UploadOutlined />} 
+                  loading={uploading}
+                  disabled={fileList.length === 1 || isFormDisabled}
+                >
+                  {fileList.length === 1 ? 'Image Uploaded' : 'Upload Image'}
+                </Button>
               </Upload>
-            </Space.Compact>
-          </Form.Item>
-          <Form.Item>
-          <Progress percent={100} size="small" />
-          </Form.Item>
-          <Form.Item className="button-submit">
-            <Button type="primary" htmlType="submit" className="submit-button">
-              Submit
-            </Button>
-          </Form.Item>
-        </Form>
+            </Form.Item>
+            {uploading && (
+              <Form.Item>
+                <Progress percent={100} size="small" status="active" />
+              </Form.Item>
+            )}
+            <Form.Item className="button-submit">
+              <Button 
+                type="primary" 
+                htmlType="submit" 
+                className="submit-button"
+                disabled={!currentFileUrl || isFormDisabled}
+                loading={submitting}
+                icon={submitting ? <LoadingOutlined /> : null}
+              >
+                {submitting ? 'Loading Questions...' : 'Submit'}
+              </Button>
+            </Form.Item>
+          </Form>
+        </Spin>
       </div>
     </Modal>
   );

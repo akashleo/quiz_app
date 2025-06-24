@@ -37,48 +37,92 @@ export const getAnswerById = async (req, res, next) => {
 
 export const createNewAnswer = async (req, res, next) => {
   const { userId, answers, topicId } = req.body;
+
+  // Validate required fields
+  if (!userId) {
+    return res.status(400).json({ message: "userId is required" });
+  }
+  if (!topicId) {
+    return res.status(400).json({ message: "topicId is required" });
+  }
+
   let answer;
   try {
     answer = new Answer({
       userId,
-      answers,
+      answers: answers || new Map(),
       topicId,
     });
     await answer.save();
   } catch (err) {
-    console.log(err);
+    console.error("Error creating answer:", err);
+    
+    // Handle validation errors
+    if (err.name === 'ValidationError') {
+      const errorMessages = Object.values(err.errors).map(error => error.message);
+      return res.status(400).json({ 
+        message: "Validation failed", 
+        errors: errorMessages 
+      });
+    }
+    
+    return res.status(500).json({ message: "Unable to create answer due to server error" });
   }
 
-  if (!answer) {
-    return res.status(500).json({ message: "Unable to add answer" });
-  }
   return res.status(201).json({ answer });
 };
 
 export const updateAnswer = async (req, res, next) => {
   const { answers } = req.body;
-  let answer;
-  let answerObj;
-
   const id = req.params.id;
 
+  // Validate input
+  if (!id) {
+    return res.status(400).json({ message: "Answer ID is required" });
+  }
+
+  if (!answers) {
+    return res.status(400).json({ message: "Answers data is required" });
+  }
+
   try {
-    answer = await Answer.findByIdAndUpdate(id, {
-      answers,
-    });
+    // First check if the answer exists
+    const existingAnswer = await Answer.findById(id);
+    if (!existingAnswer) {
+      return res.status(404).json({ message: "Answer not found with this id" });
+    }
 
-    await answer.save();
-    answerObj = await Answer.findById(id);
+    // Update the answer
+    const updatedAnswer = await Answer.findByIdAndUpdate(
+      id,
+      { answers },
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedAnswer) {
+      return res.status(500).json({ message: "Failed to update answer" });
+    }
+
+    return res.status(200).json({ answer: updatedAnswer });
   } catch (err) {
-    console.log(err);
+    console.error("Error updating answer:", err);
+    
+    // Handle validation errors
+    if (err.name === 'ValidationError') {
+      const errorMessages = Object.values(err.errors).map(error => error.message);
+      return res.status(400).json({ 
+        message: "Validation failed", 
+        errors: errorMessages 
+      });
+    }
+    
+    // Handle cast errors (invalid ObjectId)
+    if (err.name === 'CastError') {
+      return res.status(400).json({ message: "Invalid answer ID format" });
+    }
+    
+    return res.status(500).json({ message: "Unable to update answer due to server error" });
   }
-
-  if (!answer) {
-    return res
-      .status(500)
-      .json({ message: "Unable to update answer with this id" });
-  }
-  return res.status(201).json({ answer: answerObj });
 };
 
 /**
