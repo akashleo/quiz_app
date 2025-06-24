@@ -1,5 +1,6 @@
 .App {
   text-align: center;
+  color: var(--text-primary);
 }
 
 .App-logo {
@@ -14,14 +15,14 @@
 }
 
 .App-header {
-  background-color: #282c34;
+  background-color: var(--bg-secondary);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
-  color: white;
+  color: var(--text-primary);
 }
 
 .App-link {
@@ -37,20 +38,52 @@
   }
 }
 
+/* Global dark mode text handling */
+[data-theme='dark'] .ant-card,
+[data-theme='dark'] .ant-modal,
+[data-theme='dark'] .ant-drawer,
+[data-theme='dark'] .ant-dropdown,
+[data-theme='dark'] .ant-select-dropdown,
+[data-theme='dark'] .ant-popover-inner {
+  color: var(--text-primary);
+}
 
+[data-theme='dark'] .ant-form-item-label > label,
+[data-theme='dark'] .ant-modal-title,
+[data-theme='dark'] .ant-drawer-title,
+[data-theme='dark'] h1,
+[data-theme='dark'] h2,
+[data-theme='dark'] h3,
+[data-theme='dark'] h4,
+[data-theme='dark'] h5,
+[data-theme='dark'] h6 {
+  color: var(--text-primary) !important;
+}
+
+/* Ensure text in white background containers remains dark */
+[data-theme='dark'] .ant-card-bordered {
+  background-color: var(--bg-secondary);
+}
+
+[data-theme='dark'] .ant-card-head {
+  background-color: var(--bg-tertiary);
+  border-bottom: 1px solid var(--border-primary);
+}
+
+/* Scrollbar styling */
 ::-webkit-scrollbar {
   width: 8px;
 }
 
 /* Track */
 ::-webkit-scrollbar-track {
-  box-shadow: inset 0 0 5px grey;
+  box-shadow: inset 0 0 5px var(--border-secondary);
   border-radius: 10px;
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #696F79;
+  background: var(--text-tertiary);
   border-radius: 10px;
 }
 
@@ -58,8 +91,8 @@
 .spinner {
   width: 40px;
   height: 40px;
-  border: 4px solid #f3f3f3;
-  border-top: 4px solid #3498db;
+  border: 4px solid var(--border-primary);
+  border-top: 4px solid var(--info);
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
@@ -67,4 +100,56 @@
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
+}
+
+/* Additional dark mode text handling for specific components */
+[data-theme='dark'] .ant-table {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+[data-theme='dark'] .ant-table-thead > tr > th {
+  background-color: var(--bg-tertiary) !important;
+  color: var(--text-primary) !important;
+}
+
+[data-theme='dark'] .ant-table-tbody > tr > td {
+  color: var(--text-primary);
+}
+
+[data-theme='dark'] .ant-input,
+[data-theme='dark'] .ant-input-number,
+[data-theme='dark'] .ant-select-selector,
+[data-theme='dark'] .ant-picker {
+  background-color: var(--input-bg) !important;
+  color: var(--text-primary) !important;
+}
+
+[data-theme='dark'] .ant-input::placeholder,
+[data-theme='dark'] .ant-select-selection-placeholder {
+  color: var(--text-tertiary) !important;
+}
+
+[data-theme='dark'] .ant-btn:not(.ant-btn-primary):not(.ant-btn-link) {
+  background-color: var(--bg-tertiary);
+  color: var(--text-primary);
+  border-color: var(--border-primary);
+}
+
+[data-theme='dark'] .ant-menu {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+[data-theme='dark'] .ant-menu-item {
+  color: var(--text-primary);
+}
+
+[data-theme='dark'] .ant-menu-item:hover {
+  background-color: var(--bg-hover);
+}
+
+[data-theme='dark'] .ant-menu-item-selected {
+  background-color: var(--bg-hover) !important;
+  color: var(--text-primary) !important;
 }

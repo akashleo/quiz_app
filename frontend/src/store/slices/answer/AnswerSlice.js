@@ -10,6 +10,7 @@ const initialState = {
   answerMap: {},
   success: false,
   reviewedAnswers: [],
+  answerSuccess: false,
 };
 
 const answerSlice = createSlice({
@@ -75,6 +76,7 @@ const answerSlice = createSlice({
       state.currentUserAnswer = {};
       state.answerMap = {};
       state.success = true;
+      state.answerSuccess = true;
     });
     builder.addCase(submitAnswer.rejected, (state, action) => {
       state.loading = false;

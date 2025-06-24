@@ -1,3 +1,79 @@
+/* Theme Variables */
+:root[data-theme='light'] {
+  /* Primary Colors */
+  --bg-primary: #fbf9f9;
+  --bg-secondary: #ffffff;
+  --bg-tertiary: #f7fafc;
+  --bg-hover: #edf2f7;
+  
+  /* Text Colors */
+  --text-primary: #2d3748;
+  --text-secondary: #4a5568;
+  --text-tertiary: #718096;
+  --text-inverse: #ffffff;
+  
+  /* Border Colors */
+  --border-primary: #e2e8f0;
+  --border-secondary: #cbd5e0;
+  
+  /* Shadow Colors */
+  --shadow-sm: rgba(0, 0, 0, 0.1);
+  --shadow-md: rgba(0, 0, 0, 0.15);
+  --shadow-lg: rgba(0, 0, 0, 0.2);
+  
+  /* Component Specific */
+  --card-bg: #ffffff;
+  --input-bg: #ffffff;
+  --navbar-bg: #ffffff;
+  --modal-bg: #ffffff;
+  
+  /* Status Colors */
+  --success: #10b981;
+  --warning: #f59e0b;
+  --error: #ef4444;
+  --info: #3b82f6;
+}
+
+:root[data-theme='dark'] {
+  /* Primary Colors */
+  --bg-primary: #0f172a;
+  --bg-secondary: #1e293b;
+  --bg-tertiary: #334155;
+  --bg-hover: #475569;
+  
+  /* Text Colors */
+  --text-primary: #f1f5f9;
+  --text-secondary: #cbd5e0;
+  --text-tertiary: #94a3b8;
+  --text-inverse: #0f172a;
+  
+  /* Border Colors */
+  --border-primary: #334155;
+  --border-secondary: #475569;
+  
+  /* Shadow Colors */
+  --shadow-sm: rgba(0, 0, 0, 0.3);
+  --shadow-md: rgba(0, 0, 0, 0.5);
+  --shadow-lg: rgba(0, 0, 0, 0.7);
+  
+  /* Component Specific */
+  --card-bg: #1e293b;
+  --input-bg: #334155;
+  --navbar-bg: #1e293b;
+  --modal-bg: #1e293b;
+  
+  /* Status Colors */
+  --success: #10b981;
+  --warning: #f59e0b;
+  --error: #ef4444;
+  --info: #3b82f6;
+}
+
+/* Smooth transitions */
+* {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
 body {
   margin: 0;
   /* font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -5,7 +81,8 @@ body {
     sans-serif; */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #fbf9f9;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
   font-family: "Josefin Sans", sans-serif !important;
 }
 

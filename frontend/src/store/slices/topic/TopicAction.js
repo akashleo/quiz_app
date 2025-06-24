@@ -65,3 +65,19 @@ export const updateTopic = createAsyncThunk(
     }
   }
 );
+
+export const clearTopicQuestions = createAsyncThunk(
+  "clearTopicQuestions",
+  async (id, { rejectWithValue, dispatch }) => {
+    try {
+      const { data } = await apiConfig.put(`topics/clear/${id}`);
+      if (data) {
+        return data;
+      } else {
+        return rejectWithValue("Failed to clear topic questions");
+      }
+    } catch (error) {
+      return rejectWithValue(errorHandler(error, dispatch));
+    }
+  }
+);

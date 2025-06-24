@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Form,
   Input,
@@ -9,16 +9,14 @@ import {
   Row,
   Col,
   Upload,
+  message,
 } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 
-import { Packer } from "file-saver";
-//import { ObjectId } from 'bson';
 import "./questions.css";
 import { addQuestion } from "../../store/slices/question/QuestionAction";
 import { useDispatch, useSelector } from "react-redux";
 import { fileUpload } from "../../store/slices/file/FileAction";
-//import { current } from "@reduxjs/toolkit";
 
 const AddQuestion = ({
   addQuestionModal,
@@ -29,7 +27,7 @@ const AddQuestion = ({
   const [form] = Form.useForm();
   const dispatch = useDispatch();
 
-  const { currentFileUrl } = useSelector((state) => state.file);
+  const { currentFileUrl, loading: fileLoading, error: fileError } = useSelector((state) => state.file);
 
   const [question, setQuestion] = useState({
     options: [],
@@ -59,53 +57,76 @@ const AddQuestion = ({
       };
     });
     setTopicOptions(topicOption);
-  }, []);
+  }, [topics]);
 
   useEffect(() => {
-    setQuestion({ ...question, image: currentFileUrl.url });
+    if (currentFileUrl?.url) {
+      setQuestion(prev => ({ ...prev, image: currentFileUrl.url }));
+    }
   }, [currentFileUrl]);
 
-  const handleFormSubmit = (obj) => {
-    console.log(obj);
-    const { op1, op2, op3, op4, correct, topicId, questionText } = obj;
-    // Do something with the form values, e.g. submit to a server
-    const temQuestion = {
-      options: [
-        { id: 1, text: op1 },
-        { id: 2, text: op2 },
-        { id: 3, text: op3 },
-        { id: 4, text: op4 },
-      ],
-      isCorrect: correct,
-      topicId: topicId,
-      available: "true",
-      questionText: questionText,
-      image: question.image,
-    };
-    setQuestion(temQuestion);
-    console.log(question);
-    dispatch(addQuestion(temQuestion));
-    setAddQuestionModal(false);
+  useEffect(() => {
+    if (fileError) {
+      message.error(`File upload failed: ${fileError}`);
+    }
+  }, [fileError]);
+
+  const handleFormSubmit = async (obj) => {
+    try {
+      const { op1, op2, op3, op4, correct, topicId, questionText } = obj;
+      const temQuestion = {
+        options: [
+          { id: 1, text: op1 },
+          { id: 2, text: op2 },
+          { id: 3, text: op3 },
+          { id: 4, text: op4 },
+        ],
+        isCorrect: correct,
+        topicId: topicId,
+        available: "true",
+        questionText: questionText,
+        image: question.image,
+      };
+      
+      await dispatch(addQuestion(temQuestion)).unwrap();
+      message.success("Question added successfully!");
+      form.resetFields();
+      setQuestion({
+        options: [],
+        isCorrect: "",
+        topicId: "",
+        available: "true",
+        image: "",
+        questionText: "",
+      });
+      setAddQuestionModal(false);
+    } catch (error) {
+      message.error("Failed to add question. Please try again.");
+      console.error("Error adding question:", error);
+    }
   };
 
   const handleChange = (values) => {
     console.log(values);
   };
 
-  // const handleFileChange = (event) => {
-  //   console.log("event =>", event.target.files[0]);
-  //   //setFileName(event.target.files[0].name)
-  //   setSelectedFile(event.target.files[0]);
-  //   // setSelectedFile(event.target.files[0]);
-  // };
-
   const imageUpload = (file) => {
-    //console.log(selectedFile);
-    let formData = new FormData();
-    //const fileURL = URL.createObjectURL(selectedFile);
+    const formData = new FormData();
     formData.append("file", file);
-    console.log("formData", formData);
     dispatch(fileUpload(formData));
+  };
+
+  const handleModalClose = () => {
+    form.resetFields();
+    setQuestion({
+      options: [],
+      isCorrect: "",
+      topicId: "",
+      available: "true",
+      image: "",
+      questionText: "",
+    });
+    handleOk();
   };
 
   return (
@@ -113,9 +134,9 @@ const AddQuestion = ({
       className="add-question"
       title={"Add Question"}
       style={{ zIndex: 10 }}
-      open={addQuestion}
-      onOk={handleOk}
-      onCancel={handleOk}
+      open={addQuestionModal}
+      onOk={handleModalClose}
+      onCancel={handleModalClose}
       footer={false}
     >
       <div className="add-form">
@@ -226,38 +247,45 @@ const AddQuestion = ({
             ]}
           >
             <Select
-              //mode="multiple"
               disabled={false}
               style={{ width: "100%" }}
               placeholder="Please select"
-              //defaultValue={["a10", "c12"]}
               onChange={handleChange}
               options={topicOptions}
             />
           </Form.Item>
           <Form.Item>
             <Space.Compact style={{ width: "100%" }}>
-              {/* <Input
-                type="file"
-                defaultValue={"Upload Image"}
-                onChange={handleFileChange}
-                value={fileName}
-              /> */}
-              {/* <Button type="primary" onClick={() => imageUpload()}>
-                <UploadOutlined />
-                &nbsp;Upload
-              </Button> */}
               <Upload
                 beforeUpload={(file, fileList) => {
-                  // Access file content here and do something with it
-                  console.log(file);
+                  // Validate file type
+                  const isImage = file.type.startsWith('image/');
+                  if (!isImage) {
+                    message.error('You can only upload image files!');
+                    return false;
+                  }
+                  
+                  // Validate file size (e.g., 5MB)
+                  const isLt5M = file.size / 1024 / 1024 < 5;
+                  if (!isLt5M) {
+                    message.error('Image must be smaller than 5MB!');
+                    return false;
+                  }
+                  
                   imageUpload(file);
-                  // Prevent upload
                   return false;
                 }}
+                showUploadList={false}
               >
-                <Button icon={<UploadOutlined />}>Click to Upload</Button>
+                <Button icon={<UploadOutlined />} loading={fileLoading}>
+                  {fileLoading ? 'Uploading...' : 'Click to Upload'}
+                </Button>
               </Upload>
+              {question.image && (
+                <span style={{ marginLeft: 10, color: 'green' }}>
+                  ✓ Image uploaded
+                </span>
+              )}
             </Space.Compact>
           </Form.Item>
           <Form.Item className="button-submit">

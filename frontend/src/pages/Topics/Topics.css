@@ -1,6 +1,6 @@
 .cat-content {
-  background: #ffffff;
-  box-shadow: 0px 15px 40px 5px #ededed;
+  background: var(--bg-primary);
+  box-shadow: 0px 15px 40px 5px var(--shadow-sm);
   border-radius: 30px;
   padding: 2%;
 }
@@ -10,14 +10,14 @@
   font-style: normal;
   font-weight: 700;
   font-size: 1.5rem;
-  color: #696f79;
+  color: var(--text-secondary);
 }
 .featured-cat-name {
   font-family: "Josefin Sans", sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 0.8rem;
-  color: #696f79;
+  color: var(--text-secondary);
 }
 .cat-img {
   width: 90%;
@@ -99,16 +99,16 @@
   margin-top: 10vh;
   min-height: 100vh;
   padding: 80px 24px 24px;
-  background: #f5f5f5;
+  background: var(--bg-primary);
 }
 
 .topics-content-user {
   max-width: 1400px;
   margin: 0 auto;
-  background: #ffffff;
+  background: var(--bg-secondary);
   border-radius: 24px;
   padding: 32px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 8px 24px var(--shadow-sm);
 }
 
 .topics-header-user {
@@ -116,12 +116,12 @@
 }
 
 .topics-title-user {
-  color: #262626 !important;
+  color: var(--text-primary) !important;
   margin-bottom: 8px !important;
 }
 
 .topics-subtitle-user {
-  color: #8c8c8c !important;
+  color: var(--text-tertiary) !important;
   margin: 0 !important;
 }
 
@@ -138,8 +138,8 @@
   margin: 12px;
   border-radius: 16px;
   transition: all 0.3s ease;
-  background: #ffffff;
-  border: 1px solid #e8e8e8;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-primary);
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -178,7 +178,7 @@
   display: block;
   font-size: 24px !important;
   font-weight: 600;
-  color: #262626;
+  color: var(--text-primary);
   margin-bottom: 8px;
   white-space: normal !important;
   word-wrap: break-word;
@@ -188,6 +188,7 @@
 .topic-card-code-user {
   font-size: 14px;
   font-weight: 500;
+  color: var(--text-secondary);
 }
 
 /* Metrics Section */
@@ -207,7 +208,7 @@
   justify-content: center;
   flex: 1;
   padding: 12px 8px;
-  background: #f5f5f5;
+  background: var(--bg-tertiary);
   border-radius: 12px;
   min-width: 80px;
   max-width: 120px;
@@ -215,14 +216,14 @@
 
 .metric-tile-user .anticon {
   font-size: 24px;
-  color: #1890ff;
+  color: var(--primary-color);
   margin-bottom: 8px;
 }
 
 .metric-tile-value-user {
   font-size: 18px;
   font-weight: 600;
-  color: #262626;
+  color: var(--text-primary);
   line-height: 1;
   text-align: center;
   white-space: nowrap;
@@ -230,7 +231,7 @@
 
 .metric-tile-label-user {
   font-size: 13px;
-  color: #8c8c8c;
+  color: var(--text-tertiary);
   margin-top: 4px;
   text-align: center;
   white-space: nowrap;
@@ -240,14 +241,14 @@
 .topic-card-instructions-user {
   margin-top: 24px;
   padding-top: 16px;
-  border-top: 1px solid #f0f0f0;
+  border-top: 1px solid var(--border-primary);
   flex: 1;
   display: flex;
   flex-direction: column;
 }
 
 .instructions-text-user {
-  color: #595959;
+  color: var(--text-secondary);
   font-size: 14px;
   line-height: 1.6;
 }

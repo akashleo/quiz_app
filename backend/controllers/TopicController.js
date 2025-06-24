@@ -1,4 +1,5 @@
 import Topic from "../model/Topic.js";
+import Question from "../model/Question.js";
 import { categories } from "./Topics.js";
 
 export const getAllTopics = async (req, res, next) => {
@@ -124,4 +125,41 @@ export const deleteTopic = async (req, res, next) => {
     return res.status(500).json({ message: "Unable to delete by this id" });
   }
   return res.status(201).json({ topics , message: "Topic successfully deleted" });
+};
+
+export const clearTopicQuestions = async (req, res, next) => {
+  const id = req.params.id;
+  let topic;
+
+  try {
+    // Find the topic by ID
+    topic = await Topic.findById(id);
+    
+    if (!topic) {
+      return res.status(404).json({ message: "Topic not found" });
+    }
+
+    // Delete all questions referenced in the topic's questions array
+    if (topic.questions && topic.questions.length > 0) {
+      await Question.deleteMany({ _id: { $in: topic.questions } });
+    }
+
+    // Clear the questions array
+    topic.questions = [];
+    
+    // Save the updated topic
+    await topic.save();
+
+    return res.status(200).json({ 
+      message: "Topic questions cleared successfully", 
+      topic 
+    });
+
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ 
+      message: "Error clearing topic questions", 
+      error: err.message 
+    });
+  }
 };

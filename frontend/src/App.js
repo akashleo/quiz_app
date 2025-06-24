@@ -1,5 +1,6 @@
 import "./App.css";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Link, useLocation } from "react-router-dom";
+import { ConfigProvider } from "antd";
 import Login from "./pages/Login/Login";
 import AdminLogin from "./pages/Login/AdminLogin";
 import AdminRegister from "./pages/Login/AdminRegister";
@@ -12,14 +13,23 @@ import QuestionBank from "./pages/QuestionBank/QuestionBank";
 import ArchivedQuestions from "./pages/QuestionBank/ArchivedQuestions";
 import GoogleAuthCallback from "./pages/Auth/GoogleAuthCallback";
 import PrivateRoute from "./components/PrivateRoute";
+import Navbar from "./components/Navbar";
 import { useSelector } from "react-redux";
+import { ThemeProvider, useTheme } from "./contexts/ThemeContext";
+import { getAntdTheme } from "./utils/themeConfig";
 
-function App() {
+function AppContent() {
+  const location = useLocation();
   const { tokenValidity } = useSelector((state) => state.auth);
+  const { isDark } = useTheme();
+  
+  // Hide navbar on login pages
+  const hideNavbar = ['/', '/login', '/admin-login', '/admin-register'].includes(location.pathname);
+
   return (
-    <>
-      {/* <Navbar/> */}
-      <Router>
+    <ConfigProvider theme={getAntdTheme(isDark)}>
+      <>
+        {!hideNavbar && <Navbar/>}
         <Routes>
           <Route exact path="/" element={<Login />} />
           <Route exact path="/login" element={<Login />} />
@@ -51,8 +61,18 @@ function App() {
             }
           />
         </Routes>
+      </>
+    </ConfigProvider>
+  );
+}
+
+function App() {
+  return (
+    <ThemeProvider>
+      <Router>
+        <AppContent />
       </Router>
-    </>
+    </ThemeProvider>
   );
 }
 

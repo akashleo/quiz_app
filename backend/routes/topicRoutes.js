@@ -7,6 +7,7 @@ import {
   addTopic,
   updateTopic,
   deleteTopic,
+  clearTopicQuestions,
 } from "../controllers/TopicController.js";
 
 // Admin access for managing topics
@@ -18,6 +19,6 @@ topicRouter.get("/load", authenticateToken, authorizeRole(['admin']), loadAllTop
 // All authenticated users can fetch topics (e.g., for selecting a quiz)
 topicRouter.get("/", authenticateToken, getAllTopics);
 
-//module.exports = topicRouter;
+topicRouter.put("/clear/:id", authenticateToken, authorizeRole(['admin']), clearTopicQuestions);
 
 export default topicRouter;

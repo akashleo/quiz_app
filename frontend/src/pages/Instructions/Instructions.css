@@ -6,28 +6,36 @@
 
 .description{
     border-radius: 30px;
-    box-shadow: 0px 15px 40px 5px #EDEDED;
-    background: #FFFFFF;
+    box-shadow: 0px 15px 40px 5px var(--shadow-md);
+    background: var(--card-bg);
     padding: 20px;
     margin: 0px 20px 20px 20px;
 }
 
 .details{
     padding: 10px;
+    color: var(--text-primary);
 }
 
 .details h4{
     margin: 17px auto;
+    color: var(--text-primary);
 }
 
 .start-button{
     width: 150px;
-    background-color: #8692A6;
+    background-color: var(--text-secondary);
     box-shadow: none;
     font-family: "Josefin Sans", sans-serif;
     border: none;
     border-radius: 30px;
-    color: #FFFFFF;
+    color: var(--text-inverse);
+    transition: all 0.3s ease;
+}
+
+.start-button:hover {
+    background-color: var(--text-primary) !important;
+    transform: translateY(-2px);
 }
 
 .question-image{
