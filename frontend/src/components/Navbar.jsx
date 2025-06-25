@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Layout, Input, Button, Avatar, Row, Col, Drawer, Menu, Dropdown } from "antd";
+import { Layout, Button, Drawer, Menu } from "antd";
 import { 
-  SearchOutlined, 
-  UserOutlined, 
   MenuOutlined,
   PlayCircleOutlined,
   LogoutOutlined,
   QuestionCircleOutlined,
-  DownOutlined,
+  UserOutlined,
 } from "@ant-design/icons";
 import { Sun, Moon } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
@@ -91,98 +89,76 @@ const Navbar = () => {
   ].filter(Boolean);
 
   return (
-    <Header className="navbar sticky">
-      <Row className="navbar-row" align="middle">
+    <Header className="navbar">
+      <div className="navbar-container">
         {/* Mobile Menu Button */}
-        <Col xs={2} sm={0}>
-          <Button
-            type="text"
-            icon={<MenuOutlined />}
-            onClick={() => setMobileDrawerOpen(true)}
-            className="mobile-menu-button"
-          />
-        </Col>
+        <Button
+          type="text"
+          icon={<MenuOutlined />}
+          onClick={() => setMobileDrawerOpen(true)}
+          className="mobile-menu-btn"
+        />
 
         {/* Logo */}
-        <Col xs={8} sm={6} md={4}>
-          <div className="quiz-logo" onClick={() => navigate('/dashboard')}>
-            QUIZ
-          </div>
-        </Col>
-
-        {/* Search Bar - Hidden on mobile */}
-        <Col xs={0} sm={10} md={12} className="searchbar">
-          <Input
-            placeholder="Search"
-            prefix={<SearchOutlined />}
-            className="search"
+        <div className="navbar-logo" onClick={() => navigate('/dashboard')}>
+          <img 
+            src="/emoquiz_logo.png" 
+            alt="EmoQuiz Logo" 
+            className="logo-image"
           />
-        </Col>
+        </div>
 
         {/* Desktop Navigation */}
-        <Col xs={0} sm={8} md={8} className="nav-buttons">
-          {/* Theme Toggle */}
+        <div className="navbar-nav">
           <Button
-            type="text"
-            icon={theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
-            onClick={toggleTheme}
-            className="theme-toggle-button"
-            title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
-          />
+            className="nav-btn"
+            onClick={startQuiz}
+            icon={<PlayCircleOutlined />}
+          >
+            Start Quiz
+          </Button>
 
-          {/* Question Bank Button for Admin */}
           {userInfo?.role === 'admin' && (
             <Button
-              type="primary"
+              className="nav-btn"
               icon={<QuestionCircleOutlined />}
               onClick={navigateQuestionBank}
-              className="question-bank-button"
             >
               Question Bank
             </Button>
           )}
 
-          {/* Start Quiz Button */}
           <Button
-            type="default"
-            onClick={startQuiz}
-            className="start-button"
+            className="nav-btn"
+            onClick={openProfile}
+            icon={<UserOutlined />}
           >
-            Start Quiz
+            Profile
           </Button>
 
-          {/* Avatar with Dropdown */}
-          <Dropdown
-            menu={{ items: userMenuItems }}
-            placement="bottomRight"
-            trigger={['click']}
-          >
-            <div className="avatar-dropdown">
-              <Avatar 
-                icon={<UserOutlined />} 
-                src={userInfo?.profilePicture}
-                className="avatar-navbar"
-              />
-              <DownOutlined className="dropdown-icon" />
-            </div>
-          </Dropdown>
-        </Col>
-
-        {/* Mobile Search and Theme Toggle */}
-        <Col xs={14} sm={0} className="mobile-search">
           <Button
-            type="text"
+            className="nav-btn"
+            onClick={handleLogout}
+            icon={<LogoutOutlined />}
+          >
+            Logout
+          </Button>
+
+          <Button
+            className="theme-btn"
             icon={theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
             onClick={toggleTheme}
-            className="theme-toggle-button"
+            title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
           />
-          <Button
-            type="text"
-            icon={<SearchOutlined />}
-            onClick={() => {/* Handle mobile search */}}
-          />
-        </Col>
-      </Row>
+        </div>
+
+        {/* Mobile Theme Toggle */}
+        <Button
+          className="mobile-theme-btn"
+          icon={theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
+          onClick={toggleTheme}
+        />
+      </div>
 
       {/* Mobile Drawer */}
       <Drawer

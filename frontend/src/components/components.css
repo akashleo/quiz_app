@@ -1,374 +1,133 @@
+/* Navbar Styles */
 .navbar {
-  background: var(--navbar-bg) !important;
-  height: 80px !important;
-  padding: 0 24px !important;
-  display: flex;
-  align-items: center;
-  box-shadow: 0 2px 8px var(--shadow-sm);
-}
-
-.navbar-row {
-  width: 100%;
-  height: 100%;
-}
-
-.sticky {
   position: fixed;
   top: 0;
-  width: 100%;
+  left: 0;
+  right: 0;
+  height: 64px;
+  background: var(--background-color);
+  border-bottom: 1px solid var(--border-color);
   z-index: 1000;
-}
-
-.quiz-logo {
-  font-size: 24px;
-  font-weight: 600;
-  color: var(--text-primary);
-  cursor: pointer;
-  white-space: nowrap;
-  height: 100%;
-  display: flex;
-  align-items: center;
-}
-
-.searchbar {
-  display: flex;
-  align-items: center;
-}
-
-.search {
-  border-radius: 20px;
-  background: var(--bg-tertiary);
-  border: none;
-  height: 40px;
-  color: var(--text-primary);
-}
-
-.search:hover, .search:focus {
-  background: var(--bg-hover);
-  box-shadow: none;
-}
-
-/* Theme Toggle Button */
-.theme-toggle-button {
-  height: 40px;
-  width: 40px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--bg-tertiary);
-  border: none;
-  transition: all 0.3s ease;
-  color: var(--text-primary);
-}
-
-.theme-toggle-button:hover {
-  background: var(--bg-hover) !important;
-  transform: rotate(180deg);
-}
-
-.theme-toggle-button .anticon {
-  font-size: 18px;
-}
-
-/* Navigation Buttons */
-.nav-buttons {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  gap: 16px;
-}
-
-.question-bank-button {
-  height: 40px;
   padding: 0 20px;
-  font-weight: 500;
-  background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
-  border: none;
-  border-radius: 20px;
+}
+
+.navbar-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.navbar-logo {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.logo-image {
+  height: 40px;
+  width: auto;
+  object-fit: contain;
+}
+
+.navbar-nav {
+  display: none;
+  align-items: center;
+  gap: 12px;
+  margin-left: auto;
+}
+
+.nav-btn {
+  background: transparent !important;
+  border: 2px solid #808080 !important;
+  color: var(--text-color) !important;
   display: flex;
   align-items: center;
   gap: 8px;
-  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
+  height: 36px;
+  padding: 0 16px;
   transition: all 0.3s ease;
 }
 
-.question-bank-button:hover {
-  background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%) !important;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(79, 70, 229, 0.3);
+.nav-btn:hover {
+  border-color: var(--primary-color) !important;
+  color: var(--primary-color) !important;
 }
 
-.question-bank-button .anticon {
-  font-size: 18px;
+.theme-btn {
+  background: transparent !important;
+  border: none !important;
+  color: var(--text-color) !important;
+  padding: 0 8px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
 }
 
-.start-button {
-  height: 40px;
-  padding: 0 24px;
-  font-weight: 500;
-  background: var(--text-secondary);
-  color: var(--text-inverse);
+.theme-btn:hover {
+  color: var(--primary-color) !important;
+}
+
+.mobile-menu-btn {
+  display: flex;
+  color: var(--text-color);
+  font-size: 20px;
+  padding: 0;
+  background: transparent;
   border: none;
-  border-radius: 20px;
+}
+
+.mobile-theme-btn {
+  display: flex;
+  background: transparent !important;
+  border: none !important;
+  color: var(--text-color) !important;
+  padding: 0 8px;
+  height: 36px;
+  align-items: center;
+  justify-content: center;
   transition: all 0.3s ease;
 }
 
-.start-button:hover {
-  background: var(--text-primary) !important;
-  color: var(--text-inverse) !important;
-  transform: translateY(-2px);
+.mobile-theme-btn:hover {
+  color: var(--primary-color) !important;
 }
 
-/* Avatar Dropdown Styles */
-.avatar-dropdown {
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  padding: 4px;
-  border-radius: 24px;
-  transition: background-color 0.2s ease;
-}
-
-.avatar-dropdown:hover {
-  background-color: var(--bg-tertiary);
-}
-
-.dropdown-icon {
-  margin-left: 4px;
-  font-size: 12px;
-  color: var(--text-tertiary);
-}
-
-.avatar-container {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-}
-
-.avatar-navbar {
-  cursor: pointer;
-  width: 40px !important;
-  height: 40px !important;
-  transition: transform 0.2s ease;
-}
-
-.avatar-navbar:hover {
-  transform: scale(1.05);
-}
-
-/* Mobile Styles */
-.mobile-menu-button {
-  display: none;
-  margin-right: 16px;
-  color: var(--text-primary);
-}
-
-.mobile-search {
-  display: none;
-}
-
-/* Mobile Drawer Styles */
+/* Mobile Drawer */
 .mobile-drawer .ant-drawer-body {
   padding: 0;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  background: var(--bg-secondary);
-}
-
-.mobile-drawer .ant-drawer-header {
-  background: var(--bg-secondary);
-  border-bottom: 1px solid var(--border-primary);
-}
-
-.mobile-drawer .ant-drawer-title {
-  color: var(--text-primary);
-}
-
-.mobile-drawer .ant-drawer-close {
-  color: var(--text-primary);
-}
-
-.mobile-drawer .ant-menu {
-  background: var(--bg-secondary);
-}
-
-.mobile-drawer .ant-menu-item {
-  height: 50px;
-  display: flex;
-  align-items: center;
-  margin: 0 !important;
-  padding: 0 24px !important;
-  color: var(--text-primary);
-}
-
-.mobile-drawer .ant-menu-item:hover {
-  background: var(--bg-hover);
 }
 
 .mobile-drawer-menu {
-  flex: 1;
-  border-inline-end: none !important;
+  border-right: none;
 }
 
-.mobile-drawer-user-menu {
-  border-top: 1px solid var(--border-primary);
-  border-inline-end: none !important;
-}
-
-.mobile-drawer-user-menu .ant-menu-item-danger {
-  color: var(--error) !important;
-}
-
-.mobile-drawer-user-menu .ant-menu-item-danger:hover {
-  color: var(--error) !important;
-  background-color: rgba(239, 68, 68, 0.1) !important;
-}
-
-/* Ant Design Overrides for Dark Mode */
-.ant-input-affix-wrapper {
-  background: var(--input-bg);
-  border-color: var(--border-primary);
-  color: var(--text-primary);
-}
-
-.ant-input {
-  background: var(--input-bg);
-  color: var(--text-primary);
-}
-
-.ant-input::placeholder {
-  color: var(--text-tertiary);
-}
-
-/* Tablet Styles */
-@media (max-width: 1024px) {
-  .navbar {
-    padding: 0 16px !important;
-  }
-
-  .quiz-logo {
-    font-size: 20px;
-  }
-
-  .search {
-    width: 180px;
-  }
-
-  .nav-buttons {
-    gap: 12px;
-  }
-
-  .question-bank-button,
-  .start-button {
-    padding: 0 16px;
-  }
-
-  .question-bank-button .anticon {
-    font-size: 16px;
-  }
-}
-
-/* Mobile Styles */
-@media (max-width: 768px) {
-  .navbar {
-    padding: 0 12px !important;
-    height: 64px !important;
-  }
-
-  .mobile-menu-button {
-    display: block;
-  }
-
-  .mobile-search {
+/* Desktop styles */
+@media (min-width: 768px) {
+  .navbar-nav {
     display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    gap: 8px;
   }
-
-  .quiz-logo {
-    font-size: 18px;
-  }
-
-  .searchbar,
-  .nav-buttons,
-  .avatar-container {
+  
+  .mobile-menu-btn,
+  .mobile-theme-btn {
     display: none;
   }
-
-  .theme-toggle-button {
-    width: 36px;
-    height: 36px;
-  }
-
-  .theme-toggle-button .anticon {
-    font-size: 16px;
-  }
 }
 
-/* Handle very small screens */
-@media (max-width: 375px) {
+/* Mobile responsive */
+@media (max-width: 767px) {
   .navbar {
-    padding: 0 8px !important;
+    padding: 0 12px;
   }
-
-  .quiz-logo {
-    font-size: 16px;
-  }
-}
-
-.logout {
-  background-color: var(--bg-secondary);
-  width: 100%;
-}
-
-.ant-menu-light.ant-menu-root.ant-menu-vertical {
-  border-inline-end: none !important;
-}
-
-.ant-menu-vertical .ant-menu-item {
-  border-radius: 30px;
-}
-
-.questionbank {
-  background-color: var(--bg-secondary);
-}
-
-/* Profile Actions */
-.profile-actions {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  padding: 16px;
-}
-
-.profile-actions .action-buttons {
-  width: 100%;
-  height: 40px;
-  border-radius: 20px;
-  font-weight: 500;
-  background: var(--bg-tertiary);
-  border: 1px solid var(--border-primary);
-  color: var(--text-primary);
-  transition: all 0.3s ease;
-}
-
-.profile-actions .action-buttons:hover {
-  background: var(--bg-hover);
-  transform: translateY(-2px);
-  box-shadow: 0 2px 8px var(--shadow-sm);
-}
-
-@media (max-width: 768px) {
-  .profile-actions {
-    padding: 12px;
-    gap: 8px;
-  }
-
-  .profile-actions .action-buttons {
-    height: 36px;
-    font-size: 14px;
+  
+  .logo-image {
+    height: 32px;
   }
 }
+
+/* Other component styles */
